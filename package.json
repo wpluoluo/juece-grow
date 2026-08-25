@@ -4,6 +4,7 @@
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "scripts": {
+    "build": "node scripts/build.mjs",
     "cms:dev": "pnpm --filter cms dev",
     "cms:build": "pnpm --filter cms build",
     "astro:dev": "pnpm --filter astro dev",
