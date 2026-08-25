@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${WS_CHANGE_HOOK_BYPASS:-0}" == "1" ]]; then
+  echo "warn: WS_CHANGE_HOOK_BYPASS=1; skip aiws commit-msg hook" >&2
+  exit 0
+fi
+
+msg_file="${1:-}"
+[[ -n "${msg_file:-}" && -f "$msg_file" ]] || exit 0
+
+policy="${AIWS_COMMIT_MSG_POLICY:-}"
+if [[ -z "${policy:-}" ]]; then
+  policy="$(git config --get aiws.commitMessagePolicy 2>/dev/null || true)"
+fi
+if [[ -z "${policy:-}" ]]; then
+  superproject_root="$(git rev-parse --show-superproject-working-tree 2>/dev/null || true)"
+  if [[ -n "${superproject_root:-}" ]]; then
+    policy="warn"
+  elif [[ -f ".gitmodules" ]]; then
+    policy="off"
+  else
+    policy="warn"
+  fi
+fi
+policy="${policy:-warn}"
+
+case "$policy" in
+  off|disabled|0)
+    exit 0
+    ;;
+  warn|prefer-zh)
+    policy="warn"
+    ;;
+  strict|require-zh|1)
+    policy="strict"
+    ;;
+  *)
+    echo "warn: unknown aiws commit message policy '${policy}', fallback to warn" >&2
+    policy="warn"
+    ;;
+esac
+
+first_line="$(sed -n '1{s/\r$//;p;q;}' "$msg_file")"
+first_line="${first_line#"${first_line%%[![:space:]]*}"}"
+first_line="${first_line%"${first_line##*[![:space:]]}"}"
+
+[[ -n "${first_line:-}" ]] || exit 0
+
+case "$first_line" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *)
+    exit 0
+    ;;
+esac
+
+has_cjk=1
+if command -v python3 >/dev/null 2>&1; then
+  if python3 - "$first_line" <<'PY'
+import re
+import sys
+
+line = sys.argv[1].strip()
+sys.exit(0 if re.search(r"[\u3400-\u9fff]", line) else 1)
+PY
+  then
+    has_cjk=0
+  fi
+else
+  if printf '%s\n' "$first_line" | grep -q '[一-龥]'; then
+    has_cjk=0
+  fi
+fi
+
+if [[ "$has_cjk" -eq 0 ]]; then
+  exit 0
+fi
+
+if [[ "$policy" == "warn" ]]; then
+  cat >&2 <<'EOF'
+warn: commit message is better in Chinese, but English is still allowed.
+
+hint:
+  - preferred format: 修复: 登录页空指针
+  - or: 功能: 新增 submodule targets 校验
+  - if you are in AI tools, prefer: aiws commit
+  - set strict mode if needed: git config aiws.commitMessagePolicy strict
+  - disable this reminder: git config aiws.commitMessagePolicy off
+
+allowed exceptions:
+  - Merge ...
+  - Revert ...
+  - fixup! ...
+  - squash! ...
+EOF
+
+  echo "message: ${first_line}" >&2
+  exit 0
+fi
+
+cat >&2 <<'EOF'
+error: commit message should be in Chinese (strict mode).
+
+hint:
+  - use format: 修复: 登录页空指针
+  - or: 功能: 新增 submodule targets 校验
+  - if you are in AI tools, prefer: aiws commit
+  - downgrade to warn: git config aiws.commitMessagePolicy warn
+  - disable only when necessary: git config aiws.commitMessagePolicy off
+  - bypass only when necessary: WS_CHANGE_HOOK_BYPASS=1 git commit ...
+
+allowed exceptions:
+  - Merge ...
+  - Revert ...
+  - fixup! ...
+  - squash! ...
+EOF
+
+echo "message: ${first_line}" >&2
+exit 1

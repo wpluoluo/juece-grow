@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "change_id": "phase1-skeleton",
+  "events": [
+    {
+      "type": "change_new",
+      "timestamp": "2026-08-25T12:42:59Z",
+      "payload": {
+        "title": "Astro + Payload + Postgres 工程骨架（单站点 + 表单线索入池）",
+        "created_at": "2026-08-25T12:42:59Z",
+        "base_branch": "",
+        "templates": "F:/juece-grow/.aiws/changes/templates",
+        "no_design": false
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-25T12:44:41Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 4,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-25T12:46:18Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    }
+  ],
+  "updated_at": "2026-08-25T12:46:18Z"
+}

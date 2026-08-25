@@ -1,0 +1,82 @@
+{
+  "agents": {
+    "planner-sisyphus": {
+      "enabled": true,
+      "replace_plan": false,
+      "categories": [
+        "planning",
+        "autonomous"
+      ],
+      "prompt_append": "You are running inside an AIWS workspace. Before coding, read AI_PROJECT.md, REQUIREMENTS.md, and AI_WORKSPACE.md. Stay autonomous until the task is complete. Completion means: truth files read, task/change bound, required verify commands run, review/evidence written, and aiws validate . or change validate completed when applicable. Stop early only for a real blocker: missing user decision, missing credential, external dependency failure, or sandbox/permission failure."
+    },
+    "librarian": {
+      "enabled": true,
+      "categories": [
+        "docs",
+        "research"
+      ]
+    },
+    "explore": {
+      "enabled": true,
+      "categories": [
+        "code",
+        "analysis"
+      ]
+    },
+    "oracle": {
+      "enabled": true,
+      "categories": [
+        "review",
+        "qa"
+      ]
+    }
+  },
+  "backgroundTasks": {
+    "enabled": true,
+    "maxJobs": 3,
+    "defaultTimeoutMs": 1200000
+  },
+  "experimental": {
+    "auto_resume": true
+  },
+  "aiws": {
+    "autonomy": {
+      "approval_whitelist": {
+        "enabled": true,
+        "mode": "assist-only",
+        "host_permission_mode": "manual-only",
+        "read_only_commands": [
+          "rg",
+          "cat",
+          "sed",
+          "ls",
+          "find",
+          "git status",
+          "git diff"
+        ],
+        "write_allow_paths": [
+          ".aiws/tmp/",
+          ".aiws/changes/*/analysis/",
+          ".aiws/changes/*/review/",
+          ".aiws/changes/*/evidence/",
+          ".agentdocs/tmp/",
+          "changes/*/analysis/",
+          "changes/*/review/",
+          "changes/*/evidence/"
+        ],
+        "deny_paths": [
+          ".aiws/secrets/",
+          "secrets/",
+          ".env*"
+        ],
+        "deny_commands": [
+          "rm",
+          "mv",
+          "git commit",
+          "git push",
+          "npm publish"
+        ]
+      }
+    }
+  }
+}

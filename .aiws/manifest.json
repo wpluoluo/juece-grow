@@ -1,0 +1,477 @@
+{
+  "manifest_version": 1,
+  "template_id": "workspace",
+  "spec_version": "0.0.96",
+  "aiws_version": "0.0.96",
+  "installed_at": "2026-08-25T12:42:26Z",
+  "updated_at": "2026-08-25T12:42:26Z",
+  "tools": [
+    "opencode"
+  ],
+  "managed": [
+    {
+      "path": ".agents/skills/_shared/bugfix/test-gate.md",
+      "mode": "replace_file",
+      "sha256": "8eb0d664b17d2cff8a5c6f742adba1aa30b66c12ff92dd1ef52293a0d1794829"
+    },
+    {
+      "path": ".agents/skills/_shared/intake/deep-interview.md",
+      "mode": "replace_file",
+      "sha256": "5880af4ef28a43796a06389b075c1248275778374127f549549450787d1c590b"
+    },
+    {
+      "path": ".agents/skills/_shared/run-aiws.md",
+      "mode": "replace_file",
+      "sha256": "f6d87712f9d84f172a36201c86c368902a869df9bec310a2f74e71e8d75ac827"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-archive/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "56230103d7777e047b841e3944db678ec45a6a48c04ff2a205e6afe82e59d9da"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-finish/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "6850ae076dd216cede86265bd080461dc4ed2bb72a8c76ef83bd0849d721122d"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-list/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "338761f3c2e88354c951d93c41ad450ec7443acc0b8ed37a107d7cbbd50602f6"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-new/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "e0ac7a10a6cb4fc19de4d642aaf7353a3083a816a2c5c683f72eba2c6aa85758"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-next/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "82f525239784eb2bff73078edc50a74ac0906aef5f215ec3f7bb278737ce6c33"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-start/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "59eb53eaf378c89bd48b43c4205af46aeab4b663629f270cb696b706ce8a103a"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-status/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "7afafe3ef8147ccf9e6061e77930018a79bbfaeffc655f694358fdf5c0b5cf69"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-sync/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "d7b2cb33740158d8c60ea51df391cfef7f08054988db1bceda8f3a7c56e15f15"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-templates-init/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "a7a04e8bb9e50ea1831537ef56086b90644de30ca10a8db10c7d146a8e010669"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-templates-which/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "3add301c81d0303242eccf3a958d83322dcac751a46d5413033323ad9b1935fd"
+    },
+    {
+      "path": ".agents/skills/p-aiws-change-validate/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "b9a34798dc9e61225d2362760c25aa281cce6b8c5b8598b7705cff47d3f09050"
+    },
+    {
+      "path": ".agents/skills/p-aiws-hooks-install/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "e1c43a6074511fe9095b2c2d5b59de420f2ded9504c73e8a21b7754b6e98f4d3"
+    },
+    {
+      "path": ".agents/skills/p-aiws-hooks-status/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "030bfbd9dc80c13b210a43edc06251085faedfc031b4c56e35b9e4e4f4745849"
+    },
+    {
+      "path": ".agents/skills/p-aiws-init/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "f5fb01b055cdf70f60662a6046f99d62fcb681662a8ead8859c2955fbdab0335"
+    },
+    {
+      "path": ".agents/skills/p-aiws-rollback/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "24d9e197b96cf488cd607da60ba9f66bd9fa052b87a9befbfeef73179072271e"
+    },
+    {
+      "path": ".agents/skills/p-aiws-update/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "1e7c6f1344f6a7648ee97b09a1aacfd3a51fb217ae561f9dbc7e06d5bc18dae2"
+    },
+    {
+      "path": ".agents/skills/p-aiws-validate/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "bd9dee830803d6827a2ae9d40417adbd43dedfcfd629d6fe6fea96274b09390c"
+    },
+    {
+      "path": ".agents/skills/p-tasks-plan/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "2a018dde0830ad4b398b4b84bddde3e622dc5fbc774c1c83198a36055facb342"
+    },
+    {
+      "path": ".agents/skills/using-aiws/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "e4f8531e5f6887a69a129e95b9c56d40661c0b3afcba0862a6420ca8731c54fe"
+    },
+    {
+      "path": ".agents/skills/ws-analyze/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "e41c9211039b5b97d55f36e0579abc833094d26d827e962fcc8f128da4121157"
+    },
+    {
+      "path": ".agents/skills/ws-auto/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "3ae4a6dcc480ebcaf134aa74e735dd0b1c1712165f0d09e3229e8b3d19af8023"
+    },
+    {
+      "path": ".agents/skills/ws-autonomy/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "e97a0812f2428110939f3228e795a14040ef87ac8ead84594e3d9d6e87ec0f95"
+    },
+    {
+      "path": ".agents/skills/ws-bugfix-batch/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "292d26062073711535e7d40546d5ebc5da0a006b542eb11a88bab6d1241be63c"
+    },
+    {
+      "path": ".agents/skills/ws-bugfix/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "acfa6440f1066f6d7564599a3ca0c7497f15bb6045e9575c4555d2f6567828a4"
+    },
+    {
+      "path": ".agents/skills/ws-delegate/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "acbbd568e90f90e4dc5e29be3566c4169b1d7ce365e5909ae2bc6136c984fd88"
+    },
+    {
+      "path": ".agents/skills/ws-dev-lite/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "1faa62a05488618b80f1cd32a383fe3467ea82baaf56ac33ea799856719444d9"
+    },
+    {
+      "path": ".agents/skills/ws-dev/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "ef8fa3de5429f0eab71d4ece2d1dc623087ec536e61828c250c63648fc0a698b"
+    },
+    {
+      "path": ".agents/skills/ws-finish/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "66590a22386db61014d550b69299e5d9d3ed050a455db7290bc87b9c60936b0c"
+    },
+    {
+      "path": ".agents/skills/ws-frontend-design/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "7fb99ffcf363ad66dee4c8fb7f97e558027e85e2931aa4b1e2c7fae96ae5bcb3"
+    },
+    {
+      "path": ".agents/skills/ws-goal/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "90722b6741d1d48d40121ebf369b3f6989b260e7a623b002e0e2a36b2d4e251c"
+    },
+    {
+      "path": ".agents/skills/ws-plan/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "8f0c3b32be21c88dad39e87cc53995e99e049e59b4cfc6eed73162ecf2f4aed8"
+    },
+    {
+      "path": ".agents/skills/ws-preflight/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "b22b3fd276579341bdba7604b4da3e38cadba336a5ecfa4d905c3f676722e537"
+    },
+    {
+      "path": ".agents/skills/ws-quality-review/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "034dff6295fc6268de2f86902632009f07e18df67f425f47afebfbc63b5d3219"
+    },
+    {
+      "path": ".agents/skills/ws-req-change/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "8ccf2f84d813ae144bdd577b80a38aec08966c98dd7e375f06436ef1fbd6ad0a"
+    },
+    {
+      "path": ".agents/skills/ws-req-contract-sync/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "e2373f505ea3cc3ec3588afd03030c44d80db1a19005bfbaf26f232190a682a2"
+    },
+    {
+      "path": ".agents/skills/ws-req-contract-validate/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "987d088576961b5006d185fb2fac3c158be2fd55bcce263d1a7c380d78241e04"
+    },
+    {
+      "path": ".agents/skills/ws-req-flow-sync/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "19a380370b2e8ffa9ecda6e069b6ac942fae2c129dbef01d9feab6b81d2eae13"
+    },
+    {
+      "path": ".agents/skills/ws-req-review/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "d8edc54b6d90e251e6e0c75358efa0373322010d3354996eb593a6d941990a99"
+    },
+    {
+      "path": ".agents/skills/ws-review/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "f3264b93494c708d3ad4dbb4b992158cc7b9a297b0e892fd544829e6b8599618"
+    },
+    {
+      "path": ".agents/skills/ws-rule/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "0badb5bf93b0ff6dd5437b0cccc4ba90b145862764fad34d6b9086fe7b3895dc"
+    },
+    {
+      "path": ".agents/skills/ws-spec-review/SKILL.md",
+      "mode": "replace_file",
+      "sha256": "2755181213cb3e02fb5000ccbb49055a0d9a4359ba69515fba2b59718218c9ff"
+    },
+    {
+      "path": ".aiws/changes/README.md",
+      "mode": "replace_file",
+      "sha256": "57f8c974535842264aa3748e14dd1eb206cccfbeafb9e1e3e924bffac2afcb3a"
+    },
+    {
+      "path": ".aiws/tmp/.gitkeep",
+      "mode": "replace_file",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".aiws/tools/problem_issues_migrate.py",
+      "mode": "replace_file",
+      "sha256": "8c68d1e2877c72690c6c2f859514ccb1fc64070c8491bd5edb6892e6c1306373"
+    },
+    {
+      "path": ".aiws/tools/requirements_contract_migrate.py",
+      "mode": "replace_file",
+      "sha256": "b51f3dc44ce01ac86b748170ed00cf9af0543945dd9558b155b0f7ba2fb62a5a"
+    },
+    {
+      "path": ".aiws/tools/requirements_contract_sync.py",
+      "mode": "replace_file",
+      "sha256": "56d3795b9184d4d10655eb358d66d5c86c59f33917bc0f5c91e4b4d956034582"
+    },
+    {
+      "path": ".aiws/tools/requirements_contract.py",
+      "mode": "replace_file",
+      "sha256": "c3dcadbd81958e6a3645c3389c2d89802580d31b67311d86f482f867713cb8cc"
+    },
+    {
+      "path": ".aiws/tools/requirements_flow_gen.py",
+      "mode": "replace_file",
+      "sha256": "b16b44e986105317824c89c06436beeaa567e96185b9e8a3754ef9ae803ee190"
+    },
+    {
+      "path": ".aiws/tools/ws_change_check.py",
+      "mode": "replace_file",
+      "sha256": "ab9db0d64551d52846f503e2d5323b0151022442cefbd01237b484e61e601d8a"
+    },
+    {
+      "path": ".aiws/tools/ws_resolve_sub_target.sh",
+      "mode": "replace_file",
+      "sha256": "52266f5830cb17631050ad939dcb920de46ea12b574535eddd7b969942f33f89"
+    },
+    {
+      "path": ".aiws/tools/ws_tasks_plan.py",
+      "mode": "replace_file",
+      "sha256": "8b8afe55dd0ecb9c0d84a18b3c0ccca9b93f61eb2bda486eadc3e43153a90199"
+    },
+    {
+      "path": ".githooks/commit-msg",
+      "mode": "replace_file",
+      "sha256": "a21711f2ea490608b4830dad3ba7d082e25643c422abb043bf497131377cb0ac"
+    },
+    {
+      "path": ".githooks/pre-commit",
+      "mode": "replace_file",
+      "sha256": "9663d196c3332f6634202448821cbb0678a471273210e8c1bc80da6d4d49d6b2"
+    },
+    {
+      "path": ".githooks/pre-push",
+      "mode": "replace_file",
+      "sha256": "7fa368c93b47bb8a9eeed5e73d0d67507923dfb2cbca8b2326bb2afa1eedce90"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "managed_blocks",
+      "blocks": {
+        "gitignore": "fd4fab61b340dfb263db5ee99944f7d6918e1ba405a40d6f1bfe1ec5160079fa"
+      }
+    },
+    {
+      "path": ".opencode/command/using-aiws.md",
+      "mode": "replace_file",
+      "sha256": "55937759617df1529db913803b81eb56c71d538be7ae903f2226f0dd48cbffea"
+    },
+    {
+      "path": ".opencode/command/using-aiws.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:using-aiws": "a05c2f2af0b3bdc1fd58d299e706c6d1bc7be9cc01332caba7a61f532a326bbb"
+      }
+    },
+    {
+      "path": ".opencode/command/ws-dev-lite.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:ws-dev-lite": "b38fada67393cb8748fbef496c36990f37731569832b85fb8a48e59592d045e6"
+      }
+    },
+    {
+      "path": ".opencode/command/ws-dev.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:ws-dev": "32e424fdf4992e27c516c0d673c1dcc05ac3a57de603594377841f0523be96a0"
+      }
+    },
+    {
+      "path": ".opencode/command/ws-finish.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:ws-finish": "eff94de2f09505ce6122f1b0043bb1025c115140bcb8d026284e85c895ccfe95"
+      }
+    },
+    {
+      "path": ".opencode/command/ws-goal.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:ws-goal": "66c515bf5bf054a5de8abe46cb998397c185b092334e678ecb618e72a6942a8e"
+      }
+    },
+    {
+      "path": ".opencode/command/ws-plan.md",
+      "mode": "replace_file",
+      "sha256": "2b567b0896721afe062fdd36490577c979fefdb74fafbf4bf133da89dadc25c7"
+    },
+    {
+      "path": ".opencode/command/ws-plan.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:ws-plan": "f6486b61b8d3c29ae9aafb8b54b01150ff773ee620a5f9f25c84ff6ad2cdb5bd"
+      }
+    },
+    {
+      "path": ".opencode/command/ws-review.md",
+      "mode": "replace_file",
+      "sha256": "f45b371d7917c79411d6e6c4f82179466c8741a0f48a614c7e490141109286d2"
+    },
+    {
+      "path": ".opencode/command/ws-review.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "opencode:ws-review": "fdf834ed72202fb893f3c737d5928768474fd19a9387ef9c623b277ada931694"
+      }
+    },
+    {
+      "path": ".opencode/helpers/approval-whitelist-check.sh",
+      "mode": "replace_file",
+      "sha256": "2a3fb12fb84e819c7db4f8007dae22c7a2dd060925252405ee92d981913f9c2a"
+    },
+    {
+      "path": ".opencode/helpers/approval-whitelist-run.sh",
+      "mode": "replace_file",
+      "sha256": "fa6bc812343d955f94580c99250eb71366219dd0f8401510a4b28bfa5a83c95f"
+    },
+    {
+      "path": ".opencode/helpers/approval-whitelist-watchdog.sh",
+      "mode": "replace_file",
+      "sha256": "342f02220b3bf329f12aed92024e22eacfb43553cfd225fff3b06f6a3805f12d"
+    },
+    {
+      "path": ".opencode/helpers/tmux-swarm-rescue.sh",
+      "mode": "replace_file",
+      "sha256": "a52513b23ca7f6da93928bdf9cb8d0d37bc64a81747280417ce011104a63dd3d"
+    },
+    {
+      "path": ".opencode/helpers/tmux-swarm-scan.sh",
+      "mode": "replace_file",
+      "sha256": "d864d5adf696f201d8b05cc0c1c19be800d332788b627bfad55e997d90447fba"
+    },
+    {
+      "path": ".opencode/lib/aiws-context.js",
+      "mode": "replace_file",
+      "sha256": "548a1ca879805361e3eb2034932948ab2c2af74020479114a31bd71f3f0d6d54"
+    },
+    {
+      "path": ".opencode/oh-my-opencode.json.example",
+      "mode": "replace_file",
+      "sha256": "1e5e834c697f2fa60de9ebf5f1888ce076422ec545113cb3411dd91eacf45aa4"
+    },
+    {
+      "path": ".opencode/plugins/aiws-inject-context.js",
+      "mode": "replace_file",
+      "sha256": "579df8be04abc9386ca1f74d0fd8170d9a129f3abaada8e3cbcbaa4f6ebf394e"
+    },
+    {
+      "path": ".opencode/plugins/aiws-session-start.js",
+      "mode": "replace_file",
+      "sha256": "0373ebb86d3d7c3a4c3a923322053662e1ac1326588eeeb6d0e0b635174f6ea3"
+    },
+    {
+      "path": ".opencode/plugins/aiws-workflow-state.js",
+      "mode": "replace_file",
+      "sha256": "75332dbf6a99c6f9f1df3e0f66e29bdd2117c996e0a419f35630753be4b93bcc"
+    },
+    {
+      "path": ".opencode/plugins/memory-autoload.js",
+      "mode": "replace_file",
+      "sha256": "a6afa8ebb2740d878895724e75be96111104f7a586087b33a6ff88fabbebe7a5"
+    },
+    {
+      "path": ".opencode/scripts/ws-plan-gen-submodule-targets.sh",
+      "mode": "replace_file",
+      "sha256": "fad3d04f8f530f692b393b5c81be6239e4cfe9d80f26813d431438fc336844aa"
+    },
+    {
+      "path": ".pi/extensions/aiws-retry-observer.ts",
+      "mode": "replace_file",
+      "sha256": "69f30fb79e93b6136ac0afca4d49de7be92a5ec16ed412333d3ccecd322c50f5"
+    },
+    {
+      "path": ".pi/extensions/aiws-subagents.ts",
+      "mode": "replace_file",
+      "sha256": "a78fc75d4ba69fc0acbef202a3e45bd1a8c6b8e68f591eeac589e0c8436061a5"
+    },
+    {
+      "path": ".pi/extensions/aiws.ts",
+      "mode": "replace_file",
+      "sha256": "1c370fb85c6899d23abfdf9c7d35412d1f7d85f7acd9051007ce0f4b0cc3e759"
+    },
+    {
+      "path": ".pi/extensions/guardrails-destructive.ts",
+      "mode": "replace_file",
+      "sha256": "29114865cbf6c30327e09183a5e3d67c6c2b1b18c5973c3ef7c56af24bf96498"
+    },
+    {
+      "path": "AGENTS.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "agents": "63c747433e73e54021689e7853c2d4c81a19fce4e536ad907a4b50354abec969"
+      }
+    },
+    {
+      "path": "AI_PROJECT.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "ai-project:core": "abc3eecd8fb0f0b24c96dbf15a5f4a7f792bf0580165756e0f24479c8bc14cb7"
+      }
+    },
+    {
+      "path": "AI_WORKSPACE.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "ai-workspace:core": "56e640a7adf368e70aecfcc79beaf2db6090a21b44ffa809736be5c9f1225fdb"
+      }
+    },
+    {
+      "path": "REQUIREMENTS.md",
+      "mode": "managed_blocks",
+      "blocks": {
+        "requirements:contract": "323d6b9878fcd459e6bfcba4db1ada60e5d029c93fd1e48ca28b353114101a0d"
+      }
+    }
+  ]
+}

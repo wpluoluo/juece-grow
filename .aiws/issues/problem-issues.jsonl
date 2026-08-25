@@ -1,0 +1,1 @@
+{"Issue_ID": "PROB-000", "Type": "TOOLING", "Title": "示例问题（模板种子）", "Status": "OPEN", "Priority": "P2", "Req_ID": "", "Problem_ID": "PROB-000", "Notes": "problem-issues.jsonl 模板种子。新工作区 init 时复制此文件；已有 CSV 数据由 problem_issues_migrate.py 在 aiws update 后幂等迁移（legacy CSV 保留待人工删除）。"}

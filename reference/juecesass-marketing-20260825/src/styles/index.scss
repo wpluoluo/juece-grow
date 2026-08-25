@@ -1,0 +1,353 @@
+:root {
+  /* ══════════════════════════════════════
+     🎨 觉策科技 · Brand Design Tokens
+     科技现代 · 低饱和青 + 冷石墨中性
+     ══════════════════════════════════════ */
+
+  /* Layout */
+  --site-max-width: 1280px;
+  --site-page-padding: 24px;
+
+  /* 🔵 Brand: 觉策青 (Primary, 低饱和电光青) */
+  --brand-color: #2f8f96;
+  --brand-color-hover: #257a80;
+  --brand-color-active: #1b5f65;
+  --brand-color-bg: rgba(47, 143, 150, 0.09);
+  --brand-gradient: linear-gradient(135deg, #2f8f96 0%, #1b5f65 100%);
+  --brand-gradient-light: linear-gradient(135deg, #e6f2f3 0%, #d4eaec 100%);
+
+  /* TDesign 组件主题映射：让 t-button theme="primary" 等跟随觉策青，而非默认蓝
+     需要 !important：TDesign 组件库样式在 :root 上也定义同名变量且后加载，会覆盖本值 */
+  --td-brand-color: #2f8f96 !important;
+  --td-brand-color-hover: #3aa4ab !important;
+  --td-brand-color-focus: rgba(47, 143, 150, 0.2) !important;
+  --td-brand-color-active: #1b5f65 !important;
+  --td-brand-color-gradient: linear-gradient(180deg, #2f8f96 0%, #1b5f65 100%) !important;
+  --td-brand-color-light: rgba(47, 143, 150, 0.1) !important;
+  --td-brand-color-light-hover: rgba(47, 143, 150, 0.16) !important;
+  --td-brand-color-light-active: rgba(47, 143, 150, 0.22) !important;
+
+  /* 🟠 Sub-brand: 云雀 Yunque (低饱和琥珀, 仅小面积标记) */
+  --color-yunque: #b8863f;
+  --color-yunque-light: #ead8ba;
+  --color-yunque-bg: rgba(184, 134, 63, 0.1);
+
+  /* Sub-brand 背景：觉策智云 / 觉策ERP 统一走主色青 */
+  --color-saas-bg: rgba(47, 143, 150, 0.09);
+  --color-erp-bg: rgba(47, 143, 150, 0.09);
+
+  /* Text Colors (冷近黑) */
+  --text-primary: #1a2326;
+  --text-secondary: #59686c;
+  --text-tertiary: #879396;
+
+  /* Neutral Palette (冷石墨) */
+  --neutral-50: #f7f9f9;
+  --neutral-100: #eef2f2;
+  --neutral-200: #e0e7e7;
+  --neutral-300: #c4cccc;
+  --neutral-400: #99a6a8;
+  --neutral-500: #667275;
+  --neutral-600: #465356;
+  --neutral-700: #313c3f;
+  --neutral-800: #192426;
+  --neutral-900: #0c1416;
+
+  /* Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Type Scale */
+  --fs-display: clamp(44px, 6.4vw, 76px);
+  --fs-h1: clamp(34px, 4.4vw, 52px);
+  --fs-h2: clamp(26px, 3vw, 36px);
+  --fs-h3: 20px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+  --fs-tiny: 12px;
+
+  /* 淡出上移动画：用于 v-reveal 指令 */
+  --rv-dur: 640ms;
+  --rv-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Radius (克制统一) */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* Shadows (向青灰底色染色，不用纯黑) */
+  --shadow-sm: 0 1px 3px rgba(18, 34, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(18, 34, 40, 0.08);
+  --shadow-lg: 0 12px 40px rgba(18, 34, 40, 0.12);
+  --shadow-xl: 0 20px 60px rgba(18, 34, 40, 0.14);
+
+  /* Transitions */
+  --transition-fast: 200ms ease;
+  --transition-normal: 350ms ease;
+  --transition-slow: 600ms ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text-primary);
+  background: #fff;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+/* 数字统一等宽，避免 tabular 跳动 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-container {
+  max-width: var(--site-max-width);
+  margin: 0 auto;
+  padding: 0 var(--site-page-padding);
+}
+
+/* Common Utility Classes */
+.text-gradient {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Kicker：带短线的眉标 ── */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-color-active);
+
+  &::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: var(--brand-color);
+    border-radius: 2px;
+  }
+
+  &--white {
+    color: rgba(255, 255, 255, 0.72);
+
+    &::before {
+      background: var(--neutral-300);
+    }
+  }
+
+  &--center {
+    justify-content: center;
+
+    &::after {
+      content: "";
+      width: 22px;
+      height: 2px;
+      background: var(--brand-color);
+      border-radius: 2px;
+    }
+  }
+}
+
+/* ── 分节标题：支持左右对齐编辑式排版 ── */
+.section-title {
+  font-size: var(--fs-h1);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+
+  &.left {
+    text-align: left;
+  }
+
+  em {
+    font-style: normal;
+    color: var(--brand-color-active);
+  }
+}
+
+.section-desc {
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 56px;
+  line-height: 1.7;
+
+  &.left {
+    text-align: left;
+    margin: 0 0 24px;
+    max-width: 52ch;
+  }
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: var(--brand-gradient-light);
+  border-radius: var(--radius-xl);
+  color: var(--brand-color-active);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* ── 精网格质感（细线 + 禁漫射） ── */
+.grid-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(47, 143, 150, 0.18), transparent 55%);
+  background-size: 46px 46px, 46px 46px, 100% 100%;
+  mix-blend-mode: normal;
+  opacity: 0.8;
+}
+
+/* ═══ 滚动入场（配合 v-reveal 指令）═══ */
+.rv {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity var(--rv-dur) var(--rv-ease),
+    transform var(--rv-dur) var(--rv-ease);
+  transition-delay: var(--rv-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.rv.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 隐约的数值横线分隔 */
+.rule-line {
+  height: 1px;
+  background: linear-gradient(90deg, var(--neutral-200), var(--neutral-50));
+  border: 0;
+  margin: 0;
+}
+
+.product-card {
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+  }
+
+  .product-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 28px;
+    transition: transform var(--transition-fast);
+  }
+
+  &:hover .product-icon {
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .product-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+
+  .product-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .product-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    font-size: 14px;
+    line-height: 2;
+    color: var(--text-secondary);
+
+    li::before {
+      content: "✓";
+      color: var(--brand-color);
+      font-weight: 700;
+      margin-right: 10px;
+    }
+  }
+}
+
+/* 交互触感：尊重减弱动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

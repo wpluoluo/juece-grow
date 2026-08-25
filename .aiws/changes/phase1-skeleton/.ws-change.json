@@ -1,0 +1,21 @@
+{
+  "ws_change_version": 2,
+  "id": "phase1-skeleton",
+  "title": "Astro + Payload + Postgres 工程骨架（单站点 + 表单线索入池）",
+  "phase": "plan",
+  "created_at": "2026-08-25T12:42:59Z",
+  "base_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1787661746,
+      "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787661746,
+      "sha256": "0d94e0016f3416d8a302ddc47b82fe06535a84afd15890a34b886a9f3be86e78"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1787661746,
+      "sha256": "12c87836a0fceb17c647aa17a34652bd2e35c2bb681d4b974ecd027f689116df"
+    }
+  }
+}

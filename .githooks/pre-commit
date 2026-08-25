@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${WS_CHANGE_HOOK_BYPASS:-0}" == "1" ]]; then
+  echo "warn: WS_CHANGE_HOOK_BYPASS=1; skip aiws pre-commit hook" >&2
+  exit 0
+fi
+
+root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+[[ -n "${root:-}" ]] || exit 0
+
+cd "$root"
+
+# Write validate evidence stamp to: .agentdocs/tmp/aiws-validate/*.json
+export AIWS_VALIDATE_STAMP=1
+
+aiws_bin=""
+if [[ -x "$root/node_modules/.bin/aiws" ]]; then
+  aiws_bin="$root/node_modules/.bin/aiws"
+elif command -v aiws >/dev/null 2>&1; then
+  aiws_bin="aiws"
+fi
+
+if [[ -z "${aiws_bin:-}" ]]; then
+  echo "error: aiws CLI not found (required for git hook validation)" >&2
+  echo "hint: install @aipper/aiws then retry:" >&2
+  echo "  - npm i -g @aipper/aiws" >&2
+  echo "  - or: npm i -D @aipper/aiws" >&2
+  exit 1
+fi
+
+"$aiws_bin" validate .
+
+# Goal state integrity check (blocking if errors)
+if [[ -d "$root/.aiws/goals" ]]; then
+  if ! "$aiws_bin" goal validate-state >/dev/null 2>&1; then
+    echo "error: goal state validation failed — state machine integrity check" >&2
+    echo "hint: run 'aiws goal validate-state' to see details" >&2
+    exit 1
+  fi
+fi
+
+# Quality gates (non-blocking) — 每个 npm 门包 15s timeout，超时或失败都降级为 warn
+# macOS 无 GNU timeout，用 后台运行 + sleep 轮询 + kill 的兼容写法
+run_with_timeout() {
+  local secs="$1"
+  shift
+  "$@" >/dev/null 2>&1 &
+  local pid=$!
+  local waited=0
+  while kill -0 "$pid" 2>/dev/null && [[ "$waited" -lt "$secs" ]]; do
+    sleep 1
+    waited=$((waited + 1))
+  done
+  if kill -0 "$pid" 2>/dev/null; then
+    kill "$pid" 2>/dev/null || true
+    wait "$pid" 2>/dev/null || true
+    return 124
+  fi
+  wait "$pid"
+  return $?
+}
+
+if [[ -f "package.json" ]] && grep -q '"lint"' package.json 2>/dev/null; then
+  run_with_timeout 15 npm run lint || echo "warn: lint found issues or timed out (non-blocking)" >&2
+fi
+
+if [[ -f "packages/aiws/package.json" ]] && grep -q '"build"' packages/aiws/package.json 2>/dev/null; then
+  run_with_timeout 15 npm run --workspace packages/aiws build || echo "warn: build/typecheck found issues or timed out (non-blocking)" >&2
+fi
+
+if [[ -f "package.json" ]] && grep -q '"test"' package.json 2>/dev/null; then
+  run_with_timeout 15 npm test || echo "warn: tests found issues or timed out (non-blocking)" >&2
+fi
