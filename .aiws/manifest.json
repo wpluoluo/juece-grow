@@ -4,7 +4,7 @@
   "spec_version": "0.0.96",
   "aiws_version": "0.0.96",
   "installed_at": "2026-08-25T12:42:26Z",
-  "updated_at": "2026-08-25T15:35:10Z",
+  "updated_at": "2026-08-25T15:57:12Z",
   "tools": [
     "opencode"
   ],
@@ -303,11 +303,6 @@
     },
     {
       "path": ".opencode/command/using-aiws.md",
-      "mode": "replace_file",
-      "sha256": "55937759617df1529db913803b81eb56c71d538be7ae903f2226f0dd48cbffea"
-    },
-    {
-      "path": ".opencode/command/using-aiws.md",
       "mode": "managed_blocks",
       "blocks": {
         "opencode:using-aiws": "a05c2f2af0b3bdc1fd58d299e706c6d1bc7be9cc01332caba7a61f532a326bbb"
@@ -343,20 +338,10 @@
     },
     {
       "path": ".opencode/command/ws-plan.md",
-      "mode": "replace_file",
-      "sha256": "2b567b0896721afe062fdd36490577c979fefdb74fafbf4bf133da89dadc25c7"
-    },
-    {
-      "path": ".opencode/command/ws-plan.md",
       "mode": "managed_blocks",
       "blocks": {
         "opencode:ws-plan": "f6486b61b8d3c29ae9aafb8b54b01150ff773ee620a5f9f25c84ff6ad2cdb5bd"
       }
-    },
-    {
-      "path": ".opencode/command/ws-review.md",
-      "mode": "replace_file",
-      "sha256": "f45b371d7917c79411d6e6c4f82179466c8741a0f48a614c7e490141109286d2"
     },
     {
       "path": ".opencode/command/ws-review.md",
