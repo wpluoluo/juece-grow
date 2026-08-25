@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getArticles, getArticleBySlug, type Article } from '../../lib/payload'
+
+export async function getStaticPaths() {
+  const articles = await getArticles()
+  return articles.map((a) => ({ params: { slug: a.slug } }))
+}
+
+const { slug } = Astro.params
+const found = slug ? await getArticleBySlug(slug) : null
+const article: Article | null = found && found.length > 0 ? found[0] : null
+
+if (!article) {
+  return Astro.redirect('/404')
+}
+---
+
+<Layout title={article.title} description={article.excerpt || ''}>
+  <h1>{article.title}</h1>
+  {article.excerpt && <p>{article.excerpt}</p>}
+  <p><a href="/">← 返回首页</a></p>
+</Layout>

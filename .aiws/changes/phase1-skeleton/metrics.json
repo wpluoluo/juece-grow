@@ -40,7 +40,45 @@
         "warnings": 0,
         "exit_code": 0
       }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-08-25T13:56:27Z",
+      "payload": {
+        "synced_at": "2026-08-25T13:56:27Z",
+        "baseline_from": "creation",
+        "baseline_at": "2026-08-25T12:42:59Z",
+        "changed_files": [
+          "AI_WORKSPACE.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-25T13:56:50Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-08-25T15:35:35Z",
+      "payload": {
+        "synced_at": "2026-08-25T15:35:35Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-08-25T13:56:27Z",
+        "changed_files": [
+          "REQUIREMENTS.md"
+        ]
+      }
     }
   ],
-  "updated_at": "2026-08-25T12:46:18Z"
+  "updated_at": "2026-08-25T15:35:35Z"
 }

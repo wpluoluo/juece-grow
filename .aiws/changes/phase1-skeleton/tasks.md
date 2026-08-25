@@ -19,18 +19,20 @@
 ## 1. 需求/问题合同（如适用）
 
 - [ ] 1.1 需求交付：补齐/更新 `REQUIREMENTS.md` 验收条款（或确认不需要）
-- [ ] 1.2 同步 `.aiws/requirements/requirements-issues.csv`（或更新 `.aiws/issues/problem-issues.csv`）
+- [ ] 1.2 同步 `.aiws/requirements/requirements-issues.jsonl`（或更新 `.aiws/issues/problem-issues.jsonl`）
 - [ ] 1.3 记录到 `.aiws/requirements/CHANGELOG.md`（如需求发生变化）
 
 ## 2. 实现
 
 - [ ] 2.1 monorepo 根：`package.json`（pnpm workspaces）+ `pnpm-workspace.yaml` + `.gitignore` 托管块
+- [ ] 2.1a 本机运行：根 `docker-compose.yml` 仅起 postgres（DATABASE_URI=localhost:5434）；cms/astro dev 跑 host
 - [ ] 2.2 `apps/cms`：Payload 3 初始化 + Postgres 连接（@payloadcms/db-postgres）+ 环境配置
 - [ ] 2.3 `apps/cms`：首批 collections（Project / Site / Article / Lead / Form）
 - [ ] 2.4 `apps/cms`：表单提交 API（/api/v2，写入 Lead）
 - [ ] 2.5 `apps/astro`：Astro SSG 骨架 + 布局 + 首页
 - [ ] 2.6 `apps/astro`：文章详情静态渲染 + 从 Payload 拉取数据
 - [ ] 2.7 共享 /api/v2 信封与统一错误规范落地
+- [ ] 2.8 e2e 烟测：Playwright 提交表单 → Lead 落库 → /api/v2 返回 `{success:true,data}`（`apps/e2e` 或独立 e2e 包）
 
 ## 2A. 协同（可选）
 
@@ -44,6 +46,7 @@
 - [ ] 3.2 `pnpm --filter cms dev` 启动，Payload admin 可登录，首批 collections 列表可见
 - [ ] 3.3 `pnpm --filter astro dev` 启动，首页/文章详情渲染出 Payload 数据
 - [ ] 3.4 提交表单 → Lead 落库，/api/v2 返回 `{ success: true, data }`
+- [ ] 3.5 e2e 烟测通过：`pnpm --filter e2e test`（表单提交→Lead 落库→信封断言 DONE）
 
 ## 4. 交付与归档
 

@@ -17,5 +17,46 @@
       "mtime": 1787661746,
       "sha256": "12c87836a0fceb17c647aa17a34652bd2e35c2bb681d4b974ecd027f689116df"
     }
-  }
+  },
+  "synced_at": "2026-08-25T15:35:35Z",
+  "synced_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1787661746,
+      "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787662922,
+      "sha256": "08c099ff610893a4dbf4650bada09abafabcd4af489c380fb923f475052fe45f"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1787672109,
+      "sha256": "85e967bb28a5689d8a7b047acea7ae814f3a89b411383a901495c2b18d1395c3"
+    }
+  },
+  "sync_events": [
+    {
+      "synced_at": "2026-08-25T13:56:27Z",
+      "baseline_from": "creation",
+      "baseline_at": "2026-08-25T12:42:59Z",
+      "changed": [
+        {
+          "file": "AI_WORKSPACE.md",
+          "from": "0d94e0016f3416d8a302ddc47b82fe06535a84afd15890a34b886a9f3be86e78",
+          "to": "08c099ff610893a4dbf4650bada09abafabcd4af489c380fb923f475052fe45f"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-08-25T15:35:35Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-08-25T13:56:27Z",
+      "changed": [
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "12c87836a0fceb17c647aa17a34652bd2e35c2bb681d4b974ecd027f689116df",
+          "to": "85e967bb28a5689d8a7b047acea7ae814f3a89b411383a901495c2b18d1395c3"
+        }
+      ]
+    }
+  ]
 }

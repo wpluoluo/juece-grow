@@ -6,11 +6,11 @@
 一个自己的获客营销平台，替你把每个产品的官网、文章、留资入口、线索跟进在一个平台统一管起来。
 
 ## 技术栈
-- Nuxt 4.5.x / Vite 8（前端与服务端合一，SSG/ISR 利于 SEO）
-- MySQL 8 + Prisma 7（建模站点/内容/线索）
-- TipTap（富文本）
-- Chatwoot（客服收件箱，线索主数据在自己 MySQL）
-- 认证：自有 Nuxt 服务端
+- 公开站点：Astro 6（SSG 静态，内容/营销站/SEO 主场景）
+- 后台/内容/线索/数据：Payload 3 自托管（原生 admin / Auth / Lexical 富文本）
+- 数据库：PostgreSQL 16（Payload 官方 stable 适配器，数据自持）
+- 客服收件：Chatwoot（仅收件箱，线索主数据在自有 Postgres）
+- 认证：Payload 内建 Auth（JWT/Cookie）
 
 ## 文档
 - [规划方案](docs/01-plan.md)

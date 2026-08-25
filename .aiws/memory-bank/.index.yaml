@@ -1,0 +1,46 @@
+memories:
+  rule://ai-project:
+    title: AI_PROJECT.md（项目规则 / 约束真值）
+    domain: rule
+    path: rule/ai-project.md
+    created: '2026-08-25T15:35:10.583Z'
+    updated: '2026-08-25T15:35:10.583Z'
+    tags:
+      - seed:ai-project
+    summary: '<!-- AIWSMANAGEDBEGIN:ai-project:core --> <!-- AIPROJECTVERSION: 2 -->'
+  project://requirement:
+    title: REQUIREMENTS.md
+    domain: project
+    path: project/requirement.md
+    created: '2026-08-25T15:35:10.600Z'
+    updated: '2026-08-25T15:35:10.600Z'
+    tags:
+      - seed:requirement
+    summary: <!-- AIWSMANAGEDBEGIN:requirements:contract --> 本文件是工作区需求的唯一真值来源。AI 在制定计划与执行测试时必须以此为准。
+  project://ai-workspace:
+    title: AI_WORKSPACE.md（工作区说明）
+    domain: project
+    path: project/ai-workspace.md
+    created: '2026-08-25T15:35:10.612Z'
+    updated: '2026-08-25T15:35:10.612Z'
+    tags:
+      - seed:ai-workspace
+    summary: 本段由用户维护； 不会改动本段（建议把“可变参数”都放在这里）。
+  rule://agents:
+    title: AGENTS.md · juece-grow 项目规范
+    domain: rule
+    path: rule/agents.md
+    created: '2026-08-25T15:35:10.625Z'
+    updated: '2026-08-25T15:35:10.625Z'
+    tags:
+      - seed:agents
+    summary: <!-- AIWSMANAGEDBEGIN:agents --> 本仓库启用 AIWS（AI Workspace）约定。真值文件（按优先读取）： 1) （规则/边界）→ 2) （需求与验收真值）→ 3) （运行/测试入口真值）
+  change://phase1-skeleton:
+    title: 'Plan: phase1-skeleton'
+    domain: change
+    path: change/phase1-skeleton.md
+    created: '2026-08-25T15:35:10.645Z'
+    updated: '2026-08-25T15:35:10.645Z'
+    tags:
+      - seed:plan
+    summary: '> Branch: change/phase1-skeleton > Created: 2026-08-25T12:42:59Z > ChangeType: full-stack'

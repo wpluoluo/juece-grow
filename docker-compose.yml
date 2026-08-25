@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: juece-grow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: juece
+      POSTGRES_PASSWORD: juece
+      POSTGRES_DB: juece_grow
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U juece -d juece_grow"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

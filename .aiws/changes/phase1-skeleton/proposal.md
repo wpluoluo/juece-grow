@@ -41,7 +41,7 @@
 
 > 规则：
 > - `Req_ID` 与 `Problem_ID` 至少填写一项。
-> - `Contract_Row` 必须引用 `.aiws/requirements/requirements-issues.csv` 或 `.aiws/issues/problem-issues.csv` 中的真实行。
+> - `Contract_Row` 必须引用 `.aiws/requirements/requirements-issues.jsonl` 或 `.aiws/issues/problem-issues.jsonl` 中的真实行。
 > - `Plan_File` 对应的计划文件必须存在，且其绑定字段与本文件一致。
 > - `Evidence_Path` 可先声明计划路径，交付前需完成证据落盘。
 
@@ -81,7 +81,10 @@
 
 - `apps/cms/**` - Payload 后台（collections / auth / db / API）
 - `apps/astro/**` - 公开站（SSG 页面 / 布局 / 数据拉取）
-- `package.json` / `pnpm-workspace.yaml` - monorepo 根
+- `apps/e2e/**` - Playwright 烟测
+- `package.json` / `pnpm-workspace.yaml` / `pnpm-lock.yaml` - monorepo 根
+- `docker-compose.yml` - 本地 Postgres 容器
+- `README.md` / `AI_WORKSPACE.md` / `.gitignore` - 配置与真值同步
 - `docs/**` - 真值文档同步
 - `.aiws/**` - 门禁工件
 - `AGENTS.md` / `CLAUDE.md` - 治理与上下文（如需）
@@ -129,7 +132,7 @@
 
 - `REQUIREMENTS.md`：需要 —— `aiws init` 已生成，待按 docs/06-roadmap Phase 1 更新验收条款
 - `.aiws/requirements/CHANGELOG.md`：需要
-- `.aiws/requirements/requirements-issues.csv`：需要（登记 PHASE1-SKELETON）
+- `.aiws/requirements/requirements-issues.jsonl`：需要（登记 PHASE1-SKELETON）
 - `.aiws/issues/problem-issues.csv`：N/A
 - 证据落盘（推荐双层）：
   - 持久（建议入库）：`.aiws/changes/phase1-skeleton/evidence/verify-before-complete.md`

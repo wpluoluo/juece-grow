@@ -1,0 +1,15 @@
+{
+  "name": "juece-grow",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "cms:dev": "pnpm --filter cms dev",
+    "cms:build": "pnpm --filter cms build",
+    "astro:dev": "pnpm --filter astro dev",
+    "astro:build": "pnpm --filter astro build",
+    "e2e:test": "pnpm --filter e2e test",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down"
+  }
+}

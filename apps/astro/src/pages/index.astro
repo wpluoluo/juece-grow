@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { CMS_ORIGIN, getArticles } from '../lib/payload'
+
+const articles = await getArticles()
+
+function formatDate(value?: string): string {
+  if (!value) return ''
+  return new Date(value).toLocaleDateString('zh-CN')
+}
+---
+
+<Layout title="觉策增长 · 多产品获客增长平台" description="统一管理多产品的官网、文章、留资与线索。">
+  <h1>觉策增长</h1>
+  <p>
+    一个自己的获客营销平台：把每个产品的官网、文章、留资入口与线索跟进，在一个后台统一管起来。
+  </p>
+
+  <h2>最新文章</h2>
+  {
+    articles.length === 0 ? (
+      <p>还没有发布文章。</p>
+    ) : (
+      <ul>
+        {
+          articles.map((a) => (
+            <li>
+              <a href={`/articles/${a.slug}/`}>{a.title}</a>
+              <span> · {formatDate(a.publishedAt)}</span>
+            </li>
+          ))
+        }
+      </ul>
+    )
+  }
+
+  <h2>留下联系方式</h2>
+  <form id="lead-form" data-project-id="1">
+    <div>
+      <label for="name">称呼</label>
+      <input id="name" name="name" type="text" autocomplete="name" />
+    </div>
+    <div>
+      <label for="phone">电话</label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+    </div>
+    <button type="submit">提交</button>
+    <p id="lead-form-status" role="status"></p>
+  </form>
+</Layout>
+
+<script>
+  import { CMS_ORIGIN } from '../lib/payload'
+
+  const form = document.getElementById('lead-form') as HTMLFormElement
+  const status = document.getElementById('lead-form-status')
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const projectId = form.dataset.projectId as string
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value
+    const phone = (form.elements.namedItem('phone') as HTMLInputElement).value
+
+    status.textContent = '提交中…'
+    try {
+      const res = await fetch(
+        `${CMS_ORIGIN}/api/v2/leads`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ projectId, name, phone }),
+        },
+      )
+      const body = await res.json()
+      if (body.success) {
+        status.textContent = '已收到，我们会尽快联系您。'
+        form.reset()
+      } else {
+        status.textContent = body.error?.message || '提交失败。'
+      }
+    } catch {
+      status.textContent = '提交失败，请稍后再试。'
+    }
+  })
+</script>

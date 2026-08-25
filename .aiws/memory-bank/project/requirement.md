@@ -1,3 +1,15 @@
+---
+title: REQUIREMENTS.md
+created: '2026-08-25T15:35:10.600Z'
+updated: '2026-08-25T15:35:10.600Z'
+summary: <!-- AIWSMANAGEDBEGIN:requirements:contract --> 本文件是工作区需求的唯一真值来源。AI 在制定计划与执行测试时必须以此为准。
+tags:
+  - seed:requirement
+---
+# REQUIREMENTS.md
+
+_Source: `REQUIREMENTS.md`_
+
 # REQUIREMENTS.md
 
 <!-- AIWS_MANAGED_BEGIN:requirements:contract -->

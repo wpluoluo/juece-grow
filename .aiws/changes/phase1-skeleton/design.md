@@ -26,6 +26,7 @@
 
 - monorepo：根 pnpm workspaces，`apps/astro` + `apps/cms` 两包（快速开发 + 单仓治理）。
 - 数据层：PostgreSQL 16 + @payloadcms/db-postgres（官方 stable 适配器），schema 由 Payload 自管。
+- 运行形态（本机）：Postgres 跑在 Docker 容器（`docker-compose` 只起 postgres，`DATABASE_URI=localhost:5434`）；Payload cms 与 Astro dev 跑在本机 host，**不进容器**。
 - 内容/表单：Payload collections 建模；Lead 是表单提交的唯一主数据源，不依赖任何 SaaS。
 - Astro↔Payload 拉取：Payload REST 端点 + 文档化模板，Phase 1 以单站点验证该链路。
 - 接口信封：对外统一 `/api/v2`，成功 `{ success: true, data }`、失败 `{ success: false, error:{code,message} }`。
@@ -40,3 +41,9 @@
 
 - 迁移：Postgres 全新实例，Payload `push` 建 schema（加字段为主）。
 - 回滚：全部新增文件，无既有破坏 → 移除 `apps/` 与新增配置即回纯文档态，或 `git revert` 首个提交。
+
+## 生产收敛点（Production Gate，本期不落地）
+
+- CORS：`envelope.ts` 的 `Access-Control-Allow-Origin: *` 为开发期配置（当前无凭据请求，风险可控）。上生产前须收敛为白名单 origin（含 admin 同源），并收紧 `Allow-Methods/Headers`。
+- 线索去重：`leads.dedupKey` 已建索引但本期不做查重/去重合并；归因与去重策略属 Phase 2。
+- 留资校验加强：本期以「phone 或 wechat 至少填一」+ `projectId` 必须正整数为边界；更细的格式校验（手机号/微信号规则）留待后续。
