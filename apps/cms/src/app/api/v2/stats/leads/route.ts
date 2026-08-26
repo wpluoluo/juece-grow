@@ -18,6 +18,9 @@ function rate(part: number, total: number): number {
   return Math.round((part / total) * 1000) / 10
 }
 
+/** 近期事件取前 N 条。 */
+const RECENT_LIMIT = 8
+
 /** 渠道统计/归因看板：阶段漏斗、转化率、来源归因与跟进人分布。 */
 export async function GET(req: NextRequest) {
   try {
@@ -36,7 +39,15 @@ export async function GET(req: NextRequest) {
       depth: 0,
       limit: 0,
       pagination: false,
-      select: { source: true, status: true, owner: true },
+      select: {
+        source: true,
+        status: true,
+        owner: true,
+        followUpNote: true,
+        nextFollowUpAt: true,
+        createdAt: true,
+        title: true,
+      },
     })
 
     const total = doc.docs.length
@@ -100,6 +111,73 @@ export async function GET(req: NextRequest) {
       .map(([status, count]) => ({ status, count }))
       .sort((a, b) => b.count - a.count)
 
+    // 跟进动态：基于 lead-activities（项目隔离同 leads），统计跟进次数、平均成交周期与近期事件。
+    const activityWhere =
+      projectIds === null ? undefined : { project: { in: projectIds.length ? projectIds : [-1] } }
+    const acts = await payload.find({
+      collection: 'lead-activities',
+      overrideAccess: true,
+      where: activityWhere,
+      depth: 0,
+      limit: 0,
+      pagination: false,
+      sort: '-createdAt',
+      select: {
+        lead: true,
+        type: true,
+        detail: true,
+        meta: true,
+        actor: true,
+        createdAt: true,
+      },
+    })
+
+    let followUpCount = 0
+    const convertMoments = new Map<number, number>() // leadId -> 首次流转到 converted 的时间戳
+    const createdMoments = new Map<number, number>() // leadId -> created 时间戳
+    for (const a of acts.docs) {
+      if (a.type === 'follow_up') followUpCount += 1
+      const leadId = Number(a.lead)
+      if (a.type === 'created' && !createdMoments.has(leadId)) {
+        createdMoments.set(leadId, new Date(a.createdAt).getTime())
+      }
+      if (a.type === 'status_changed') {
+        const meta = a.meta as { to?: string } | null | undefined
+        if (meta?.to === CONVERTED_STATUS && !convertMoments.has(leadId)) {
+          convertMoments.set(leadId, new Date(a.createdAt).getTime())
+        }
+      }
+    }
+    // 平均成交周期：仅统计有 created 且成功流转到 converted 的线索（小时，取整）。
+    let cycleHoursSum = 0
+    let cycleCount = 0
+    for (const [leadId, convTs] of convertMoments) {
+      const createdTs = createdMoments.get(leadId)
+      if (!createdTs || convTs < createdTs) continue
+      cycleHoursSum += Math.round((convTs - createdTs) / 3_600_000)
+      cycleCount += 1
+    }
+    const avgConvertCycleHours = cycleCount > 0 ? Math.round(cycleHoursSum / cycleCount) : null
+
+    // 近期事件：解析 lead 标题与 actor 显示名。
+    const leadTitle = new Map<number, string>()
+    for (const l of doc.docs) leadTitle.set(Number(l.id), (l.title as string) || `线索#${l.id}`)
+    const recent = acts.docs.slice(0, RECENT_LIMIT).map((a) => {
+      const leadId = Number(a.lead)
+      const actorId = a.actor == null ? null : Number(a.actor)
+      const actorName =
+        actorId == null ? '系统' : ownerNames.get(String(actorId)) ?? `用户${actorId}`
+      return {
+        id: a.id,
+        leadId,
+        title: leadTitle.get(leadId) ?? `线索#${leadId}`,
+        type: a.type,
+        detail: a.detail ?? '',
+        actor: actorName,
+        at: a.createdAt,
+      }
+    })
+
     return ok({
       total,
       converted,
@@ -108,6 +186,9 @@ export async function GET(req: NextRequest) {
       byStatus,
       bySource,
       byOwner,
+      followUpCount,
+      avgConvertCycleHours,
+      recent,
     })
   } catch {
     return err('STATS_FETCH_FAILED', '统计失败，请稍后再试', 500)

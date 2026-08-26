@@ -12,6 +12,9 @@ type Stats = {
   byStatus: { status: string; count: number }[]
   bySource: { source: string; total: number; converted: number; convertedRate: number }[]
   byOwner: { owner: string; name: string; count: number }[]
+  followUpCount: number
+  avgConvertCycleHours: number | null
+  recent: { id: number; leadId: number; title: string; type: string; detail: string; actor: string; at: string }[]
 }
 
 const DICT: Dict = {
@@ -30,6 +33,17 @@ const DICT: Dict = {
   byOwner: { zh: '跟进人分布', en: 'Owner distribution' },
   noSource: { zh: '暂无来源数据', en: 'No source data' },
   noOwner: { zh: '暂无跟进人数据', en: 'No owner data' },
+  followUpCount: { zh: '跟进次数', en: 'Follow-ups' },
+  avgCycle: { zh: '平均成交周期', en: 'Avg. cycle' },
+  cycleHours: { zh: '{n} 小时', en: '{n} hours' },
+  noCycle: { zh: '暂无成交', en: 'No conversions' },
+  recent: { zh: '近期动态', en: 'Recent activity' },
+  noRecent: { zh: '暂无动态', en: 'No activity yet' },
+  at: { zh: '{d} · {a}', en: '{d} · {a}' },
+  'ev.created': { zh: '创建入池', en: 'Created' },
+  'ev.status_changed': { zh: '状态流转', en: 'Status changed' },
+  'ev.assigned': { zh: '线索分配', en: 'Assigned' },
+  'ev.follow_up': { zh: '跟进写注', en: 'Follow-up' },
   unit: { zh: '{n} 条', en: '{n} leads' },
   unitConverted: { zh: '成交 {n}（{p}%）', en: '{n} converted ({p}%)' },
   'st.new': { zh: '新线索', en: 'New' },
@@ -108,6 +122,15 @@ function Board() {
         <Card label={t('total')} value={stats?.total ?? 0} />
         <Card label={t('converted')} value={stats?.converted ?? 0} />
         <Card label={t('convertedRate')} value={`${stats?.convertedRate ?? 0}%`} />
+        <Card label={t('followUpCount')} value={stats?.followUpCount ?? 0} />
+        <Card
+          label={t('avgCycle')}
+          value={
+            stats?.avgConvertCycleHours == null
+              ? t('noCycle')
+              : t('cycleHours').replace('{n}', String(stats.avgConvertCycleHours))
+          }
+        />
       </div>
 
       {showEmpty && <p style={{ color: '#8a8f99', fontSize: 13 }}>{t('emptyData')}</p>}
@@ -158,6 +181,29 @@ function Board() {
             ))}
           </section>
         </div>
+      )}
+
+      {stats && (
+        <section style={{ ...sectionStyle, marginTop: 20 }}>
+          <h2 style={h2Style}>{t('recent')}</h2>
+          {stats.recent.length === 0 && <p style={{ color: '#8a8f99', fontSize: 12 }}>{t('noRecent')}</p>}
+          {stats.recent.map((r) => (
+            <div key={r.id} style={rowStyle}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <span style={evTagStyle}>{t(`ev.${r.type}`)}</span>
+                  <span style={{ fontSize: 13, color: '#333', fontWeight: 500 }}>{r.title}</span>
+                </div>
+                {r.detail && (
+                  <div style={{ fontSize: 12, color: '#666', marginTop: 3 }}>{r.detail}</div>
+                )}
+                <div style={{ fontSize: 12, color: '#999', marginTop: 2 }}>
+                  {t('at').replace('{d}', formatTime(r.at)).replace('{a}', r.actor)}
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
       )}
     </main>
   )
@@ -234,4 +280,20 @@ const rowStyle: React.CSSProperties = {
   padding: '7px 0',
   borderBottom: '1px solid #f0f1f3',
 }
+const evTagStyle: React.CSSProperties = {
+  fontSize: 11,
+  color: '#4a6b57',
+  background: '#edf3ef',
+  borderRadius: 4,
+  padding: '2px 7px',
+  flexShrink: 0,
+}
 const linkStyle: React.CSSProperties = { color: '#3b6ea5', fontSize: 14 }
+
+/** 将 ISO 时间戳格式化为本地 `MM-DD HH:mm`。 */
+function formatTime(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
