@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { err, ok } from '../../../../lib/envelope'
+import { LEAD_SOURCE_VALUES, type LeadSourceValue } from '../../../../lib/leadSources'
 
 type LeadInput = {
   projectId: string
@@ -19,7 +20,7 @@ const PHONE_RE = /^1[3-9]\d{9}$/
 /** 微信号：6~20 位字母数字，可含下划线/连字符。 */
 const WECHAT_RE = /^[A-Za-z0-9_-]{6,20}$/
 
-/** 校验 name 长度与来源取值，返回错误信息；合法返回空。 */
+/** 校验 name/source/note 长度与来源取值，返回错误信息；合法返回空。 */
 function validateBody(data: {
   name?: string
   phone?: string
@@ -29,7 +30,7 @@ function validateBody(data: {
 }): string {
   if (data.name && data.name.trim().length > 50) return '称呼请控制在 50 字以内'
   if (data.note && data.note.trim().length > 500) return '留言请控制在 500 字以内'
-  if (data.source && !/^[a-z0-9-]{1,30}$/.test(data.source)) return '来源格式不正确'
+  if (data.source && !LEAD_SOURCE_VALUES.includes(data.source)) return '来源取值不正确'
   return ''
 }
 
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
   const phone = (body.phone || '').trim()
   const wechat = (body.wechat || '').trim()
   const note = (body.note || '').trim()
-  const source = body.source || 'website'
+  const source = (body.source || 'website') as LeadSourceValue
 
   if (!phone && !wechat) return err('VALIDATION', 'phone 与 wechat 至少填一个')
   if (phone && !PHONE_RE.test(phone)) return err('VALIDATION', '手机号格式不正确')
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
     })
     if (project.docs.length === 0) return err('PROJECT_NOT_FOUND', '项目不存在')
 
-    // 去重：同一项目下相同 dedupKey 的线索跳过写入，避免重复留资。
+    // 去重合并：同一项目下相同 dedupKey 已存在时，把本次留资的缺失信息合并进既有线索，避免重复与丢信息。
     const dedupKey = phone || wechat
     if (dedupKey) {
       const existing = await payload.find({
@@ -81,7 +82,23 @@ export async function POST(req: NextRequest) {
         depth: 0,
       })
       if (existing.docs.length > 0) {
-        return ok({ id: existing.docs[0].id, duplicate: true })
+        const cur = existing.docs[0]
+        const patch: Record<string, unknown> = {}
+        if (!cur.name && name) patch.name = name
+        if (!cur.phone && phone) patch.phone = phone
+        if (!cur.wechat && wechat) patch.wechat = wechat
+        if (!cur.note && note) patch.note = note
+        const followUpNote = [cur.followUpNote, note].filter(Boolean).join('\n')
+        if (followUpNote && followUpNote !== cur.followUpNote) patch.followUpNote = followUpNote
+        if (Object.keys(patch).length > 0) {
+          await payload.update({
+            collection: 'leads',
+            overrideAccess: true,
+            id: cur.id,
+            data: patch,
+          })
+        }
+        return ok({ id: cur.id, duplicate: true })
       }
     }
 

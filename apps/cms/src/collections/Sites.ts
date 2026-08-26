@@ -1,6 +1,6 @@
-import type { CollectionConfig } from 'payload'
+import { addDataAndFileToRequest, type CollectionConfig } from 'payload'
 
-import { authenticated, everyone } from '../access'
+import { authenticated, everyone, memberCanWrite } from '../access'
 
 /** 站点：挂在项目下，独立可访问，SEO 字段独立配置。 */
 export const Sites: CollectionConfig = {
@@ -23,6 +23,87 @@ export const Sites: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
+  endpoints: [
+    {
+      path: '/clone',
+      method: 'post',
+      // 复制一个站点为草稿副本，便于以模板快速起新站。
+      handler: async (req) => {
+        if (!req.user) {
+          return Response.json(
+            { success: false, error: { code: 'UNAUTHORIZED', message: '未登录' } },
+            { status: 401 },
+          )
+        }
+        if (!(await memberCanWrite(req))) {
+          return Response.json(
+            { success: false, error: { code: 'FORBIDDEN', message: '无权复制站点' } },
+            { status: 403 },
+          )
+        }
+
+        await addDataAndFileToRequest(req)
+        const data = req.data as {
+          sourceId?: number
+          name?: string
+          projectId?: number
+        } | null
+        if (!data) {
+          return Response.json(
+            { success: false, error: { code: 'INVALID_JSON', message: '请求体必须是 JSON' } },
+            { status: 400 },
+          )
+        }
+        if (!Number.isInteger(data.sourceId) || (data.sourceId as number) <= 0) {
+          return Response.json(
+            { success: false, error: { code: 'MISSING_SOURCE', message: '缺少有效的 sourceId' } },
+            { status: 400 },
+          )
+        }
+        if (data.projectId !== undefined && (!Number.isInteger(data.projectId) || data.projectId <= 0)) {
+          return Response.json(
+            { success: false, error: { code: 'INVALID_PROJECT', message: 'projectId 必须是正整数' } },
+            { status: 400 },
+          )
+        }
+
+        try {
+          const source = await req.payload.findByID({
+            collection: 'sites',
+            overrideAccess: true,
+            id: data.sourceId as number,
+            depth: 0,
+          })
+
+          const name = (data.name || '').trim() || `${source.name} 副本`
+          const clone = await req.payload.create({
+            collection: 'sites',
+            overrideAccess: true,
+            data: {
+              name,
+              project: data.projectId ?? Number(source.project),
+              subdomain: source.subdomain || undefined,
+              pathSlug: source.pathSlug || undefined,
+              themeColor: source.themeColor || undefined,
+              metaTitle: source.metaTitle || undefined,
+              metaDescription: source.metaDescription || undefined,
+              logo: typeof source.logo === 'number' ? source.logo : undefined,
+              ogImage: typeof source.ogImage === 'number' ? source.ogImage : undefined,
+              isTemplate: false,
+              status: 'draft',
+            },
+          })
+
+          return Response.json({ success: true, data: { id: clone.id, name: clone.name } })
+        } catch {
+          return Response.json(
+            { success: false, error: { code: 'SITE_CLONE_FAILED', message: '站点复制失败，请稍后再试' } },
+            { status: 500 },
+          )
+        }
+      },
+    },
+  ],
   fields: [
     {
       name: 'name',
@@ -59,6 +140,18 @@ export const Sites: CollectionConfig = {
         description: {
           zh: '路径标识（如 /home 或 /product），用于区分站点页面。',
           en: 'Path identifier (e.g. /home) to distinguish site pages.',
+        },
+      },
+    },
+    {
+      name: 'isTemplate',
+      type: 'checkbox',
+      label: { zh: '作为模板', en: 'Is Template' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          zh: '勾选后可作为模板，通过“复制站点”快速生成新站点。',
+          en: 'Mark as a reusable template for cloning new sites.',
         },
       },
     },

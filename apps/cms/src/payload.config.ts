@@ -28,6 +28,7 @@ import { Media } from './collections/Media'
 import { Articles } from './collections/Articles'
 import { Forms } from './collections/Forms'
 import { Leads } from './collections/Leads'
+import { Memberships } from './collections/Memberships'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -157,6 +158,13 @@ export default buildConfig({
       ...Users,
       admin: {
         ...Users.admin,
+        group: { zh: '系统', en: 'System' },
+      },
+    },
+    {
+      ...Memberships,
+      admin: {
+        ...Memberships.admin,
         group: { zh: '系统', en: 'System' },
       },
     },

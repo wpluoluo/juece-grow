@@ -75,6 +75,7 @@ export interface Config {
     articles: Article;
     forms: Form;
     users: User;
+    memberships: Membership;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    memberships: MembershipsSelect<false> | MembershipsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -161,9 +163,9 @@ export interface Lead {
    */
   note?: string | null;
   /**
-   * Source channel, e.g. website / event / manual.
+   * Lead source channel (for tagging).
    */
-  source?: string | null;
+  source?: ('website' | 'campaign' | 'manual' | 'support' | 'referral') | null;
   /**
    * Current owner.
    */
@@ -349,6 +351,10 @@ export interface Site {
    */
   pathSlug?: string | null;
   /**
+   * Mark as a reusable template for cloning new sites.
+   */
+  isTemplate?: boolean | null;
+  /**
    * Site publishing status.
    */
   status?: ('draft' | 'published' | 'archived') | null;
@@ -506,6 +512,30 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Multi-project governance: assign admin users to projects with scoped roles.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "memberships".
+ */
+export interface Membership {
+  id: number;
+  title?: string | null;
+  /**
+   * The project this member belongs to.
+   */
+  project: number | Project;
+  /**
+   * The admin user account.
+   */
+  user: number | User;
+  /**
+   * owner/admin manage members; editor/owner/admin write; viewer read-only.
+   */
+  role: 'owner' | 'admin' | 'editor' | 'viewer';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -560,6 +590,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'memberships';
+        value: number | Membership;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -657,6 +691,7 @@ export interface SitesSelect<T extends boolean = true> {
   project?: T;
   subdomain?: T;
   pathSlug?: T;
+  isTemplate?: T;
   status?: T;
   logo?: T;
   themeColor?: T;
@@ -794,6 +829,18 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "memberships_select".
+ */
+export interface MembershipsSelect<T extends boolean = true> {
+  title?: T;
+  project?: T;
+  user?: T;
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,6 +1,14 @@
-import type { CollectionConfig } from 'payload'
+import { addDataAndFileToRequest, type CollectionConfig } from 'payload'
 
-import { authenticated, everyone } from '../access'
+import {
+  authenticated,
+  everyone,
+  isGlobalAdmin,
+  isProjectMember,
+  memberCanWriteProject,
+  projectScopedRead,
+} from '../access'
+import { LEAD_SOURCES } from '../lib/leadSources'
 
 /** 线索：主数据存自有 Postgres。read 仅登录可见（隐私），create 公开（网页表单入池）。 */
 export const Leads: CollectionConfig = {
@@ -19,7 +27,7 @@ export const Leads: CollectionConfig = {
     },
   },
   access: {
-    read: authenticated,
+    read: projectScopedRead,
     create: everyone,
     update: authenticated,
     delete: authenticated,
@@ -35,6 +43,113 @@ export const Leads: CollectionConfig = {
       },
     ],
   },
+  endpoints: [
+    {
+      path: '/assign',
+      method: 'post',
+      // 分配线索给项目成员：发起人需对该项目有写权限，被分配人需是该项目成员或全局管理员。
+      handler: async (req) => {
+        if (!req.user) {
+          return Response.json(
+            { success: false, error: { code: 'UNAUTHORIZED', message: '未登录' } },
+            { status: 401 },
+          )
+        }
+
+        await addDataAndFileToRequest(req)
+        const data = req.data as { leadId?: number; assigneeId?: number } | null
+        if (!data) {
+          return Response.json(
+            { success: false, error: { code: 'INVALID_JSON', message: '请求体必须是 JSON' } },
+            { status: 400 },
+          )
+        }
+        if (!Number.isInteger(data.leadId) || (data.leadId as number) <= 0) {
+          return Response.json(
+            { success: false, error: { code: 'MISSING_LEAD', message: '缺少有效的 leadId' } },
+            { status: 400 },
+          )
+        }
+        if (!Number.isInteger(data.assigneeId) || (data.assigneeId as number) <= 0) {
+          return Response.json(
+            { success: false, error: { code: 'INVALID_ASSIGNEE', message: 'assigneeId 必须是正整数' } },
+            { status: 400 },
+          )
+        }
+
+        try {
+          const lead = await req.payload.findByID({
+            collection: 'leads',
+            overrideAccess: true,
+            id: data.leadId as number,
+            depth: 0,
+          })
+          if (!lead) {
+            return Response.json(
+              { success: false, error: { code: 'LEAD_NOT_FOUND', message: '线索不存在' } },
+              { status: 404 },
+            )
+          }
+
+          const projectId = Number(lead.project)
+          if (!(await memberCanWriteProject(req, projectId)) || !(await isProjectMember(req, projectId))) {
+            return Response.json(
+              { success: false, error: { code: 'FORBIDDEN', message: '无权操作该线索' } },
+              { status: 403 },
+            )
+          }
+
+          const assignee = await req.payload.findByID({
+            collection: 'users',
+            overrideAccess: true,
+            id: data.assigneeId as number,
+            depth: 0,
+          })
+          if (!assignee) {
+            return Response.json(
+              { success: false, error: { code: 'ASSIGNEE_NOT_FOUND', message: '跟进人不存在' } },
+              { status: 404 },
+            )
+          }
+
+          if (!isGlobalAdmin(assignee)) {
+            const membership = await req.payload.find({
+              collection: 'memberships',
+              overrideAccess: true,
+              where: {
+                and: [
+                  { project: { equals: projectId } },
+                  { user: { equals: data.assigneeId as number } },
+                ],
+              },
+              limit: 1,
+              depth: 0,
+            })
+            if (membership.docs.length === 0) {
+              return Response.json(
+                { success: false, error: { code: 'ASSIGNEE_NOT_IN_PROJECT', message: '跟进人不是该项目成员' } },
+                { status: 400 },
+              )
+            }
+          }
+
+          const updated = await req.payload.update({
+            collection: 'leads',
+            overrideAccess: true,
+            id: lead.id,
+            data: { owner: data.assigneeId as number },
+          })
+
+          return Response.json({ success: true, data: { id: updated.id, owner: updated.owner } })
+        } catch {
+          return Response.json(
+            { success: false, error: { code: 'LEAD_ASSIGN_FAILED', message: '分配失败，请稍后再试' } },
+            { status: 500 },
+          )
+        }
+      },
+    },
+  ],
   fields: [
     {
       name: 'title',
@@ -96,11 +211,12 @@ export const Leads: CollectionConfig = {
     },
     {
       name: 'source',
-      type: 'text',
+      type: 'select',
+      options: LEAD_SOURCES,
       defaultValue: 'website',
       label: { zh: '来源', en: 'Source' },
       admin: {
-        description: { zh: '来源渠道，如 website / 活动 / 手动录入等。', en: 'Source channel, e.g. website / event / manual.' },
+        description: { zh: '线索来源渠道（打标用）。', en: 'Lead source channel (for tagging).' },
       },
     },
     {
