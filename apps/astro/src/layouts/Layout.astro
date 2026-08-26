@@ -36,6 +36,11 @@ function current(href: string): string | undefined {
 }
 
 const year = new Date().getFullYear()
+
+// Chatwoot 在线客服：配置了 URL 与网站 token 才注入控件，缺任一项则关闭。
+const chatwootUrl = import.meta.env.PUBLIC_CHATWOOT_URL as string | undefined
+const chatwootToken = import.meta.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN as string | undefined
+const enableChat = Boolean(chatwootUrl && chatwootToken)
 ---
 
 <!doctype html>
@@ -845,6 +850,15 @@ const year = new Date().getFullYear()
         </form>
       </div>
     </div>
+
+    {enableChat && (
+      <>
+        <script is:inline src={`${chatwootUrl}/packs/js/sdk.js`} />
+        <script is:inline define:vars={{ chatwootUrl, chatwootToken }}>
+          window.chatwootSDK.run({ websiteToken: chatwootToken, baseUrl: chatwootUrl })
+        </script>
+      </>
+    )}
   </body>
 </html>
 
