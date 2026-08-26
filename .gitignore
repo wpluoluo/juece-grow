@@ -17,6 +17,9 @@ dist/
 *.log
 .DS_Store
 
+# database backups (dated SQL dumps)
+backups/
+
 # generated / test artifacts
 __pycache__/
 *.pyc
