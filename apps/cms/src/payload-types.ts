@@ -165,7 +165,7 @@ export interface Lead {
   /**
    * Lead source channel (for tagging).
    */
-  source?: ('website' | 'campaign' | 'manual' | 'support' | 'referral') | null;
+  source?: ('website' | 'campaign' | 'douyin' | 'xiaohongshu' | 'manual' | 'support' | 'referral') | null;
   /**
    * Current owner.
    */
