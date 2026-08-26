@@ -75,5 +75,21 @@
         }
       ]
     }
-  ]
+  ],
+  "archived_at": "2026-08-26T11:51:01Z",
+  "archived_to": "F:\\juece-grow\\.aiws\\changes\\archive\\2026-08-26-phase1-skeleton",
+  "archived_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1787661746,
+      "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787673432,
+      "sha256": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1787673432,
+      "sha256": "6c848e3d31a5bc21696f0cdf5a728fbf5e1ec11c69f489f832c2a73788bf0841"
+    }
+  }
 }

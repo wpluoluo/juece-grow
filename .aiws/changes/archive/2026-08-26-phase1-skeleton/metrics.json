@@ -153,7 +153,42 @@
         "warnings": 0,
         "exit_code": 0
       }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T11:50:43Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T11:51:00Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": true,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "archive",
+      "timestamp": "2026-08-26T11:51:01Z",
+      "payload": {
+        "archived_to": ".aiws\\changes\\archive\\2026-08-26-phase1-skeleton"
+      }
     }
   ],
-  "updated_at": "2026-08-26T11:49:47Z"
+  "updated_at": "2026-08-26T11:51:01Z"
 }
