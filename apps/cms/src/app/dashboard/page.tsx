@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
+import { I18nProvider, LangSwitcher, useLocale, type Dict } from '../../lib/i18n'
+
 type Stats = {
   total: number
   converted: number
@@ -12,25 +14,40 @@ type Stats = {
   byOwner: { owner: string; name: string; count: number }[]
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  new: '新线索',
-  contacted: '已联系',
-  converted: '已成交',
-  closed: '已关闭',
+const DICT: Dict = {
+  boardTitle: { zh: '线索看板', en: 'Lead Dashboard' },
+  loginPrompt: { zh: '请先登录后台查看看板', en: 'Please log in first to view the dashboard' },
+  goLogin: { zh: '前往登录', en: 'Go to login' },
+  total: { zh: '总线索', en: 'Total leads' },
+  converted: { zh: '已成交', en: 'Converted' },
+  convertedRate: { zh: '转化率', en: 'Conversion rate' },
+  emptyData: { zh: '当前项目下暂无线索数据。', en: 'No lead data in the current project yet.' },
+  loading: { zh: '加载中…', en: 'Loading…' },
+  errLoad: { zh: '看板数据加载失败', en: 'Failed to load dashboard data' },
+  errNet: { zh: '网络异常，无法加载看板', en: 'Network error, unable to load dashboard' },
+  funnel: { zh: '阶段漏斗', en: 'Funnel' },
+  bySource: { zh: '来源归因', en: 'Source attribution' },
+  byOwner: { zh: '跟进人分布', en: 'Owner distribution' },
+  noSource: { zh: '暂无来源数据', en: 'No source data' },
+  noOwner: { zh: '暂无跟进人数据', en: 'No owner data' },
+  unit: { zh: '{n} 条', en: '{n} leads' },
+  unitConverted: { zh: '成交 {n}（{p}%）', en: '{n} converted ({p}%)' },
+  'st.new': { zh: '新线索', en: 'New' },
+  'st.contacted': { zh: '已联系', en: 'Contacted' },
+  'st.converted': { zh: '已成交', en: 'Converted' },
+  'st.closed': { zh: '已关闭', en: 'Closed' },
+  'src.website': { zh: '官网表单', en: 'Website' },
+  'src.campaign': { zh: '渠道活动', en: 'Campaign' },
+  'src.douyin': { zh: '抖音', en: 'Douyin' },
+  'src.xiaohongshu': { zh: '小红书', en: 'Xiaohongshu' },
+  'src.manual': { zh: '手动录入', en: 'Manual' },
+  'src.support': { zh: '客服收件', en: 'Support' },
+  'src.referral': { zh: '他人推荐', en: 'Referral' },
+  'src.other': { zh: '其他', en: 'Other' },
 }
 
-const SOURCE_LABELS: Record<string, string> = {
-  website: '官网表单',
-  campaign: '渠道活动',
-  douyin: '抖音',
-  xiaohongshu: '小红书',
-  manual: '手动录入',
-  support: '客服收件',
-  referral: '他人推荐',
-  other: '其他',
-}
-
-export default function DashboardPage() {
+function Board() {
+  const { t } = useLocale()
   const [stats, setStats] = useState<Stats | null>(null)
   const [loggedIn, setLoggedIn] = useState(false)
   const [error, setError] = useState('')
@@ -53,26 +70,26 @@ export default function DashboardPage() {
         const json = (await res.json()) as { success: boolean; data?: Stats }
         if (!alive) return
         if (!res.ok || !json.success) {
-          setError('看板数据加载失败')
+          setError(t('errLoad'))
           return
         }
         setStats(json.data ?? null)
       } catch {
-        if (alive) setError('网络异常，无法加载看板')
+        if (alive) setError(t('errNet'))
       }
     }
     load()
     return () => {
       alive = false
     }
-  }, [])
+  }, [t])
 
   if (!loggedIn) {
     return (
       <main style={centerStyle}>
-        <p style={{ fontSize: 15 }}>请先登录后台查看看板</p>
+        <p style={{ fontSize: 15 }}>{t('loginPrompt')}</p>
         <a href="/admin" style={linkStyle}>
-          前往登录
+          {t('goLogin')}
         </a>
       </main>
     )
@@ -82,26 +99,29 @@ export default function DashboardPage() {
 
   return (
     <main style={mainStyle}>
-      <h1 style={h1Style}>线索看板</h1>
-
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', margin: '12px 0 24px' }}>
-        <Card label="总线索" value={stats?.total ?? 0} />
-        <Card label="已成交" value={stats?.converted ?? 0} />
-        <Card label="转化率" value={`${stats?.convertedRate ?? 0}%`} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={h1Style}>{t('boardTitle')}</h1>
+        <LangSwitcher />
       </div>
 
-      {showEmpty && <p style={{ color: '#8a8f99', fontSize: 13 }}>当前项目下暂无线索数据。</p>}
-      {error && <p style={{ color: '#b3402a', fontSize: 13 }}>{error}</p>}
-      {!stats && !error && <p style={{ color: '#8a8f99', fontSize: 13 }}>加载中…</p>}
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', margin: '12px 0 24px' }}>
+        <Card label={t('total')} value={stats?.total ?? 0} />
+        <Card label={t('converted')} value={stats?.converted ?? 0} />
+        <Card label={t('convertedRate')} value={`${stats?.convertedRate ?? 0}%`} />
+      </div>
+
+      {showEmpty && <p style={{ color: '#8a8f99', fontSize: 13 }}>{t('emptyData')}</p>}
+      {error && <p style={{ color: '#a8402a', fontSize: 13 }}>{error}</p>}
+      {!stats && !error && <p style={{ color: '#8a8f99', fontSize: 13 }}>{t('loading')}</p>}
 
       {stats && (
         <div style={{ display: 'grid', gap: 20, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           <section style={sectionStyle}>
-            <h2 style={h2Style}>阶段漏斗</h2>
+            <h2 style={h2Style}>{t('funnel')}</h2>
             {stats.funnel.map((f) => (
               <div key={f.status} style={{ marginBottom: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#555' }}>
-                  <span>{STATUS_LABELS[f.status] ?? f.status}</span>
+                  <span>{t(`st.${f.status}`)}</span>
                   <span>
                     {f.count} · {f.share}%
                   </span>
@@ -114,31 +134,43 @@ export default function DashboardPage() {
           </section>
 
           <section style={sectionStyle}>
-            <h2 style={h2Style}>来源归因</h2>
-            {stats.bySource.length === 0 && <p style={{ color: '#8a8f99', fontSize: 12 }}>暂无来源数据</p>}
+            <h2 style={h2Style}>{t('bySource')}</h2>
+            {stats.bySource.length === 0 && <p style={{ color: '#8a8f99', fontSize: 12 }}>{t('noSource')}</p>}
             {stats.bySource.map((s) => (
               <div key={s.source} style={rowStyle}>
-                <span style={{ fontSize: 13 }}>{SOURCE_LABELS[s.source] ?? s.source}</span>
+                <span style={{ fontSize: 13 }}>{t(`src.${s.source}`)}</span>
                 <span style={{ fontSize: 12, color: '#666' }}>
-                  {s.total} 条 · 成交 {s.converted}（{s.convertedRate}%）
+                  {t('unitConverted').replace('{n}', String(s.converted)).replace('{p}', String(s.convertedRate))} ·{' '}
+                  {t('unit').replace('{n}', String(s.total))}
                 </span>
               </div>
             ))}
           </section>
 
           <section style={sectionStyle}>
-            <h2 style={h2Style}>跟进人分布</h2>
-            {stats.byOwner.length === 0 && <p style={{ color: '#8a8f99', fontSize: 12 }}>暂无跟进人数据</p>}
+            <h2 style={h2Style}>{t('byOwner')}</h2>
+            {stats.byOwner.length === 0 && <p style={{ color: '#8a8f99', fontSize: 12 }}>{t('noOwner')}</p>}
             {stats.byOwner.map((o) => (
               <div key={o.owner} style={rowStyle}>
                 <span style={{ fontSize: 13 }}>{o.name}</span>
-                <span style={{ fontSize: 12, color: '#666' }}>{o.count} 条</span>
+                <span style={{ fontSize: 12, color: '#666' }}>{t('unit').replace('{n}', String(o.count))}</span>
               </div>
             ))}
           </section>
         </div>
       )}
     </main>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <I18nProvider
+      dict={DICT}
+      titles={{ zh: '线索看板 · 觉策增长', en: 'Lead Dashboard · Juece Growth' }}
+    >
+      <Board />
+    </I18nProvider>
   )
 }
 
