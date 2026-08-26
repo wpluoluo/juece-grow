@@ -21,6 +21,9 @@ function rate(part: number, total: number): number {
 /** 近期事件取前 N 条。 */
 const RECENT_LIMIT = 8
 
+/** 趋势图覆盖的天数。 */
+const TREND_DAYS = 14
+
 /** 渠道统计/归因看板：阶段漏斗、转化率、来源归因与跟进人分布。 */
 export async function GET(req: NextRequest) {
   try {
@@ -159,6 +162,35 @@ export async function GET(req: NextRequest) {
     }
     const avgConvertCycleHours = cycleCount > 0 ? Math.round(cycleHoursSum / cycleCount) : null
 
+    // 近 N 天新增/成交趋势：新增按 leads.createdAt 分桶，成交按流转到 converted 的时间分桶。
+    const localDayKey = (ts: number) => {
+      const d = new Date(ts)
+      const pad = (n: number) => String(n).padStart(2, '0')
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+    }
+    const dayNew = new Map<string, number>()
+    for (const l of doc.docs) {
+      const key = localDayKey(new Date(l.createdAt).getTime())
+      dayNew.set(key, (dayNew.get(key) ?? 0) + 1)
+    }
+    const dayConverted = new Map<string, number>()
+    for (const [, convTs] of convertMoments) {
+      const key = localDayKey(convTs)
+      dayConverted.set(key, (dayConverted.get(key) ?? 0) + 1)
+    }
+    const now = new Date()
+    const trend: { day: string; label: string; newCount: number; converted: number }[] = []
+    for (let i = TREND_DAYS - 1; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i)
+      const key = localDayKey(d.getTime())
+      trend.push({
+        day: key,
+        label: `${d.getMonth() + 1}/${d.getDate()}`,
+        newCount: dayNew.get(key) ?? 0,
+        converted: dayConverted.get(key) ?? 0,
+      })
+    }
+
     // 近期事件：解析 lead 标题与 actor 显示名。
     const leadTitle = new Map<number, string>()
     for (const l of doc.docs) leadTitle.set(Number(l.id), (l.title as string) || `线索#${l.id}`)
@@ -188,6 +220,7 @@ export async function GET(req: NextRequest) {
       byOwner,
       followUpCount,
       avgConvertCycleHours,
+      trend,
       recent,
     })
   } catch {

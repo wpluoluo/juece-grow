@@ -14,6 +14,7 @@ type Stats = {
   byOwner: { owner: string; name: string; count: number }[]
   followUpCount: number
   avgConvertCycleHours: number | null
+  trend: { day: string; label: string; newCount: number; converted: number }[]
   recent: { id: number; leadId: number; title: string; type: string; detail: string; actor: string; at: string }[]
 }
 
@@ -39,6 +40,9 @@ const DICT: Dict = {
   noCycle: { zh: '暂无成交', en: 'No conversions' },
   recent: { zh: '近期动态', en: 'Recent activity' },
   noRecent: { zh: '暂无动态', en: 'No activity yet' },
+  trend: { zh: '近 14 天趋势', en: 'Last 14 days' },
+  trendNew: { zh: '新增', en: 'New' },
+  trendConverted: { zh: '成交', en: 'Converted' },
   at: { zh: '{d} · {a}', en: '{d} · {a}' },
   'ev.created': { zh: '创建入池', en: 'Created' },
   'ev.status_changed': { zh: '状态流转', en: 'Status changed' },
@@ -185,6 +189,19 @@ function Board() {
 
       {stats && (
         <section style={{ ...sectionStyle, marginTop: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <h2 style={h2Style}>{t('trend')}</h2>
+            <div style={{ display: 'flex', gap: 14, fontSize: 12, color: '#666' }}>
+              <span style={legendStyle}>· {t('trendNew')}</span>
+              <span style={{ ...legendStyle, color: '#3f6f4f' }}>· {t('trendConverted')}</span>
+            </div>
+          </div>
+          <TrendBars data={stats.trend} />
+        </section>
+      )}
+
+      {stats && (
+        <section style={{ ...sectionStyle, marginTop: 20 }}>
           <h2 style={h2Style}>{t('recent')}</h2>
           {stats.recent.length === 0 && <p style={{ color: '#8a8f99', fontSize: 12 }}>{t('noRecent')}</p>}
           {stats.recent.map((r) => (
@@ -288,7 +305,66 @@ const evTagStyle: React.CSSProperties = {
   padding: '2px 7px',
   flexShrink: 0,
 }
+const legendStyle: React.CSSProperties = { display: 'flex', alignItems: 'center' }
 const linkStyle: React.CSSProperties = { color: '#3b6ea5', fontSize: 14 }
+
+const TREND_HEIGHT = 130
+
+/** 近 14 天新增/成交双柱趋势图（纯 CSS，不引入图表库）。 */
+function TrendBars({ data }: { data: { label: string; newCount: number; converted: number }[] }) {
+  const maxV = Math.max(1, ...data.map((d) => Math.max(d.newCount, d.converted)))
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: TREND_HEIGHT + 24 }}>
+      {data.map((d) => (
+        <div key={d.label} style={trendColStyle}>
+          <div style={trendColInnerStyle}>
+            <div
+              style={{
+                ...trendBarStyle,
+                color: '#6b7c93',
+                height: `${Math.max(2, Math.round((d.newCount / maxV) * TREND_HEIGHT))}px`,
+              }}
+              title={d.label}
+            />
+            <div
+              style={{
+                ...trendBarStyle,
+                color: '#3f6f4f',
+                height: `${Math.max(2, Math.round((d.converted / maxV) * TREND_HEIGHT))}px`,
+              }}
+              title={d.label}
+            />
+          </div>
+          <div style={trendLabelStyle}>{d.label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+const trendColStyle: React.CSSProperties = {
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: 4,
+  minWidth: 0,
+}
+const trendColInnerStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-end',
+  gap: 3,
+  height: TREND_HEIGHT,
+}
+const trendBarStyle: React.CSSProperties = {
+  width: 10,
+  borderRadius: 3,
+  background: 'currentColor',
+}
+const trendLabelStyle: React.CSSProperties = {
+  fontSize: 11,
+  color: '#999',
+  whiteSpace: 'nowrap',
+}
 
 /** 将 ISO 时间戳格式化为本地 `MM-DD HH:mm`。 */
 function formatTime(iso: string): string {
