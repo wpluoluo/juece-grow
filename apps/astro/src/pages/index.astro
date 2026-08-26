@@ -409,7 +409,6 @@ const solutions = [
       font-style: normal;
       position: relative;
       color: var(--text-primary);
-      white-space: nowrap;
     }
     .hero-title em::after {
       content: '';
@@ -465,16 +464,16 @@ const solutions = [
 
     /* Hero 图解 */
     .hero-diagram {
-      min-height: 520px;
       display: flex;
       align-items: center;
     }
     .dg-panel {
       position: relative;
       width: 100%;
-      min-height: 520px;
-      border-radius: 28px;
-      padding: 28px;
+      max-width: 500px;
+      margin: 0 auto;
+      border-radius: 24px;
+      padding: 24px;
       background: linear-gradient(160deg, #123c41 0%, #1a4c52 48%, #0c2a2e 100%);
       box-shadow: 0 40px 90px rgba(9, 34, 38, 0.28);
       overflow: hidden;
