@@ -12,7 +12,7 @@ test('健康端点返回统一成功信封', async ({ request }) => {
 
 test('首页渲染 Payload 数据并展示线索表单', async ({ page }) => {
   await page.goto(`${WEB_ORIGIN}/`)
-  await expect(page.getByRole('heading', { name: '觉策增长' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '觉策增长', exact: true })).toBeVisible()
   await expect(page.locator('#lead-form')).toBeVisible()
 })
 
@@ -104,4 +104,32 @@ test('OPTIONS 预检返回 204 且带 CORS 头', async ({ request }) => {
   expect(res.status()).toBe(204)
   expect(res.headers()['access-control-allow-origin']).toBe('*')
   expect(res.headers()['access-control-allow-methods']).toContain('POST')
+})
+
+test('手机号格式非法时返回 VALIDATION', async ({ request }) => {
+  const res = await request.post(`${CMS_ORIGIN}/api/v2/leads`, {
+    data: { projectId: '1', name: '格式烟测', phone: '12345' },
+  })
+  expect(res.status()).toBe(400)
+  const body = await res.json()
+  expect(body.success).toBe(false)
+  expect(body.error.code).toBe('VALIDATION')
+})
+
+test('同一项目相同联系方式去重返回 duplicate:true', async ({ request }) => {
+  const phone = `135${String(Date.now()).slice(-8)}`
+  const first = await request.post(`${CMS_ORIGIN}/api/v2/leads`, {
+    data: { projectId: '1', name: '去重烟测', phone },
+  })
+  const firstBody = await first.json()
+  expect(firstBody.success).toBe(true)
+
+  const second = await request.post(`${CMS_ORIGIN}/api/v2/leads`, {
+    data: { projectId: '1', name: '去重烟测', phone },
+  })
+  const secondBody = await second.json()
+  expect(secondBody.success).toBe(true)
+  expect(secondBody.data.duplicate).toBe(true)
+  // 去重不落新记录，返回原线索 id。
+  expect(secondBody.data.id).toBe(firstBody.data.id)
 })

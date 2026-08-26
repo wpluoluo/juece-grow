@@ -1,4 +1,6 @@
 ---
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+
 import Layout from '../../layouts/Layout.astro'
 import { getArticles, getArticleBySlug, type Article } from '../../lib/payload'
 
@@ -14,10 +16,230 @@ const article: Article | null = found && found.length > 0 ? found[0] : null
 if (!article) {
   return Astro.redirect('/404')
 }
+
+const title = article.seoTitle || article.title
+const description = article.seoDescription || article.excerpt || ''
+const bodyHTML = article.body
+  ? convertLexicalToHTML({ data: article.body as Parameters<typeof convertLexicalToHTML>[0]['data'] })
+  : ''
+
+const projectName =
+  article.project && typeof article.project === 'object' && 'name' in article.project
+    ? (article.project as { name: string }).name
+    : ''
+
+function formatDate(value?: string): string {
+  if (!value) return ''
+  return new Date(value).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+const url = new URL(`/articles/${article.slug}/`, Astro.site || Astro.url).href
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.title,
+  description,
+  datePublished: article.publishedAt || article.createdAt || undefined,
+  inLanguage: 'zh-CN',
+  author: { '@type': 'Organization', name: '觉策增长' },
+}
 ---
 
-<Layout title={article.title} description={article.excerpt || ''}>
-  <h1>{article.title}</h1>
-  {article.excerpt && <p>{article.excerpt}</p>}
-  <p><a href="/">← 返回首页</a></p>
+<Layout
+  title={title}
+  description={description}
+  url={url}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <article class="article">
+    <header class="article__header">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="/">首页</a>
+        <span>/</span>
+        <span>文章</span>
+      </nav>
+      {projectName && <p class="article__project">{projectName}</p>}
+      <h1>{article.title}</h1>
+      {article.excerpt && <p class="article__excerpt">{article.excerpt}</p>}
+      <p class="article__meta">
+        <time datetime={article.publishedAt || article.createdAt}>
+          {formatDate(article.publishedAt || article.createdAt)}
+        </time>
+      </p>
+    </header>
+
+    <div class="article__body" set:html={bodyHTML}></div>
+
+    <footer class="article__footer">
+      <a class="article__back" href="/#articles">← 返回文章列表</a>
+    </footer>
+  </article>
+
+  <style>
+    .article {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 24px 0;
+    }
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 40px;
+    }
+    .breadcrumb a {
+      color: var(--text-tertiary);
+      transition: color 0.2s ease;
+    }
+    .breadcrumb a:hover {
+      color: var(--brand-color-active);
+    }
+    .article__project {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brand-color-active);
+    }
+    .article h1 {
+      margin: 0 0 20px;
+      font-size: clamp(30px, 4.5vw, 44px);
+      line-height: 1.22;
+      letter-spacing: 0.01em;
+      max-width: 20ch;
+    }
+    .article__excerpt {
+      margin: 0 0 16px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+    .article__meta {
+      margin: 0 0 48px;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    /* 正文排版 */
+    .article__body {
+      font-size: 17px;
+      line-height: 1.95;
+      color: var(--text-primary);
+    }
+    .article__body > *:first-child {
+      margin-top: 0;
+    }
+    .article__body h2 {
+      margin: 40px 0 16px;
+      font-size: 25px;
+      line-height: 1.35;
+    }
+    .article__body h3 {
+      margin: 32px 0 12px;
+      font-size: 20px;
+      line-height: 1.4;
+    }
+    .article__body p {
+      margin: 0 0 20px;
+    }
+    .article__body a {
+      color: var(--brand-color-active);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .article__body strong {
+      font-weight: 700;
+    }
+    .article__body ul,
+    .article__body ol {
+      margin: 0 0 20px;
+      padding-left: 1.4em;
+    }
+    .article__body li {
+      margin-bottom: 8px;
+    }
+    .article__body blockquote {
+      margin: 24px 0;
+      padding: 16px 20px;
+      border-left: 3px solid var(--brand-color-active);
+      color: var(--text-secondary);
+      background: var(--brand-color-bg);
+      border-radius: var(--radius-md);
+    }
+    .article__body hr {
+      border: none;
+      border-top: 1px solid var(--neutral-200);
+      margin: 36px 0;
+    }
+    .article__body code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9em;
+      background: var(--brand-color-bg);
+      color: var(--text-secondary);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .article__body img,
+    .article__body picture {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 24px 0;
+      border-radius: var(--radius-md);
+    }
+    .article__body .lexical-table-container {
+      margin: 24px 0;
+      overflow-x: auto;
+    }
+    .article__body .lexical-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .article__body .lexical-table th,
+    .article__body .lexical-table td {
+      border: 1px solid var(--neutral-200) !important;
+      padding: 10px 12px !important;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article__body .lexical-table th {
+      background: var(--brand-color-bg);
+      font-weight: 600;
+    }
+
+    .article__footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--neutral-200);
+    }
+    .article__back {
+      display: inline-flex;
+      color: var(--brand-color-active);
+      font-weight: 600;
+      font-size: 15px;
+      transition: gap 0.2s ease;
+    }
+    .article__back:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .article {
+        padding: 40px 20px 0;
+      }
+      .article__body {
+        font-size: 16px;
+      }
+    }
+  </style>
 </Layout>

@@ -67,12 +67,14 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
+    leads: Lead;
     projects: Project;
     sites: Site;
+    categories: Category;
+    media: Media;
     articles: Article;
     forms: Form;
-    leads: Lead;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,12 +82,14 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     sites: SitesSelect<false> | SitesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
-    leads: LeadsSelect<false> | LeadsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -109,21 +113,121 @@ export interface Config {
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string;
-    password: string;
+    username: string;
   };
   login: {
-    email: string;
     password: string;
+    username: string;
   };
   registerFirstUser: {
-    email: string;
     password: string;
+    username: string;
   };
   unlock: {
-    email: string;
-    password: string;
+    username: string;
   };
+}
+/**
+ * Customer leads from public forms and manual entry, tracked step by step.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  title?: string | null;
+  /**
+   * The project this lead belongs to.
+   */
+  project: number | Project;
+  /**
+   * Contact name.
+   */
+  name?: string | null;
+  /**
+   * Phone number (share with wechat at least one).
+   */
+  phone?: string | null;
+  /**
+   * WeChat ID (share with phone at least one).
+   */
+  wechat?: string | null;
+  /**
+   * Company or store name (optional).
+   */
+  company?: string | null;
+  /**
+   * Customer-stated need or current situation.
+   */
+  note?: string | null;
+  /**
+   * Source channel, e.g. website / event / manual.
+   */
+  source?: string | null;
+  /**
+   * Current owner.
+   */
+  owner?: (number | null) | User;
+  /**
+   * Current follow-up stage.
+   */
+  status?: ('new' | 'contacted' | 'converted' | 'closed') | null;
+  /**
+   * Dedupe key (phone or wechat), auto-written.
+   */
+  dedupKey?: string | null;
+  /**
+   * Most recent follow-up note.
+   */
+  followUpNote?: string | null;
+  /**
+   * Reminder for the next follow-up.
+   */
+  nextFollowUpAt?: string | null;
+  /**
+   * Follow-up history timeline.
+   */
+  activity?:
+    | {
+        time: string;
+        type?: ('call' | 'wechat' | 'visit' | 'quote') | null;
+        summary?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Each product or focus area is a project; leads are grouped by project.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  name: string;
+  /**
+   * Unique URL-friendly English identifier.
+   */
+  slug: string;
+  /**
+   * One sentence on what this project does.
+   */
+  description?: string | null;
+  /**
+   * Current operating status.
+   */
+  status?: ('active' | 'beta' | 'archived') | null;
+  contactName?: string | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  /**
+   * Public homepage URL (optional).
+   */
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -131,11 +235,28 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
-  username: string;
+  /**
+   * Shown as the lead owner, etc.
+   */
   name?: string | null;
+  /**
+   * Determines accessible collections.
+   */
+  role?: ('operator' | 'editor' | 'admin') | null;
+  /**
+   * Profile image (optional).
+   */
+  avatar?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
-  email: string;
+  /**
+   * For system notifications (optional).
+   */
+  email?: string | null;
+  /**
+   * Unique login username for the admin.
+   */
+  username: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
   salt?: string | null;
@@ -153,43 +274,171 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Manage covers, site logos, avatars and other image assets.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects".
+ * via the `definition` "media".
  */
-export interface Project {
+export interface Media {
   id: number;
-  name: string;
-  slug: string;
-  description?: string | null;
+  /**
+   * Accessibility alternative text; recommended for main images.
+   */
+  alt?: string | null;
+  /**
+   * Optional caption below the image.
+   */
+  caption?: string | null;
   updatedAt: string;
   createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    banner?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
+ * A project can have multiple independent sites, each with its own SEO.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "sites".
  */
 export interface Site {
   id: number;
   name: string;
+  /**
+   * The project this site belongs to.
+   */
   project: number | Project;
+  /**
+   * Subdomain (e.g. demo), blank to use the project default.
+   */
   subdomain?: string | null;
+  /**
+   * Path identifier (e.g. /home) to distinguish site pages.
+   */
   pathSlug?: string | null;
+  /**
+   * Site publishing status.
+   */
+  status?: ('draft' | 'published' | 'archived') | null;
+  /**
+   * Site logo (400×100 transparent PNG recommended).
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Accent color in hex, e.g. #2f8f96.
+   */
+  themeColor?: string | null;
+  /**
+   * Browser title, keep under 60 chars.
+   */
   metaTitle?: string | null;
+  /**
+   * Search snippet, keep under 120 chars.
+   */
   metaDescription?: string | null;
-  published?: boolean | null;
+  /**
+   * Social share preview image (1200×630).
+   */
+  ogImage?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  /**
+   * URL identifier; blank will be derived from the name.
+   */
+  slug?: string | null;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Product ideas, solutions and growth practices with rich text and images.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "articles".
  */
 export interface Article {
   id: number;
+  /**
+   * Cover image for cards and share previews.
+   */
+  coverImage?: (number | null) | Media;
   title: string;
+  /**
+   * Unique URL identifier; blank will be derived from the title.
+   */
   slug: string;
+  /**
+   * The project this article belongs to.
+   */
   project: number | Project;
+  /**
+   * One-line summary for list cards and excerpts.
+   */
   excerpt?: string | null;
+  /**
+   * Article category (optional).
+   */
+  category?: (number | null) | Category;
+  /**
+   * Topic tags for grouping and search.
+   */
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Byline; blank defaults to the organization name.
+   */
+  author?: string | null;
+  /**
+   * Estimated reading time; blank auto-estimates.
+   */
+  readingMinutes?: number | null;
+  /**
+   * Body content with headings, lists, quotes, code, images, etc.
+   */
   body?: {
     root: {
       type: string;
@@ -205,21 +454,45 @@ export interface Article {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Page title (≤60 chars); blank uses the article title.
+   */
   seoTitle?: string | null;
+  /**
+   * Page summary (≤120 chars); blank uses the excerpt.
+   */
   seoDescription?: string | null;
+  /**
+   * Drafts are admin-only; publish to go live.
+   */
   status: 'draft' | 'published';
+  /**
+   * Publish time; auto-filled on publish if blank.
+   */
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Define lead-capture form fields and submission target on public pages.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
 export interface Form {
   id: number;
   name: string;
+  /**
+   * Owning site (optional, reusable globally).
+   */
   site?: (number | null) | Site;
+  /**
+   * Only active forms are used on public pages.
+   */
+  status?: ('draft' | 'active') | null;
+  /**
+   * Field structure (JSON): names, required flags, order, etc.
+   */
   fields?:
     | {
         [k: string]: unknown;
@@ -229,23 +502,6 @@ export interface Form {
     | number
     | boolean
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads".
- */
-export interface Lead {
-  id: number;
-  project: number | Project;
-  name?: string | null;
-  phone?: string | null;
-  wechat?: string | null;
-  note?: string | null;
-  source?: string | null;
-  dedupKey?: string | null;
-  status?: ('new' | 'contacted' | 'converted' | 'closed') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -274,8 +530,8 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'leads';
+        value: number | Lead;
       } | null)
     | ({
         relationTo: 'projects';
@@ -286,6 +542,14 @@ export interface PayloadLockedDocument {
         value: number | Site;
       } | null)
     | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
         relationTo: 'articles';
         value: number | Article;
       } | null)
@@ -294,8 +558,8 @@ export interface PayloadLockedDocument {
         value: number | Form;
       } | null)
     | ({
-        relationTo: 'leads';
-        value: number | Lead;
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -341,27 +605,32 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "leads_select".
  */
-export interface UsersSelect<T extends boolean = true> {
-  username?: T;
+export interface LeadsSelect<T extends boolean = true> {
+  title?: T;
+  project?: T;
   name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
+  phone?: T;
+  wechat?: T;
+  company?: T;
+  note?: T;
+  source?: T;
+  owner?: T;
+  status?: T;
+  dedupKey?: T;
+  followUpNote?: T;
+  nextFollowUpAt?: T;
+  activity?:
     | T
     | {
+        time?: T;
+        type?: T;
+        summary?: T;
         id?: T;
-        createdAt?: T;
-        expiresAt?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -371,6 +640,11 @@ export interface ProjectsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   description?: T;
+  status?: T;
+  contactName?: T;
+  contactEmail?: T;
+  contactPhone?: T;
+  url?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -383,21 +657,98 @@ export interface SitesSelect<T extends boolean = true> {
   project?: T;
   subdomain?: T;
   pathSlug?: T;
+  status?: T;
+  logo?: T;
+  themeColor?: T;
   metaTitle?: T;
   metaDescription?: T;
-  published?: T;
+  ogImage?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        banner?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "articles_select".
  */
 export interface ArticlesSelect<T extends boolean = true> {
+  coverImage?: T;
   title?: T;
   slug?: T;
   project?: T;
   excerpt?: T;
+  category?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  author?: T;
+  readingMinutes?: T;
   body?: T;
   seoTitle?: T;
   seoDescription?: T;
@@ -413,25 +764,36 @@ export interface ArticlesSelect<T extends boolean = true> {
 export interface FormsSelect<T extends boolean = true> {
   name?: T;
   site?: T;
+  status?: T;
   fields?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads_select".
+ * via the `definition` "users_select".
  */
-export interface LeadsSelect<T extends boolean = true> {
-  project?: T;
+export interface UsersSelect<T extends boolean = true> {
   name?: T;
-  phone?: T;
-  wechat?: T;
-  note?: T;
-  source?: T;
-  dedupKey?: T;
-  status?: T;
+  role?: T;
+  avatar?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  username?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

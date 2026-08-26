@@ -17,7 +17,12 @@ export type Article = {
   excerpt?: string
   status: 'draft' | 'published'
   publishedAt?: string
+  createdAt?: string
   project: number | Project
+  /** Lexical 富文本正文（SerializedEditorState）。 */
+  body?: unknown
+  seoTitle?: string
+  seoDescription?: string
 }
 
 type PayloadList<T> = {
@@ -29,7 +34,7 @@ async function fetchList<T>(
   collection: string,
   query: string,
 ): Promise<T> {
-  const url = `${CMS_ORIGIN}/api/${collection}?depth=1&limit=50&${query}`
+  const url = `${CMS_ORIGIN}/api/${collection}?depth=2&limit=50&${query}`
   const res = await fetch(url, { headers: { 'Content-Type': 'application/json' } })
   if (!res.ok) throw new Error(`Payload ${collection} 拉取失败: ${res.status}`)
   const body = (await res.json()) as PayloadList<T>

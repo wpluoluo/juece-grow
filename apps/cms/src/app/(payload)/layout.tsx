@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { ServerFunctionClient } from 'payload'
 
 import '@payloadcms/next/css'
+import './custom.scss'
 
 import config from '@payload-config'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'

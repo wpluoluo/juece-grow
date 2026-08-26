@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="站点地图 · 觉策科技" description="觉策科技站点地图，快速访问首页、行业方案、功能全景、价格方案与法律页面。" seoTitle="站点地图 · 觉策科技">
+  <section class="sitemap">
+    <div class="site-container">
+      <div class="sitemap-content" data-reveal>
+        <h1>站点地图</h1>
+        <p class="sitemap-desc">快速找到您需要的内容</p>
+
+        <div class="sitemap-grid">
+          <div class="sitemap-section">
+            <h2>主要页面</h2>
+            <ul class="link-list">
+              <li><a href="/">首页</a></li>
+              <li><a href="/solutions/">行业方案</a></li>
+              <li><a href="/features/">功能全景</a></li>
+              <li><a href="/pricing/">价格方案</a></li>
+            </ul>
+          </div>
+
+          <div class="sitemap-section">
+            <h2>法律与支持</h2>
+            <ul class="link-list">
+              <li><a href="/privacy/">隐私政策</a></li>
+              <li><a href="/terms/">服务条款</a></li>
+              <li><a href="/sitemap/">站点地图</a></li>
+            </ul>
+          </div>
+
+          <div class="sitemap-section">
+            <h2>联系方式</h2>
+            <ul class="info-list">
+              <li>邮箱：58379760@qq.com</li>
+              <li>ICP备案：<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">渝ICP备2025076099号-1</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .sitemap {
+      padding: 80px 0;
+      background: var(--neutral-50);
+      min-height: 60vh;
+    }
+    .sitemap-content {
+      background: #fff;
+      padding: 56px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .sitemap-content h1 {
+      font-size: 32px;
+      margin: 0 0 8px;
+      text-align: center;
+      color: var(--text-primary);
+    }
+    .sitemap-desc {
+      text-align: center;
+      color: var(--text-secondary);
+      margin: 0 0 48px;
+    }
+    .sitemap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 48px;
+    }
+    .sitemap-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 24px;
+      color: var(--text-primary);
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--brand-color);
+      display: inline-block;
+    }
+    .sitemap-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sitemap-section li {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .sitemap-section a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .sitemap-section a:hover {
+      color: var(--brand-color-active);
+    }
+    @media (max-width: 768px) {
+      .sitemap {
+        padding: 48px 0;
+      }
+      .sitemap-content {
+        padding: 28px 22px;
+      }
+      .sitemap-grid {
+        gap: 32px;
+      }
+    }
+  </style>
+</Layout>

@@ -23,6 +23,7 @@ __pycache__/
 test-results/
 playwright-report/
 next-env.d.ts
+*.tsbuildinfo
 
 # env
 !.env.example

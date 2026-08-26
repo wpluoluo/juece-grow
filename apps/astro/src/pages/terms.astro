@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="服务条款 · 觉策科技" description="觉策科技服务条款：明确服务内容、账号安全、用户行为规范与免责声明。" seoTitle="服务条款 · 觉策科技">
+  <section class="legal">
+    <div class="site-container">
+      <div class="legal-content" data-reveal>
+        <h1>服务条款</h1>
+        <p class="update-time">最近更新日期：2025年1月1日</p>
+
+        <section>
+          <h2>1. 接受条款</h2>
+          <p>
+            欢迎使用觉策智云企业数字化运营平台（以下简称“本平台”）。通过访问或使用本平台，即表示您同意接受本服务条款的所有内容。如果您不同意本条款的任何部分，请停止使用本服务。
+          </p>
+        </section>
+
+        <section>
+          <h2>2. 服务内容</h2>
+          <p>
+            本平台为企业提供数字化运营解决方案，包括但不限于会员管理、营销工具、数据分析、插件市场等功能。我们保留随时修改、暂停或终止部分或全部服务的权利。
+          </p>
+        </section>
+
+        <section>
+          <h2>3. 账号注册与安全</h2>
+          <ul>
+            <li>您在注册账号时应提供真实、准确的信息，并及时更新。</li>
+            <li>您有责任妥善保管您的账号和密码，并对该账号下发生的所有活动负责。</li>
+            <li>如发现账号被盗用或存在安全漏洞，请立即通知我们。</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>4. 用户行为规范</h2>
+          <p>在使用本平台服务时，您承诺不进行以下行为：</p>
+          <ul>
+            <li>违反法律法规或侵犯他人合法权益；</li>
+            <li>发布违法、色情、暴力或垃圾信息；</li>
+            <li>干扰或破坏本平台的正常运行；</li>
+            <li>利用本平台进行任何非法商业活动。</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>5. 知识产权</h2>
+          <p>
+            本平台包含的所有内容（包括但不限于文字、图片、代码、界面设计等）均受版权法和知识产权法律保护。未经我们书面许可，您不得复制、修改或用于商业目的。
+          </p>
+        </section>
+
+        <section>
+          <h2>6. 免责声明</h2>
+          <p>
+            本平台服务按“现状”提供。我们不保证服务不会中断或没有错误。在法律允许的范围内，我们不对因使用本平台而产生的任何直接或间接损失承担责任。
+          </p>
+        </section>
+
+        <section>
+          <h2>7. 协议修改</h2>
+          <p>
+            我们有权随时修改本服务条款。修改后的条款将在本平台发布，并在发布时生效。您继续使用本平台即视为接受修改后的条款。
+          </p>
+        </section>
+
+        <section>
+          <h2>8. 联系我们</h2>
+          <p>
+            如有任何问题，请联系我们：<br />
+            邮箱：58379760@qq.com
+          </p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .legal {
+      padding: 80px 0;
+      background: var(--neutral-50);
+      min-height: 60vh;
+    }
+    .legal-content {
+      background: #fff;
+      padding: 56px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .legal-content h1 {
+      font-size: 32px;
+      margin: 0 0 16px;
+      text-align: center;
+      color: var(--text-primary);
+    }
+    .update-time {
+      text-align: center;
+      color: var(--text-tertiary);
+      margin: 0 0 48px;
+      font-size: 14px;
+    }
+    .legal-content section {
+      margin-bottom: 36px;
+    }
+    .legal-content h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: var(--text-primary);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--neutral-100);
+    }
+    .legal-content p {
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin: 0 0 16px;
+    }
+    .legal-content ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    .legal-content li {
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    @media (max-width: 768px) {
+      .legal {
+        padding: 48px 0;
+      }
+      .legal-content {
+        padding: 28px 22px;
+      }
+    }
+  </style>
+</Layout>

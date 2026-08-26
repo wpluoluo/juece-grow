@@ -1,0 +1,719 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+const industries = [
+  {
+    label: '教育培训',
+    meta: '觉策智云',
+    blurb: '招生、排课、家校沟通占用大量日常人力。',
+    tone: 'saas',
+    painPoints: [
+      '招生依赖传单和熟客介绍，效果难预估',
+      '排课消课靠表格，师生的时间常有冲突',
+      '家长难以了解孩子近期的学习进展',
+      '学员结课后缺少继续学习的理由',
+    ],
+    solutions: [
+      '体验课、拼团等活动辅助招生，来源更可控',
+      '智能排课自动提示冲突，家长在微信收到消课通知',
+      '成长档案与作业打卡，家长能持续看到进展',
+      '积分与会员权益，为续费提供依据',
+    ],
+    scenarios: [
+      { title: '招生引流', desc: '体验课、拼团等活动' },
+      { title: '智能排课', desc: '自动检测冲突' },
+      { title: '家校互通', desc: '作业、评价、通知' },
+      { title: '经营报表', desc: '财务与课消汇总' },
+    ],
+  },
+  {
+    label: '体育场馆',
+    meta: '觉策智云',
+    blurb: '场地空闲意味着收入流失，让运营更可控。',
+    tone: 'saas',
+    painPoints: [
+      '电话预订容易撞单，沟通成本较高',
+      '会员卡靠纸质记录，核销效率偏低',
+      '淡旺季客流差异明显，闲时资源闲置',
+      '对账繁琐，占用大量时间',
+    ],
+    solutions: [
+      '在线预订小程序，场地状态可视化，锁定时段避免撞单',
+      '电子会员卡，扫码核销，入场更顺畅',
+      '闲时优惠与赛事活动，提升闲时的场地利用率',
+      '流水自动归集，经营日报按固定时间生成',
+    ],
+    scenarios: [
+      { title: '场地预订', desc: '在线选场锁场' },
+      { title: '次卡/年卡', desc: '灵活售卖与核销' },
+      { title: '赛事运营', desc: '报名、签到、成绩' },
+      { title: '商品售卖', desc: '饮料装备线上购买' },
+    ],
+  },
+  {
+    label: '餐饮美食',
+    meta: '觉策智云',
+    blurb: '平台抽成较高时，自营渠道是补充。',
+    tone: 'saas',
+    painPoints: [
+      '平台抽成较高，挤压门店利润',
+      '高峰时段排队，部分客人等待后离开',
+      '客人消费后难以建立持续的联系',
+      '对折扣依赖明显，常以让利换客流',
+    ],
+    solutions: [
+      '自营外卖与扫码点餐，订单直连门店收单',
+      '多人预点单，加快高峰时段的翻台',
+      '支付后引导成为会员，把客群留进自己的会员系统',
+      '活动玩法多样，折扣与套餐搭配让利',
+    ],
+    scenarios: [
+      { title: '扫码点餐', desc: '堂食、自提、外卖' },
+      { title: '营销发券', desc: '满减、折扣、套餐' },
+      { title: '会员储值', desc: '会员资金与管理' },
+      { title: '菜品分析', desc: '分析菜品销售情况' },
+    ],
+  },
+  {
+    label: '到店服务',
+    meta: '觉策智云',
+    blurb: '预约制门店，重点在让老客户持续到店。',
+    tone: 'saas',
+    painPoints: [
+      '技师排班靠口头协调，客人常需等待',
+      '服务质量依赖个人经验，水平波动较大',
+      '储值后缺少唤醒，下次到店时间难掌握',
+      '老客维护靠私下联系，容易遗漏',
+    ],
+    solutions: [
+      '在线预约，技师与工位可视化，客人自选时段',
+      '服务项目标准化，消费后支持评价',
+      '会员画像与标签，按需推送合适的优惠',
+      '生日与复购提醒，用自动化维护老客',
+    ],
+    scenarios: [
+      { title: '在线预约', desc: '选技师、选时间' },
+      { title: '预付卡', desc: '计次、储值灵活' },
+      { title: '评价管理', desc: '服务质量可追踪' },
+      { title: '员工提成', desc: '业绩自动统计' },
+    ],
+  },
+  {
+    label: '广告制作',
+    meta: '觉策ERP V3',
+    blurb: '还在用表格报价、口头跟进生产，可以换一种方式。',
+    tone: 'erp',
+    painPoints: [
+      '报价依赖人工经验，容易出错或延误',
+      '生产进度靠追问，外协环节难以同步',
+      '开票与回款多头对接，财务工作量较大',
+      '客户多通过电话询问进度，占用人力',
+    ],
+    solutions: [
+      '导入素材自动识别尺寸并估价，报价更稳定',
+      '生产看板与外协跟踪，进度逐工序可见',
+      '数电发票与税负统计，减轻对账负担',
+      '客户门户支持自助下单与查进度',
+    ],
+    scenarios: [
+      { title: '智能报价', desc: '素材导入即可估价' },
+      { title: '生产看板', desc: '排产、外协全程可视' },
+      { title: '财务税务', desc: '发票与税负管理' },
+      { title: '客户门户', desc: '自助下单与查进度' },
+    ],
+  },
+  {
+    label: '智能体协作',
+    meta: '云雀 Yunque',
+    blurb: 'AI 项目落地时，问题往往不在模型本身。',
+    tone: 'yunque',
+    painPoints: [
+      '演示效果可行，上线后缺少运行管理手段',
+      '多个智能体各自工作，缺少协作与共享记忆',
+      '缺少权限管控，难以对团队放开使用',
+      '对接现有系统时，扩展能力不足',
+    ],
+    solutions: [
+      '一个工作台统一 Chat、画布与文档',
+      '记忆与任务编排，保持协作连贯',
+      '治理控制台与权限管理，满足企业使用要求',
+      '插件化架构，便于对接外部系统',
+    ],
+    scenarios: [
+      { title: '统一工作台', desc: 'Chat、画布、文档' },
+      { title: '任务编排', desc: '多智能体协同' },
+      { title: '治理管控', desc: '权限与管理' },
+      { title: '插件扩展', desc: '对接外部系统' },
+    ],
+  },
+]
+---
+
+<Layout
+  title="行业方案 · 觉策科技"
+  description="按行业整理了觉策智云与觉策 ERP 的现成方案，痛点逐条对应到落地结果。"
+>
+  <!-- ═══ 01 · 页头 ═══ -->
+  <section class="page-hero">
+    <div class="grid-texture"></div>
+    <div class="site-container">
+      <div class="hero-inner">
+        <span class="kicker kicker--white" data-reveal>行业方案</span>
+        <h1 class="hero-title" data-reveal>
+          不同行业，<br />落地结果各不相同
+        </h1>
+        <p class="hero-desc" data-reveal>
+          按行业整理了觉策智云与觉策 ERP 的现成方案。挑一个贴近业务的，看每一项对应哪个痛点、落到什么结果。
+        </p>
+        <div class="hero-meta" data-reveal>
+          <span><b class="tnum">06</b>个行业</span>
+          <span><b class="tnum">03</b>条产品线</span>
+          <span><b>痛点 → 方案</b>逐条对应</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 02 · 行业索引（手风琴） ═══ -->
+  <section class="index-section">
+    <div class="site-container">
+      <div class="index-list" data-accordion data-single>
+        {
+          industries.map((ind, i) => (
+            <article class={`index-band tone-${ind.tone}${i === 0 ? ' is-open' : ''}`} data-reveal="40">
+              <button class="band-head" type="button" data-accordion-trigger>
+                <span class="band-no tnum">0{i + 1}</span>
+                <span class="band-title">
+                  <span class="bt-main">{ind.label}</span>
+                  <span class="bt-meta">{ind.meta}</span>
+                </span>
+                <span class="band-blurb">{ind.blurb}</span>
+                <span class="band-chevron">
+                  <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </button>
+
+              <div class="band-detail" data-accordion-panel>
+                <div class="detail-grid">
+                  <div class="detail-col pain">
+                    <div class="col-label">
+                      <span class="col-dot"></span>
+                      <h3>行业痛点</h3>
+                      <span class="col-count tnum">{ind.painPoints.length}</span>
+                    </div>
+                    <ol class="num-list">
+                      {ind.painPoints.map((point, p) => (
+                        <li>
+                          <span class="num tnum">{p + 1}</span>
+                          <span class="text">{point}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  <div class="detail-col solve">
+                    <div class="col-label">
+                      <span class="col-dot"></span>
+                      <h3>解决方案</h3>
+                      <span class="col-count tnum">{ind.solutions.length}</span>
+                    </div>
+                    <ul class="tick-list">
+                      {ind.solutions.map((sol) => (
+                        <li>
+                          <span class="tick">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.5l2.5 2.5 4.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                          </span>
+                          <span class="text">{sol}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="detail-scenes">
+                  <div class="scenes-title">应用场景</div>
+                  <div class="scenes-grid">
+                    {ind.scenarios.map((scene, s) => (
+                      <div class="scene">
+                        <span class="scene-no tnum">0{s + 1}</span>
+                        <div class="scene-text">
+                          <h4>{scene.title}</h4>
+                          <p>{scene.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="detail-foot">
+                  <button class="cta-link" type="button" data-open-lead>
+                    了解{ind.label}方案
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 03 · 底部 CTA ═══ -->
+  <section class="bottom-cta">
+    <div class="grid-texture"></div>
+    <div class="site-container">
+      <div class="cta-inner" data-reveal>
+        <span class="kicker kicker--white kicker--center">没有贴近你的场景？</span>
+        <h2>可以直接聊聊你的业务</h2>
+        <p>告诉我们你做什么生意、卡在哪一环，我们对需求给一套推荐，直接照着谈。</p>
+        <button class="cta-btn" type="button" data-open-lead>
+          联系我们
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* ═══ 01 · 页头 ═══ */
+    .page-hero {
+      position: relative;
+      padding: 88px 0 96px;
+      background:
+        radial-gradient(circle at 78% 10%, rgba(47, 143, 150, 0.22), transparent 40%),
+        linear-gradient(150deg, #0c2a2e 0%, #133d42 55%, #1b5f65 100%);
+      color: #fff;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .hero-inner {
+      position: relative;
+      max-width: 720px;
+    }
+    .hero-title {
+      margin: 0 0 22px;
+      font-size: var(--fs-h1);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+    .hero-desc {
+      margin: 0 0 36px;
+      max-width: 52ch;
+      font-size: 17px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .hero-meta span {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.66);
+    }
+    .hero-meta b {
+      font-size: 18px;
+      font-weight: 800;
+      color: #7fd3d8;
+      margin-right: 4px;
+    }
+
+    /* ═══ 02 · 行业索引 ═══ */
+    .index-section {
+      padding: 96px 0 112px;
+    }
+    .index-list {
+      border-top: 1px solid var(--neutral-200);
+    }
+    .index-band {
+      border-bottom: 1px solid var(--neutral-200);
+      transition: background var(--transition-normal);
+    }
+    .band-head {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1.1fr) 44px;
+      gap: 24px;
+      align-items: center;
+      padding: 30px 12px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+    }
+    .band-head:hover .bt-main {
+      color: var(--brand-color-active);
+    }
+    .band-no {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--neutral-200);
+      letter-spacing: -0.02em;
+      transition: color var(--transition-fast);
+    }
+    .band-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .bt-main {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      transition: color var(--transition-fast);
+    }
+    .bt-meta {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+    .band-blurb {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 46ch;
+    }
+    .band-chevron {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--neutral-200);
+      color: var(--text-tertiary);
+      transition: all var(--transition-fast);
+    }
+    .band-chevron svg {
+      transition: transform var(--transition-fast);
+    }
+    .index-band.is-open {
+      background: var(--neutral-50);
+    }
+    .index-band.is-open .band-no {
+      color: var(--brand-color-active);
+    }
+    .index-band.is-open .band-chevron {
+      border-color: var(--brand-color);
+      color: var(--brand-color-active);
+    }
+    .index-band.is-open .band-chevron svg {
+      transform: rotate(90deg);
+    }
+
+    /* 详情区 */
+    .band-detail {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 420ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 300ms ease;
+    }
+    .band-detail.is-open {
+      max-height: 1400px;
+      opacity: 1;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px;
+      padding: 12px 12px 0 108px;
+    }
+    .detail-col {
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      background: #fff;
+    }
+    .detail-col.pain {
+      background: var(--neutral-50);
+    }
+    .col-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .col-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--brand-color);
+    }
+    .col-label h3 {
+      margin: 0;
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+    .col-count {
+      margin-left: auto;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--neutral-300);
+    }
+    .num-list,
+    .tick-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .num-list li,
+    .tick-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .num-list .num {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid var(--neutral-200);
+      color: var(--brand-color-active);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .tick-list .tick {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background: var(--brand-color-bg);
+      color: var(--brand-color-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    /* 应用场景 */
+    .detail-scenes {
+      margin: 24px 12px 0 108px;
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      background: linear-gradient(150deg, var(--brand-color-bg), rgba(255, 255, 255, 0.9));
+    }
+    .scenes-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 22px;
+    }
+    .scenes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .scene {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+    }
+    .scene-no {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--neutral-300);
+    }
+    .scene-text h4 {
+      margin: 0 0 4px;
+      font-size: 15px;
+      color: var(--text-primary);
+    }
+    .scene-text p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .detail-foot {
+      padding: 28px 12px 32px 108px;
+    }
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: var(--brand-gradient);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: 0;
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+    .cta-link svg {
+      transition: transform var(--transition-fast);
+    }
+    .cta-link:hover {
+      transform: translateY(-2px);
+    }
+    .cta-link:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* tone 强调：云雀走低饱和琥珀 */
+    .index-band.tone-yunque .tick-list .tick {
+      background: var(--color-yunque-bg);
+      color: var(--color-yunque);
+    }
+    .index-band.tone-yunque .detail-scenes {
+      background: linear-gradient(150deg, var(--color-yunque-bg), rgba(255, 255, 255, 0.9));
+    }
+
+    /* ═══ 03 · 底部 CTA ═══ */
+    .bottom-cta {
+      position: relative;
+      padding: 88px 0;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(184, 134, 63, 0.14), transparent 36%),
+        linear-gradient(150deg, #0c2a2e 0%, #164a50 60%, #1b5f65 100%);
+      color: #fff;
+      text-align: center;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .cta-inner {
+      position: relative;
+    }
+    .cta-inner h2 {
+      margin: 0 0 16px;
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 800;
+    }
+    .cta-inner p {
+      margin: 0 auto 36px;
+      max-width: 46ch;
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.78);
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 32px;
+      height: 48px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--brand-color-active);
+      font-size: 15px;
+      font-weight: 700;
+      border: 0;
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+    .cta-btn svg {
+      transition: transform var(--transition-fast);
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+    }
+    .cta-btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* ═══ Responsive ═══ */
+    @media (max-width: 1080px) {
+      .band-head {
+        grid-template-columns: 56px minmax(0, 1fr) 40px;
+      }
+      .band-blurb,
+      .row-blurb {
+        display: none;
+      }
+      .detail-grid,
+      .detail-scenes {
+        padding-left: 68px;
+      }
+      .detail-foot {
+        padding-left: 68px;
+      }
+    }
+    @media (max-width: 900px) {
+      .scenes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .page-hero {
+        padding: 56px 0 64px;
+      }
+      .index-section {
+        padding: 64px 0 80px;
+      }
+      .band-head {
+        grid-template-columns: 40px minmax(0, 1fr) 36px;
+        gap: 14px;
+        padding: 20px 6px;
+      }
+      .band-head .bt-main {
+        font-size: 21px;
+      }
+      .band-chevron {
+        width: 36px;
+        height: 36px;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr;
+        padding: 12px 6px 0;
+      }
+      .detail-scenes {
+        margin: 16px 6px 0;
+      }
+      .detail-foot {
+        padding: 20px 6px 24px;
+      }
+    }
+    @media (max-width: 560px) {
+      .scenes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</Layout>
+
+<script>
+  // 手风琴：点击展开/收起，data-single 时互斥
+  const list = document.querySelector('[data-accordion]') as HTMLElement
+  const single = list.hasAttribute('data-single')
+  const bands = Array.from(list.querySelectorAll('.index-band')) as HTMLElement[]
+
+  function setOpen(band: HTMLElement, open: boolean) {
+    band.classList.toggle('is-open', open)
+    const panel = band.querySelector('[data-accordion-panel]') as HTMLElement
+    panel.classList.toggle('is-open', open)
+  }
+
+  for (const band of bands) {
+    const trigger = band.querySelector('[data-accordion-trigger]') as HTMLButtonElement
+    trigger.addEventListener('click', () => {
+      const willOpen = !band.classList.contains('is-open')
+      if (single) {
+        bands.forEach((b) => setOpen(b, false))
+      }
+      setOpen(band, willOpen)
+    })
+  }
+</script>

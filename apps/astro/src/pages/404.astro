@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="页面不存在 · 觉策增长" description="你要找的页面不存在或已移动。" seoTitle="页面不存在 · 觉策增长">
+  <section class="nf">
+    <span class="kicker">404</span>
+    <h1>这个页面不存在</h1>
+    <p class="nf__text">它可能已被移动或删除，也可能是地址写错了。</p>
+    <div class="nf__actions">
+      <a class="btn btn--primary" href="/">返回首页</a>
+      <a class="btn btn--outline" href="/solutions/">看行业方案</a>
+    </div>
+  </section>
+
+  <style>
+    .nf {
+      max-width: var(--site-max-width);
+      margin: 0 auto;
+      padding: 140px 24px 160px;
+      text-align: center;
+    }
+    .nf .kicker {
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .nf h1 {
+      margin: 0 0 16px;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+    .nf__text {
+      margin: 0 auto 36px;
+      max-width: 40ch;
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+    .nf__actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 640px) {
+      .nf {
+        padding: 100px 20px 120px;
+      }
+    }
+  </style>
+</Layout>
