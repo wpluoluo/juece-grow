@@ -27,6 +27,20 @@ export const ReminderRules: CollectionConfig = {
     update: projectWrite,
     delete: ({ req }) => isGlobalAdmin(req.user),
   },
+  hooks: {
+    beforeChange: [
+      // 未绑定项目的全局规则覆盖所有项目，仅管理员可建/改；项目级规则由项目写权限者管理。
+      ({ data, operation, originalDoc, req }) => {
+        if (!data) return data
+        const effectiveProject = data.project ?? (operation === 'update' ? originalDoc?.project : undefined)
+        const isGlobal = effectiveProject == null || Number(effectiveProject) === 0
+        if (isGlobal && !isGlobalAdmin(req.user)) {
+          throw new Error('仅管理员可配置全局提醒规则')
+        }
+        return data
+      },
+    ],
+  },
   fields: [
     {
       name: 'name',

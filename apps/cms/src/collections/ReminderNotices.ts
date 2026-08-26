@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isGlobalAdmin, projectScopedRead } from '../access'
+import { isGlobalAdmin, projectScopedRead, projectWrite } from '../access'
 
 /**
  * 提醒记录：规则命中后落一条，兼作「待跟进」清单与判重依据。
@@ -23,7 +23,8 @@ export const ReminderNotices: CollectionConfig = {
   access: {
     read: projectScopedRead,
     create: ({ req }) => isGlobalAdmin(req.user),
-    update: ({ req }) => isGlobalAdmin(req.user),
+    // 标记「已办」是跟进处理动作，项目写权限者应可操作，与读取的项目隔离对齐。
+    update: projectWrite,
     delete: ({ req }) => isGlobalAdmin(req.user),
   },
   fields: [
