@@ -1,3 +1,8 @@
+---
+title: Progress
+created: '2026-08-26T11:44:30.897Z'
+updated: '2026-08-26T11:44:30.897Z'
+---
 # Progress
 
 每次完成一个可验证小步就追加一条：
@@ -7,4 +12,5 @@
   - Verify: `command`
   - Evidence: `path/to/log_or_report`
   - Next:
+
 

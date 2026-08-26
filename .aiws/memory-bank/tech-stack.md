@@ -1,3 +1,8 @@
+---
+title: Tech Stack
+created: '2026-08-26T11:44:30.908Z'
+updated: '2026-08-26T11:44:30.908Z'
+---
 # Tech Stack
 
 填写原则：只写“确实在用且影响决策”的信息，避免长篇大论。
@@ -8,4 +13,5 @@
 - 关键框架与约束（Spring Boot、Ktor、Vue、React 等）
 - 数据层（DB/Redis/MQ）与迁移方式
 - 本地/测试环境切换方式（引用 `AI_WORKSPACE.md` 的命令即可）
+
 

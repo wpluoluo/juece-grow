@@ -1,7 +1,7 @@
 ---
 title: AI_PROJECT.md（项目规则 / 约束真值）
 created: '2026-08-25T15:35:10.583Z'
-updated: '2026-08-25T15:35:10.583Z'
+updated: '2026-08-26T11:44:30.517Z'
 summary: '<!-- AIWSMANAGEDBEGIN:ai-project:core --> <!-- AIPROJECTVERSION: 2 -->'
 tags:
   - seed:ai-project

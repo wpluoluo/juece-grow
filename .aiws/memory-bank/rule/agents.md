@@ -1,7 +1,7 @@
 ---
 title: AGENTS.md · juece-grow 项目规范
 created: '2026-08-25T15:35:10.625Z'
-updated: '2026-08-25T15:35:10.625Z'
+updated: '2026-08-26T11:44:30.586Z'
 summary: <!-- AIWSMANAGEDBEGIN:agents --> 本仓库启用 AIWS（AI Workspace）约定。真值文件（按优先读取）： 1) （规则/边界）→ 2) （需求与验收真值）→ 3) （运行/测试入口真值）
 tags:
   - seed:agents

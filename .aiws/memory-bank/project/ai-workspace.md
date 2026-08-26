@@ -1,7 +1,7 @@
 ---
 title: AI_WORKSPACE.md（工作区说明）
 created: '2026-08-25T15:35:10.612Z'
-updated: '2026-08-25T15:35:10.612Z'
+updated: '2026-08-26T11:44:30.564Z'
 summary: 本段由用户维护； 不会改动本段（建议把“可变参数”都放在这里）。
 tags:
   - seed:ai-workspace

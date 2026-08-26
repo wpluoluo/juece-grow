@@ -1,7 +1,7 @@
 ---
 title: 'Plan: phase1-skeleton'
 created: '2026-08-25T15:35:10.645Z'
-updated: '2026-08-25T15:35:10.645Z'
+updated: '2026-08-26T11:44:30.609Z'
 summary: '> Branch: change/phase1-skeleton > Created: 2026-08-25T12:42:59Z > ChangeType: full-stack'
 tags:
   - seed:plan
