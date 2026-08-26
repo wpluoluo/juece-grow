@@ -91,7 +91,28 @@
         "warnings": 1,
         "exit_code": 0
       }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T13:01:10Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": true,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 1,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "archive",
+      "timestamp": "2026-08-26T13:01:10Z",
+      "payload": {
+        "archived_to": ".aiws\\changes\\archive\\2026-08-26-lead-followup-reminders"
+      }
     }
   ],
-  "updated_at": "2026-08-26T12:40:25Z"
+  "updated_at": "2026-08-26T13:01:10Z"
 }
