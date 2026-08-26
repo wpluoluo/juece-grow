@@ -88,7 +88,48 @@
         "push": false,
         "gateTier": "strict"
       }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T11:40:01Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 2,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-08-26T11:40:10Z",
+      "payload": {
+        "synced_at": "2026-08-26T11:40:10Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-08-25T15:35:35Z",
+        "changed_files": [
+          "AI_WORKSPACE.md",
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T11:40:18Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
     }
   ],
-  "updated_at": "2026-08-25T15:57:13Z"
+  "updated_at": "2026-08-26T11:40:18Z"
 }

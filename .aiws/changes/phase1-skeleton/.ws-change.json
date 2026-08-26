@@ -2,7 +2,7 @@
   "ws_change_version": 2,
   "id": "phase1-skeleton",
   "title": "Astro + Payload + Postgres 工程骨架（单站点 + 表单线索入池）",
-  "phase": "plan",
+  "phase": "finished",
   "created_at": "2026-08-25T12:42:59Z",
   "base_truth_files": {
     "AI_PROJECT.md": {
@@ -18,19 +18,19 @@
       "sha256": "12c87836a0fceb17c647aa17a34652bd2e35c2bb681d4b974ecd027f689116df"
     }
   },
-  "synced_at": "2026-08-25T15:35:35Z",
+  "synced_at": "2026-08-26T11:40:10Z",
   "synced_truth_files": {
     "AI_PROJECT.md": {
       "mtime": 1787661746,
       "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
     },
     "AI_WORKSPACE.md": {
-      "mtime": 1787662922,
-      "sha256": "08c099ff610893a4dbf4650bada09abafabcd4af489c380fb923f475052fe45f"
+      "mtime": 1787673432,
+      "sha256": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
     },
     "REQUIREMENTS.md": {
-      "mtime": 1787672109,
-      "sha256": "85e967bb28a5689d8a7b047acea7ae814f3a89b411383a901495c2b18d1395c3"
+      "mtime": 1787673432,
+      "sha256": "6c848e3d31a5bc21696f0cdf5a728fbf5e1ec11c69f489f832c2a73788bf0841"
     }
   },
   "sync_events": [
@@ -55,6 +55,23 @@
           "file": "REQUIREMENTS.md",
           "from": "12c87836a0fceb17c647aa17a34652bd2e35c2bb681d4b974ecd027f689116df",
           "to": "85e967bb28a5689d8a7b047acea7ae814f3a89b411383a901495c2b18d1395c3"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-08-26T11:40:10Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-08-25T15:35:35Z",
+      "changed": [
+        {
+          "file": "AI_WORKSPACE.md",
+          "from": "08c099ff610893a4dbf4650bada09abafabcd4af489c380fb923f475052fe45f",
+          "to": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
+        },
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "85e967bb28a5689d8a7b047acea7ae814f3a89b411383a901495c2b18d1395c3",
+          "to": "6c848e3d31a5bc21696f0cdf5a728fbf5e1ec11c69f489f832c2a73788bf0841"
         }
       ]
     }
