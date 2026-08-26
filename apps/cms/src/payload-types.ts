@@ -76,6 +76,7 @@ export interface Config {
     forms: Form;
     users: User;
     memberships: Membership;
+    'lead-activities': LeadActivity;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     memberships: MembershipsSelect<false> | MembershipsSelect<true>;
+    'lead-activities': LeadActivitiesSelect<false> | LeadActivitiesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -536,6 +538,37 @@ export interface Membership {
   createdAt: string;
 }
 /**
+ * System-recorded key events for each lead. Read-only timeline of the lead lifecycle.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-activities".
+ */
+export interface LeadActivity {
+  id: number;
+  lead: number | Lead;
+  project: number | Project;
+  type: 'created' | 'status_changed' | 'assigned' | 'follow_up';
+  /**
+   * Human-readable description of this event.
+   */
+  detail?: string | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Who triggered this event (auto-written).
+   */
+  actor?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -594,6 +627,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'memberships';
         value: number | Membership;
+      } | null)
+    | ({
+        relationTo: 'lead-activities';
+        value: number | LeadActivity;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -839,6 +876,20 @@ export interface MembershipsSelect<T extends boolean = true> {
   project?: T;
   user?: T;
   role?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-activities_select".
+ */
+export interface LeadActivitiesSelect<T extends boolean = true> {
+  lead?: T;
+  project?: T;
+  type?: T;
+  detail?: T;
+  meta?: T;
+  actor?: T;
   updatedAt?: T;
   createdAt?: T;
 }

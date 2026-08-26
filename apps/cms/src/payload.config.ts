@@ -28,6 +28,7 @@ import { Media } from './collections/Media'
 import { Articles } from './collections/Articles'
 import { Forms } from './collections/Forms'
 import { Leads } from './collections/Leads'
+import { LeadActivities } from './collections/LeadActivities'
 import { Memberships } from './collections/Memberships'
 
 const filename = fileURLToPath(import.meta.url)
@@ -166,6 +167,13 @@ export default buildConfig({
       admin: {
         ...Memberships.admin,
         group: { zh: '系统', en: 'System' },
+      },
+    },
+    {
+      ...LeadActivities,
+      admin: {
+        ...LeadActivities.admin,
+        group: { zh: '客户与线索', en: 'Customers & Leads' },
       },
     },
   ],

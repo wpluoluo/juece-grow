@@ -42,6 +42,72 @@ export const Leads: CollectionConfig = {
         return data
       },
     ],
+    afterChange: [
+      // 线索动态：在唯一写入路径记录关键事件（创建/状态流转/分配/跟进写注），见 lib/leadActivity。
+      async ({ doc, previousDoc, operation, req }) => {
+        const { payload, user, transactionID } = req
+        const lead = doc as { id: number; project?: { id: number } | number; status?: string; owner?: unknown; followUpNote?: string }
+        // afterChange 返回的 doc 中 relationship 可能已被填充为对象，取它的 id。
+        const projectRaw = lead.project
+        const projectId = Number(typeof projectRaw === 'object' && projectRaw !== null ? (projectRaw as { id: number }).id : projectRaw)
+        if (!projectId) return
+
+        const prev =
+          operation === 'update' && previousDoc
+            ? (previousDoc as { status?: string; owner?: unknown; followUpNote?: string })
+            : null
+
+        let type: 'created' | 'status_changed' | 'assigned' | 'follow_up' | null = null
+        let detail = ''
+        const meta: Record<string, unknown> = { projectId }
+
+        if (operation === 'create') {
+          type = 'created'
+          detail = '线索入池'
+        } else if (prev) {
+          if (prev.status !== lead.status) {
+            type = 'status_changed'
+            meta.from = prev.status ?? ''
+            meta.to = lead.status ?? ''
+            detail = `状态流转：${meta.from} → ${meta.to}`
+          } else if (prev.owner !== lead.owner) {
+            type = 'assigned'
+            // lead.owner 在 afterChange 中可能为填充对象，只记录其 id。
+            const ownerRaw = lead.owner as { id: number } | number | null | undefined
+            meta.owner =
+              ownerRaw == null
+                ? null
+                : Number(typeof ownerRaw === 'object' ? (ownerRaw as { id: number }).id : ownerRaw)
+            detail = '已分配跟进人'
+          } else if (prev.followUpNote !== lead.followUpNote) {
+            type = 'follow_up'
+            detail = '更新跟进记录'
+          }
+        }
+
+        if (!type) return
+
+        const actorId = user ? Number(user.id) : null
+        try {
+          await payload.create({
+            collection: 'lead-activities',
+            overrideAccess: true,
+            req: { transactionID },
+            data: {
+              lead: lead.id,
+              project: projectId,
+              type,
+              detail,
+              meta,
+              actor: actorId === null ? null : actorId,
+            },
+          })
+        } catch (e) {
+          // 动态记录失败不影响线索主流程，仅记录到服务端日志便于排查。
+          console.error('[lead-activity] 记录失败', lead.id, type, e)
+        }
+      },
+    ],
   },
   endpoints: [
     {
