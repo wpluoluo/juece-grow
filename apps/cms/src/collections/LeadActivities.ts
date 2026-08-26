@@ -52,6 +52,7 @@ export const LeadActivities: CollectionConfig = {
         { label: { zh: '状态流转', en: 'Status Changed' }, value: 'status_changed' },
         { label: { zh: '线索分配', en: 'Assigned' }, value: 'assigned' },
         { label: { zh: '跟进写注', en: 'Follow-up' }, value: 'follow_up' },
+        { label: { zh: '系统提醒', en: 'Reminder' }, value: 'reminder' },
       ],
     },
     {

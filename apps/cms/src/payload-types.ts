@@ -77,6 +77,8 @@ export interface Config {
     users: User;
     memberships: Membership;
     'lead-activities': LeadActivity;
+    'reminder-rules': ReminderRule;
+    'reminder-notices': ReminderNotice;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +96,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     memberships: MembershipsSelect<false> | MembershipsSelect<true>;
     'lead-activities': LeadActivitiesSelect<false> | LeadActivitiesSelect<true>;
+    'reminder-rules': ReminderRulesSelect<false> | ReminderRulesSelect<true>;
+    'reminder-notices': ReminderNoticesSelect<false> | ReminderNoticesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -547,7 +551,7 @@ export interface LeadActivity {
   id: number;
   lead: number | Lead;
   project: number | Project;
-  type: 'created' | 'status_changed' | 'assigned' | 'follow_up';
+  type: 'created' | 'status_changed' | 'assigned' | 'follow_up' | 'reminder';
   /**
    * Human-readable description of this event.
    */
@@ -565,6 +569,57 @@ export interface LeadActivity {
    * Who triggered this event (auto-written).
    */
   actor?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Configure follow-up reminder rules (due / first-response SLA), consumed by the scheduled scan.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reminder-rules".
+ */
+export interface ReminderRule {
+  id: number;
+  name: string;
+  /**
+   * Empty means a global rule for all projects.
+   */
+  project?: (number | null) | Project;
+  kind: 'due' | 'sla';
+  applyStatuses: ('new' | 'contacted' | 'converted' | 'closed')[];
+  /**
+   * Only for SLA: exceeds this many hours since creation without first response.
+   */
+  graceHours?: number | null;
+  /**
+   * Empty means remind the lead owner.
+   */
+  target?: (number | null) | User;
+  enabled?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Follow-up records triggered by reminder rules; mark as done when handled.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reminder-notices".
+ */
+export interface ReminderNotice {
+  id: number;
+  lead: number | Lead;
+  project: number | Project;
+  rule: number | ReminderRule;
+  kind: 'due' | 'sla';
+  /**
+   * Rule target or the lead owner.
+   */
+  receiver?: (number | null) | User;
+  status: 'open' | 'done';
+  /**
+   * When the reminder was due.
+   */
+  dueAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -631,6 +686,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lead-activities';
         value: number | LeadActivity;
+      } | null)
+    | ({
+        relationTo: 'reminder-rules';
+        value: number | ReminderRule;
+      } | null)
+    | ({
+        relationTo: 'reminder-notices';
+        value: number | ReminderNotice;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -890,6 +953,36 @@ export interface LeadActivitiesSelect<T extends boolean = true> {
   detail?: T;
   meta?: T;
   actor?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reminder-rules_select".
+ */
+export interface ReminderRulesSelect<T extends boolean = true> {
+  name?: T;
+  project?: T;
+  kind?: T;
+  applyStatuses?: T;
+  graceHours?: T;
+  target?: T;
+  enabled?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reminder-notices_select".
+ */
+export interface ReminderNoticesSelect<T extends boolean = true> {
+  lead?: T;
+  project?: T;
+  rule?: T;
+  kind?: T;
+  receiver?: T;
+  status?: T;
+  dueAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

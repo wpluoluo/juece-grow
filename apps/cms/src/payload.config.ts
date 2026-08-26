@@ -30,6 +30,9 @@ import { Forms } from './collections/Forms'
 import { Leads } from './collections/Leads'
 import { LeadActivities } from './collections/LeadActivities'
 import { Memberships } from './collections/Memberships'
+import { ReminderRules } from './collections/ReminderRules'
+import { ReminderNotices } from './collections/ReminderNotices'
+import { startReminderCron } from './lib/reminderCron'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -176,6 +179,20 @@ export default buildConfig({
         group: { zh: '客户与线索', en: 'Customers & Leads' },
       },
     },
+    {
+      ...ReminderRules,
+      admin: {
+        ...ReminderRules.admin,
+        group: { zh: '客户与线索', en: 'Customers & Leads' },
+      },
+    },
+    {
+      ...ReminderNotices,
+      admin: {
+        ...ReminderNotices.admin,
+        group: { zh: '客户与线索', en: 'Customers & Leads' },
+      },
+    },
   ],
   editor: lexicalEditor({
     features: [
@@ -210,6 +227,10 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  onInit: async (payload) => {
+    // 启动跟进提醒定时扫描；构建期与 HMR 由 reminderCron 内部护栏处理。
+    startReminderCron(payload)
   },
   db: postgresAdapter({
     pool: {

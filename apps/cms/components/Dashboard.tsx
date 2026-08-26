@@ -42,6 +42,7 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     contactedLeads,
     convertedLeads,
     closedLeads,
+    openReminders,
     articles,
     projects,
     recentLeads,
@@ -58,6 +59,7 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     payload.count({ collection: 'leads', where: { status: { equals: 'contacted' } } }),
     payload.count({ collection: 'leads', where: { status: { equals: 'converted' } } }),
     payload.count({ collection: 'leads', where: { status: { equals: 'closed' } } }),
+    payload.count({ collection: 'reminder-notices', where: { status: { equals: 'open' } } }),
     payload.count({ collection: 'articles', where: { status: { equals: 'published' } } }),
     payload.find({ collection: 'projects', where: {}, depth: 0, pagination: false, limit: 100 }),
     payload.find({ collection: 'leads', where: {}, sort: '-createdAt', limit: 6, depth: 1 }),
@@ -214,6 +216,7 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     { key: 'total', label: '累计线索', value: String(totalLeads.totalDocs), hint: '全部留资来源', icon: 'users' },
     { key: 'today', label: '今日新增', value: String(todayLeads.totalDocs), hint: '今日 00:00 起', icon: 'clock' },
     { key: 'follow', label: '待跟进', value: String(newLeads.totalDocs), hint: 'new 状态等待接洽', icon: 'bell', tone: 'amber' },
+    { key: 'reminder', label: '待跟进提醒', value: String(openReminders.totalDocs), hint: '规则命中未处理', icon: 'flag', tone: 'amber' },
     { key: 'rate', label: '成交转化率', value: `${conversion}%`, hint: `${convertedLeads.totalDocs} 已成交 / ${totalLeads.totalDocs} 总量`, icon: 'percent' },
     { key: 'followup', label: '跟进次数', value: String(followUpCount), hint: 'follow_up 动态累计', icon: 'write' },
     { key: 'cycle', label: '平均成交周期', value: avgCycle == null ? '—' : `${avgCycle}h`, hint: '入池到成交平均用时', icon: 'watch' },
@@ -409,6 +412,12 @@ function MetricIcon({ name }: { name: string }) {
       <>
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
         <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      </>
+    ),
+    flag: (
+      <>
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+        <line x1="4" y1="22" x2="4" y2="15" />
       </>
     ),
     percent: (

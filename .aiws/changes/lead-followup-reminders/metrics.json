@@ -77,7 +77,21 @@
         "warnings": 1,
         "exit_code": 0
       }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T12:40:25Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 1,
+        "exit_code": 0
+      }
     }
   ],
-  "updated_at": "2026-08-26T12:18:47Z"
+  "updated_at": "2026-08-26T12:40:25Z"
 }

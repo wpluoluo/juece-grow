@@ -1,7 +1,7 @@
 ---
 title: REQUIREMENTS.md
 created: '2026-08-25T15:35:10.600Z'
-updated: '2026-08-26T11:44:30.544Z'
+updated: '2026-08-26T12:42:42.488Z'
 summary: <!-- AIWSMANAGEDBEGIN:requirements:contract --> 本文件是工作区需求的唯一真值来源。AI 在制定计划与执行测试时必须以此为准。
 tags:
   - seed:requirement
@@ -35,6 +35,33 @@ _Source: `REQUIREMENTS.md`_
 - **验收标准**：可机器或人工验证的条目
 
 已完成的需求保留在历史区并标记 `✓`；新增需求追加到 Backlog 区。
+
+## Backlog
+
+### REQ-0002：线索跟进提醒自动化（到期 + 首次跟进 SLA，核心）
+
+**背景 / 问题**
+- 现有 `nextFollowUpAt` 字段已存在但无机制消费，跟进全凭人工记忆，逾期/漏跟无提醒。
+- new 线索长时间无人首响、长期停在未跟进状态，无信号让跟进人感知。
+
+**目标**
+- 支持在后台配置提醒规则（到期提醒 / 首次跟进 SLA），由 node-cron 定时扫描命中线索。
+- 命中后写 `reminder-notices`（后台"待跟进"清单）+ 追加 `LeadActivities`（`reminder` 事件），看板展示待办提醒点。
+- 承诺：同一线索同一规则在未处理前不重复提醒；提醒不改变线索本身状态。
+
+**非目标**
+- 外部渠道触达（企业微信/钉钉/邮件 webhook 推送）—— 后续独立 change 接入。
+- 自动改线索状态 / 自动分配 / 自动外呼 —— 仅提醒，不代执行动作。
+- 提醒规则的第三方订阅与复杂条件编排（如叠加来源+多标签）—— 先支持项目范围+适用阶段。
+
+**验收标准**
+- [ ] 后台可配置规则：`reminder-rules` 集合含 type(due/sla)、适用阶段、sla 超时阈值(小时)、归属项目(空=全局)、启停，且字段均有中英双语 label
+- [ ] 到期提醒：`nextFollowUpAt` 已过且阶段为进行中(new/contacted)的线索命中，未处理前不重复提醒
+- [ ] 首次跟进 SLA：状态仍为 `new` 且创建超过阈值小时未跟进(pre)线索命中
+- [ ] 命中后生成 `reminder-notices`（线索+类型+接收人+状态 open/done）并追加 `LeadActivities` 事件 `reminder`
+- [ ] 提供 `/api/v2/reminders/run`(POST，管理员) 手动触发扫描，返回 `{ success, data:{ created } }`
+- [ ] 看板展示待办提醒数量/清单；后台 `reminder-notices` 集合即"待跟进"列表
+- [ ] CMS 生产构建通过 TS 校验；调度在构建期不启动定时器
 
 ## Backlog
 

@@ -24,15 +24,15 @@
 
 ## 2. 实现
 
-- [ ] 2.1 新增 `apps/cms/src/collections/ReminderRules.ts`（name/project/kind(due|sla)/applyStatuses/graceHours/target/enabled，双语 label）
-- [ ] 2.2 新增 `apps/cms/src/collections/ReminderNotices.ts`（lead/project/rule/kind/receiver/dueAt/status(open|done)，双语 label，read=projectScopedRead）
-- [ ] 2.3 `LeadActivities.type` 新增 `reminder` 选项（双语 label）
-- [ ] 2.4 `payload.config.ts` 注册两集合 + `onInit` 启动 `startReminderCron`
-- [ ] 2.5 `pnpm --filter cms add node-cron`（无需外部服务的自宿主依赖，对照红线 OK）
-- [ ] 2.6 新增 `apps/cms/src/lib/reminderCron.ts`：构建期早退 + globalThis 哨兵 + `runReminderScan`（due/sla 命中 → 判重 → 写 notice + activity）
-- [ ] 2.7 新增 `apps/cms/src/app/api/v2/reminders/run/route.ts`（管理员手动触发，统一信封）
-- [ ] 2.8 Dashboard 看板新增"待跟进"提醒点（open notices 数量/摘要）；custom.scss 补样式
-- [ ] 2.9 `pnpm --filter cms payload generate:types` 重新生成 `payload-types.ts`
+- [x] 2.1 新增 `apps/cms/src/collections/ReminderRules.ts`（name/project/kind(due|sla)/applyStatuses/graceHours/target/enabled，双语 label）
+- [x] 2.2 新增 `apps/cms/src/collections/ReminderNotices.ts`（lead/project/rule/kind/receiver/dueAt/status(open|done)，双语 label，read=projectScopedRead）
+- [x] 2.3 `LeadActivities.type` 新增 `reminder` 选项（双语 label）
+- [x] 2.4 `payload.config.ts` 注册两集合 + `onInit` 启动 `startReminderCron`
+- [x] 2.5 `pnpm --filter cms add node-cron`（无需外部服务的自宿主依赖，对照红线 OK）
+- [x] 2.6 新增 `apps/cms/src/lib/reminderCron.ts`：构建期早退 + globalThis 哨兵 + `runReminderScan`（due/sla 命中 → 判重 → 写 notice + activity）
+- [x] 2.7 新增 `apps/cms/src/app/api/v2/reminders/run/route.ts`（管理员手动触发，统一信封）
+- [x] 2.8 Dashboard 看板新增"待跟进"提醒点（open notices 数量/摘要）；custom.scss 补样式
+- [x] 2.9 `pnpm --filter cms payload generate:types` 重新生成 `payload-types.ts`
 
 ## 2A. 协同（可选）
 
@@ -42,8 +42,8 @@
 
 ## 3. 验证（必须可复现）
 
-- [ ] 3.1 `pnpm --filter cms build`：生产构建 TS 通过，构建期不启动定时器
-- [ ] 3.2 手动扫描验证：起 db + cms dev，后台建 due/sla 规则，造 status=new、nextFollowUpAt 已过线索，`curl -X POST :3000/api/v2/reminders/run` 返回 `{success:true, data:{created>0}}`；重复调用 created 不增长；`reminder-notices` 与 `LeadActivities(reminder)` 可见
+- [x] 3.1 `pnpm --filter cms build`：生产构建 TS 通过，构建期不启动定时器
+- [x] 3.2 手动扫描验证：起 db + cms dev，后台建 due/sla 规则，造 status=new、nextFollowUpAt 已过线索，`curl -X POST :3000/api/v2/reminders/run` 返回 `{success:true, data:{created>0}}`；重复调用 created 不增长；`reminder-notices` 与 `LeadActivities(reminder)` 可见
 - [ ] 3.3 `aiws change validate lead-followup-reminders --strict` 通过
 
 ## 4. 交付与归档

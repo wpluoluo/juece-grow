@@ -7,6 +7,15 @@ memories:
     updated: '2026-08-26T11:44:30.871Z'
     tags: []
     summary: 目标：记录“模块关系与关键边界”，让新的会话可以快速对齐代码布局。
+  change://2026-08-26-lead-followup-reminders:
+    title: 'Plan: lead-followup-reminders'
+    domain: change
+    path: change/2026-08-26-lead-followup-reminders.md
+    created: '2026-08-26T12:42:42.524Z'
+    updated: '2026-08-26T12:42:42.524Z'
+    tags:
+      - seed:plan
+    summary: '> Generated: 2026-08-26 · Change: lead-followup-reminders · Req: REQ-0002'
   change://phase1-skeleton:
     title: 'Plan: phase1-skeleton'
     domain: change
@@ -16,6 +25,20 @@ memories:
     tags:
       - seed:plan
     summary: '> Branch: change/phase1-skeleton > Created: 2026-08-25T12:42:59Z > ChangeType: full-stack'
+  decision://lead-followup-reminders:
+    title: 线索跟进提醒自动化
+    domain: decision
+    path: decision/lead-followup-reminders.md
+    created: '2026-08-26T12:42:36.019Z'
+    updated: '2026-08-26T12:42:36.020Z'
+    tags:
+      - reminders
+      - node-cron
+      - lead
+    disclosure: boot
+    summary: >-
+      线索跟进自动化 change 完成。改动：新增 reminder-rules/reminder-notices 两集合 + lead-activities 增 reminder 事件；node-cron 调度 +
+      runReminderScan 判重落写；新增 POST /api/v2/reminders/run（管理员）。关键决策：构建期不启定时器（NEXT_PHASE 早退 + glob...
   decision://phase1-skeleton:
     title: phase1-skeleton 变更归档
     domain: decision
@@ -57,7 +80,7 @@ memories:
     domain: project
     path: project/requirement.md
     created: '2026-08-25T15:35:10.600Z'
-    updated: '2026-08-26T11:44:30.544Z'
+    updated: '2026-08-26T12:42:42.488Z'
     tags:
       - seed:requirement
     summary: <!-- AIWSMANAGEDBEGIN:requirements:contract --> 本文件是工作区需求的唯一真值来源。AI 在制定计划与执行测试时必须以此为准。
