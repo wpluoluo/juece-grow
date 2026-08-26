@@ -3,7 +3,7 @@ import type { AdminViewServerProps } from 'payload'
 import Link from 'next/link'
 import config from '@payload-config'
 import { getPayload } from 'payload'
-import { Donut, DailyBars, RankedBars } from './DashboardCharts'
+import { Donut, DailyDualBars, RankedBars, type Slice } from './DashboardCharts'
 
 /** 来源切片配色（与 DashboardCharts 的 COLOR_WHEEL 保持一致）。 */
 const SLICE_COLORS = [
@@ -45,8 +45,9 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     articles,
     projects,
     recentLeads,
-    last7d,
     sourceRows,
+    actsAll,
+    users,
   ] = await Promise.all([
     payload.count({ collection: 'leads', where: {} }),
     payload.count({
@@ -60,29 +61,30 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     payload.count({ collection: 'articles', where: { status: { equals: 'published' } } }),
     payload.find({ collection: 'projects', where: {}, depth: 0, pagination: false, limit: 100 }),
     payload.find({ collection: 'leads', where: {}, sort: '-createdAt', limit: 6, depth: 1 }),
+    payload.find({ collection: 'leads', where: {}, depth: 0, pagination: false, limit: 2000 }),
     payload.find({
-      collection: 'leads',
-      where: { createdAt: { greater_than: new Date(now - 7 * dayMs).toISOString() } },
+      collection: 'lead-activities',
+      where: {},
       depth: 0,
       pagination: false,
-      limit: 2000,
+      limit: 0,
+      sort: '-createdAt',
+      select: { lead: true, type: true, detail: true, meta: true, actor: true, createdAt: true },
     }),
-    payload.find({ collection: 'leads', where: {}, depth: 0, pagination: false, limit: 2000 }),
+    payload.find({
+      collection: 'users',
+      where: {},
+      depth: 0,
+      pagination: false,
+      limit: 500,
+      select: { name: true, username: true },
+    }),
   ])
 
-  // 近 7 日线索趋势：按本地日期聚合。
+  // 近 N 日按本地日期取键，供趋势聚合。
   const dayKey = (ts: number) => {
     const d = new Date(ts)
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-  }
-  const buckets = Array.from({ length: 7 }, (_, i) => {
-    const t = new Date(now - (6 - i) * dayMs)
-    return { key: dayKey(t.getTime()), label: `${t.getMonth() + 1}/${t.getDate()}`, value: 0 }
-  })
-  const bucketByKey = new Map(buckets.map((b) => [b.key, b]))
-  for (const doc of last7d.docs) {
-    const b = bucketByKey.get(dayKey(new Date(doc.createdAt).getTime()))
-    if (b) b.value += 1
   }
 
   // 来源渠道分布：自由文本，按出现次数聚合。
@@ -91,13 +93,23 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     const src = String(doc.source || 'unknown')
     srcCount.set(src, (srcCount.get(src) || 0) + 1)
   }
+  // 来源成交数：用于来源归因展示转化。
+  const sourceConverted = new Map<string, number>()
+  for (const doc of sourceRows.docs) {
+    if (String(doc.status || '') === 'converted') {
+      const src = String(doc.source || 'unknown')
+      sourceConverted.set(src, (sourceConverted.get(src) || 0) + 1)
+    }
+  }
   const sourceLabel: Record<string, string> = { website: '官网表单', unknown: '未标识', manual: '手动录入' }
   const sourceSlices = [...srcCount.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
     .map(([key, value], i) => ({
+      key,
       label: sourceLabel[key] || key,
       value,
+      converted: sourceConverted.get(key) || 0,
       color: SLICE_COLORS[i % SLICE_COLORS.length],
     }))
 
@@ -120,6 +132,80 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     }),
   )
 
+  // 跟进动态：跟进次数、平均成交周期、近期事件与成交时间戳（来自 lead-activities）。
+  const createdAtMs = new Map<number, number>()
+  const convertedAtMs = new Map<number, number>()
+  let followUpCount = 0
+  for (const a of actsAll.docs) {
+    const leadId = Number(a.lead)
+    const ts = new Date(a.createdAt).getTime()
+    if (a.type === 'follow_up') followUpCount += 1
+    if (a.type === 'created' && !createdAtMs.has(leadId)) createdAtMs.set(leadId, ts)
+    if (a.type === 'status_changed') {
+      const m = a.meta as { to?: string } | null | undefined
+      if (m?.to === 'converted' && !convertedAtMs.has(leadId)) convertedAtMs.set(leadId, ts)
+    }
+  }
+  let cycleSum = 0
+  let cycleCount = 0
+  for (const [leadId, convTs] of convertedAtMs) {
+    const createdTs = createdAtMs.get(leadId)
+    if (!createdTs || convTs < createdTs) continue
+    cycleSum += Math.round((convTs - createdTs) / 3_600_000)
+    cycleCount += 1
+  }
+  const avgCycle = cycleCount > 0 ? Math.round(cycleSum / cycleCount) : null
+
+  // 操作人/跟进人显示名。
+  const userName = new Map<string, string>()
+  for (const u of users.docs) userName.set(String(u.id), u.name || u.username || `用户${u.id}`)
+
+  // 跟进人分布：按 owner 聚合线索数。
+  const ownerRows: Slice[] = []
+  const ownerCount = new Map<string, number>()
+  for (const doc of sourceRows.docs) {
+    const ownerKey = doc.owner == null ? 'unassigned' : String(doc.owner)
+    ownerCount.set(ownerKey, (ownerCount.get(ownerKey) || 0) + 1)
+  }
+  for (const [key, value] of ownerCount.entries()) {
+    const label = key === 'unassigned' ? '未分配' : userName.get(String(Number(key))) || `用户${key}`
+    ownerRows.push({ label, value })
+  }
+  ownerRows.sort((a, b) => b.value - a.value)
+
+  // 近期动态：取最近 8 条。
+  const TYPE_LABEL: Record<string, string> = {
+    created: '创建入池',
+    status_changed: '状态流转',
+    assigned: '线索分配',
+    follow_up: '跟进写注',
+  }
+  const recentActs = actsAll.docs.slice(0, 8).map((a, i) => {
+    const actor = a.actor
+      ? userName.get(String(Number(a.actor))) || `用户${a.actor}`
+      : '系统'
+    const time = new Date(
+      new Date(a.createdAt).toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }),
+    ).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+    return { key: `${a.id}-${i}`, label: TYPE_LABEL[String(a.type)] || String(a.type), detail: String(a.detail || ''), actor, time }
+  })
+
+  // 近 14 日趋势（新增 + 成交双系列）：新增按线索 createdAt 归日，成交按成交事件时间归日。
+  const dualBars = Array.from({ length: 14 }, (_, i) => {
+    const t = new Date(now - (13 - i) * dayMs)
+    return { label: `${t.getMonth() + 1}/${t.getDate()}`, key: dayKey(t.getTime()), newValue: 0, converted: 0 }
+  })
+  const dualByKey = new Map(dualBars.map((b) => [b.key, b]))
+  for (const doc of sourceRows.docs) {
+    const b = dualByKey.get(dayKey(new Date(doc.createdAt).getTime()))
+    if (b) b.newValue += 1
+  }
+  for (const [leadId, convTs] of convertedAtMs) {
+    const b = dualByKey.get(dayKey(convTs))
+    if (b) b.converted += 1
+  }
+  const trendHasData = dualBars.some((b) => b.newValue > 0 || b.converted > 0)
+
   const conversion = totalLeads.totalDocs
     ? Math.round((convertedLeads.totalDocs / totalLeads.totalDocs) * 1000) / 10
     : 0
@@ -129,6 +215,8 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     { key: 'today', label: '今日新增', value: String(todayLeads.totalDocs), hint: '今日 00:00 起', icon: 'clock' },
     { key: 'follow', label: '待跟进', value: String(newLeads.totalDocs), hint: 'new 状态等待接洽', icon: 'bell', tone: 'amber' },
     { key: 'rate', label: '成交转化率', value: `${conversion}%`, hint: `${convertedLeads.totalDocs} 已成交 / ${totalLeads.totalDocs} 总量`, icon: 'percent' },
+    { key: 'followup', label: '跟进次数', value: String(followUpCount), hint: 'follow_up 动态累计', icon: 'write' },
+    { key: 'cycle', label: '平均成交周期', value: avgCycle == null ? '—' : `${avgCycle}h`, hint: '入池到成交平均用时', icon: 'watch' },
     { key: 'article', label: '已发布文章', value: String(articles.totalDocs), hint: '对公开站可见', icon: 'doc' },
   ]
 
@@ -166,13 +254,13 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
       </div>
 
       <div className="admin-grid" style={{ gridTemplateColumns: '1.6fr 1fr' }}>
-        {/* 近 7 日趋势 */}
+        {/* 近 14 日趋势（新增 / 成交） */}
         <div className="admin-card">
-          <div className="admin-section-title">近 7 日新增线索</div>
-          {last7d.docs.length ? (
-            <DailyBars days={buckets} />
+          <div className="admin-section-title">近 14 日新增与成交</div>
+          {trendHasData ? (
+            <DailyDualBars days={dualBars} />
           ) : (
-            <AdminEmpty title="近 7 日还没有新增" text="公开表单提交后会自动出现。" />
+            <AdminEmpty title="近 14 日还没有数据" text="线索入池或成交后会自动出现。" />
           )}
         </div>
 
@@ -198,52 +286,88 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
         </div>
       </div>
 
-      <div className="admin-grid" style={{ gridTemplateColumns: '1fr 1.4fr' }}>
+      <div className="admin-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
         {/* 阶段漏斗 */}
         <div className="admin-card">
           <div className="admin-section-title">线索阶段分布</div>
           <RankedBars rows={funnel} />
         </div>
 
-        {/* 项目引流 */}
+        {/* 跟进人分布 */}
         <div className="admin-card">
-          <div className="admin-section-title">项目引流</div>
-          {projectRows.length ? (
-            <RankedBars rows={projectRows.map((p) => ({ label: p.name, value: p.value }))} />
+          <div className="admin-section-title">跟进人分布</div>
+          {ownerRows.length ? (
+            <RankedBars rows={ownerRows} />
           ) : (
-            <AdminEmpty title="还没有项目" text="先创建一个项目，线索会自动归类。" />
+            <AdminEmpty title="还没有跟进人数据" text="为线索分配 owner 后按人统计。" />
           )}
         </div>
       </div>
 
-      {/* 最新线索 */}
-      <div className="admin-section-title admin-section-margin">最新线索</div>
-      {recentLeads.docs.length ? (
-        <div className="admin-list">
-          {recentLeads.docs.map((lead) => (
-            <div className="admin-list-row" key={String(lead.id)}>
-              <div className="admin-list-main">
-                <span
-                  className={`admin-badge tone-${LEAD_TONE[(lead.status as string) || 'new'] || 'teal'}`}
-                >
-                  {STATUS_LABEL[String(lead.status)] || String(lead.status)}
-                </span>
-                <div>
-                  <div className="admin-list-title">{lead.title}</div>
-                  <div className="admin-list-meta">
-                    {[lead.phone, lead.wechat, lead.company].filter(Boolean).join(' · ') || '未留联系方式'}
-                  </div>
-                </div>
-              </div>
-              <Link className="btn btn--style-secondary" href={`/admin/collections/leads/${lead.id}`}>
-                查看
-              </Link>
-            </div>
-          ))}
+      {/* 项目引流 */}
+      <div className="admin-section-title admin-section-margin">项目引流</div>
+      {projectRows.length ? (
+        <div className="admin-card">
+          <RankedBars rows={projectRows.map((p) => ({ label: p.name, value: p.value }))} />
         </div>
       ) : (
-        <AdminEmpty title="还没有线索" text="公开表单提交后会自动出现在这里。" />
+        <AdminEmpty title="还没有项目" text="先创建一个项目，线索会自动归类。" />
       )}
+
+      <div className="admin-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        {/* 近期动态 */}
+        <div className="admin-card">
+          <div className="admin-section-title">近期动态</div>
+          {recentActs.length ? (
+            <div className="admin-feed">
+              {recentActs.map((a) => (
+                <div className="admin-feed-row" key={a.key}>
+                  <span className="admin-feed-tag">{a.label}</span>
+                  <div className="admin-feed-main">
+                    <div className="admin-feed-text">{a.detail || '更新了线索状态'}</div>
+                    <div className="admin-feed-meta">
+                      {a.actor} · {a.time}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <AdminEmpty title="还没有动态" text="线索创建、跟进、流转后会自动记录。" />
+          )}
+        </div>
+
+        {/* 最新线索 */}
+        <div className="admin-card">
+          <div className="admin-section-title">最新线索</div>
+          {recentLeads.docs.length ? (
+            <div className="admin-list">
+              {recentLeads.docs.map((lead) => (
+                <div className="admin-list-row" key={String(lead.id)}>
+                  <div className="admin-list-main">
+                    <span
+                      className={`admin-badge tone-${LEAD_TONE[(lead.status as string) || 'new'] || 'teal'}`}
+                    >
+                      {STATUS_LABEL[String(lead.status)] || String(lead.status)}
+                    </span>
+                    <div>
+                      <div className="admin-list-title">{lead.title}</div>
+                      <div className="admin-list-meta">
+                        {[lead.phone, lead.wechat, lead.company].filter(Boolean).join(' · ') || '未留联系方式'}
+                      </div>
+                    </div>
+                  </div>
+                  <Link className="btn btn--style-secondary" href={`/admin/collections/leads/${lead.id}`}>
+                    查看
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <AdminEmpty title="还没有线索" text="公开表单提交后会自动出现在这里。" />
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -298,6 +422,19 @@ function MetricIcon({ name }: { name: string }) {
       <>
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
+      </>
+    ),
+    write: (
+      <>
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z" />
+      </>
+    ),
+    watch: (
+      <>
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+        <path d="M12 2v3M12 19v3" />
       </>
     ),
   }

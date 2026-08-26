@@ -63,6 +63,45 @@ export const Donut: FC<{ slices: Slice[]; size?: number; thickness?: number }> =
 
 export type DayPoint = { label: string; value: number }
 
+export type DualPoint = { label: string; newValue: number; converted: number }
+
+/** 最近 N 日双系列柱状图（新增 / 成交），次级系列用低饱和强调色。 */
+export const DailyDualBars: FC<{ days: DualPoint[] }> = ({ days }) => {
+  const max = Math.max(...days.map((d) => Math.max(d.newValue, d.converted)), 1)
+  const stepX = 100 / days.length
+  const stepSpace = stepX * 0.62
+  const plotHeight = 132
+  const barMax = plotHeight - 14 - 18
+  return (
+    <div className="admin-barchart">
+      <div className="admin-barchart-legend">
+        <span className="admin-barchart-key is-new" />
+        新增
+        <span className="admin-barchart-key is-converted" />
+        成交
+      </div>
+      <div className="admin-barchart-plot" style={{ height: plotHeight }}>
+        {days.map((d, i) => (
+          <div className="admin-barchart-col" key={i} style={{ width: `${stepX}%` }}>
+            <div className="admin-barchart-val">{d.newValue || d.converted || ''}</div>
+            <div className="admin-barchart-dual">
+              <div
+                className="admin-barchart-bar is-new"
+                style={{ height: Math.max((d.newValue / max) * barMax, 1), width: `${stepSpace * 0.45}%` }}
+              />
+              <div
+                className="admin-barchart-bar is-converted"
+                style={{ height: Math.max((d.converted / max) * barMax, 1), width: `${stepSpace * 0.45}%` }}
+              />
+            </div>
+            <div className="admin-barchart-label">{d.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /** 最近 N 日柱状趋势图。 */
 export const DailyBars: FC<{ days: DayPoint[] }> = ({ days }) => {
   const max = Math.max(...days.map((d) => d.value), 1)

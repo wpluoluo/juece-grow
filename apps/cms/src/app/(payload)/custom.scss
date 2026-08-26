@@ -247,6 +247,8 @@
     #nav-articles { --nav-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2.5h7l5 5V21a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z'/%3E%3Cpath d='M13 2.5V8h5'/%3E%3Cpath d='M9 12h6M9 16h6'/%3E%3C/svg%3E"); }
     #nav-forms    { --nav-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='4' width='14' height='17' rx='2'/%3E%3Cpath d='M9 3.5h6v2.5H9z'/%3E%3Cpath d='M9 13h6M9 16.5h6'/%3E%3C/svg%3E"); }
     #nav-users    { --nav-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3.2'/%3E%3Cpath d='M3 20c0-3.2 2.7-5.2 6-5.2s6 2 6 5.2'/%3E%3Cpath d='M16 5.2a3.2 3.2 0 0 1 0 5.6M21 20c0-2.5-1.9-4.3-4.5-4.9'/%3E%3C/svg%3E"); }
+    #nav-memberships   { --nav-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='17' rx='2'/%3E%3Cpath d='M9 5v15'/%3E%3Ccircle cx='6.5' cy='9.5' r='1.3'/%3E%3Cpath d='M4 17c0-1.4 1-2.3 2.5-2.3s2.5.9 2.5 2.3'/%3E%3Cpath d='M15 10h4M15 13h4M15 16h3'/%3E%3C/svg%3E"); }
+    #nav-lead-activities { --nav-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='22 12 18 12 15 21 9 3 6 12 2 12'/%3E%3C/svg%3E"); }
 
     /* ---------- 分组名：小字号、次级色、舒展留白 ---------- */
     .nav-group {
@@ -539,11 +541,35 @@
   }
 }
 
-/* ---------- 近 7 日柱状趋势 ---------- */
+/* ---------- 近 14 日柱状趋势（新增/成交双系列） ---------- */
 .admin-barchart-plot {
   display: flex;
   align-items: flex-end;
   gap: 4px;
+}
+
+.admin-barchart-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  color: var(--theme-elevation-500);
+}
+
+.admin-barchart-key {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  flex: none;
+
+  &.is-new {
+    background: var(--theme-success-300);
+  }
+
+  &.is-converted {
+    background: var(--color-blue-300);
+  }
 }
 
 .admin-barchart-col {
@@ -560,15 +586,33 @@
   margin-bottom: 4px;
 }
 
+.admin-barchart-dual {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+}
+
 .admin-barchart-bar {
-  background: var(--theme-success-300);
   border-radius: 6px 6px 0 0;
   transition:
     height 600ms cubic-bezier(0.22, 1, 0.36, 1),
     background-color 160ms ease;
 
-  &:hover {
-    background: var(--theme-success-400);
+  &.is-new {
+    background: var(--theme-success-300);
+
+    &:hover {
+      background: var(--theme-success-400);
+    }
+  }
+
+  &.is-converted {
+    background: var(--color-blue-300);
+
+    &:hover {
+      background: var(--color-blue-400);
+    }
   }
 }
 
@@ -696,4 +740,47 @@
 
 .admin-section-margin {
   margin: 28px 0 12px;
+}
+
+/* ---------- 近期动态 ---------- */
+.admin-feed {
+  display: flex;
+  flex-direction: column;
+
+  .admin-feed-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--theme-elevation-100);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .admin-feed-tag {
+    flex: none;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    color: var(--theme-elevation-600);
+    background: var(--theme-elevation-100);
+  }
+
+  .admin-feed-main {
+    min-width: 0;
+  }
+
+  .admin-feed-text {
+    font-size: 0.82rem;
+    color: var(--theme-elevation-700);
+    overflow-wrap: anywhere;
+  }
+
+  .admin-feed-meta {
+    font-size: 0.74rem;
+    color: var(--theme-elevation-400);
+    margin-top: 2px;
+  }
 }
