@@ -14,7 +14,7 @@
 
 ## 仓库结构
 ```
-apps/cms     Payload 后台 + /api/v2 + admin + 线索看板
+apps/cms     Payload 后台 + /api/v2 + admin（统一运营看板）
 apps/astro   公开站（SSG），首页/方案/文章/落地页
 infra/       Chatwoot 等自托管编排
 scripts/     构建与运维脚本
@@ -40,4 +40,4 @@ docs/        规划、架构、数据模型、SEO、线索流程、路线图、�
 - [项目上下文](CLAUDE.md)
 
 ## 状态
-Phase 1 链路跑通、Phase 2 多项目治理、Phase 3 全渠道收口均已完成（见 [docs/06-roadmap.md](docs/06-roadmap.md)），进入收尾阶段：文档对齐、开源化、部署与备份策略。
+Phase 1 链路跑通、Phase 2 多项目治理、Phase 3 全渠道收口均已完成（见 [docs/06-roadmap.md](docs/06-roadmap.md)）；收尾阶段（文档对齐、开源化、部署与备份策略）也已落地，见 [LICENSE](LICENSE)、[CONTRIBUTING.md](CONTRIBUTING.md)、[docs/08-deployment.md](docs/08-deployment.md)。
