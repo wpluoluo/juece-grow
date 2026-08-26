@@ -9,5 +9,6 @@
 
 | 日期 | 变更内容 | 原因/背景 | 影响范围（模块/接口） | 关联 issues/PR | 记录人 |
 |---|---|---|---|---|---|
+| 2026-08-26 | 新增 REQ-0002：线索跟进提醒自动化（到期 + 首次跟进 SLA，核心） | 现有 nextFollowUpAt 无消费机制，跟进无提醒；new 线索首响无信号 | 新建 reminder-rules / reminder-notices 集合；LeadActivities 增 reminder 枚举；新增 POST /api/v2/reminders/run；看板待办提醒点 | change/lead-followup-reminders | owner |
 | YYYY-MM-DD | | | | | |
 

@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "change_id": "lead-followup-reminders",
+  "events": [
+    {
+      "type": "change_new",
+      "timestamp": "2026-08-26T12:14:46Z",
+      "payload": {
+        "title": "线索跟进自动化：到期提醒+首次跟进SLA（核心，后台内提醒）",
+        "created_at": "2026-08-26T12:14:46Z",
+        "base_branch": "main",
+        "templates": "F:/juece-grow/.aiws/changes/templates",
+        "no_design": false
+      }
+    },
+    {
+      "type": "change_start",
+      "timestamp": "2026-08-26T12:14:46Z",
+      "payload": {
+        "mode": "no-switch",
+        "branch": "change/lead-followup-reminders",
+        "from_branch": "main",
+        "current_branch": "main",
+        "hooks": false
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T12:17:32Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 16,
+        "warnings": 1,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-08-26T12:18:28Z",
+      "payload": {
+        "synced_at": "2026-08-26T12:18:28Z",
+        "baseline_from": "creation",
+        "baseline_at": "2026-08-26T12:14:46Z",
+        "changed_files": [
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T12:18:29Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 1,
+        "warnings": 1,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-08-26T12:18:47Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 1,
+        "exit_code": 0
+      }
+    }
+  ],
+  "updated_at": "2026-08-26T12:18:47Z"
+}

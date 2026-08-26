@@ -1,0 +1,52 @@
+{
+  "ws_change_version": 2,
+  "id": "lead-followup-reminders",
+  "title": "线索跟进自动化：到期提醒+首次跟进SLA（核心，后台内提醒）",
+  "phase": "plan",
+  "created_at": "2026-08-26T12:14:46Z",
+  "base_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1787661746,
+      "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787673432,
+      "sha256": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1787673432,
+      "sha256": "6c848e3d31a5bc21696f0cdf5a728fbf5e1ec11c69f489f832c2a73788bf0841"
+    }
+  },
+  "base_branch": "main",
+  "base_branch_set_at": "2026-08-26T12:14:46Z",
+  "synced_at": "2026-08-26T12:18:28Z",
+  "synced_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1787661746,
+      "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787673432,
+      "sha256": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1787746536,
+      "sha256": "68d230586ffe2b259b36d5e6b51e70ac2e4bde02c7c70558a1557a3cc5df8f6e"
+    }
+  },
+  "sync_events": [
+    {
+      "synced_at": "2026-08-26T12:18:28Z",
+      "baseline_from": "creation",
+      "baseline_at": "2026-08-26T12:14:46Z",
+      "changed": [
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "6c848e3d31a5bc21696f0cdf5a728fbf5e1ec11c69f489f832c2a73788bf0841",
+          "to": "68d230586ffe2b259b36d5e6b51e70ac2e4bde02c7c70558a1557a3cc5df8f6e"
+        }
+      ]
+    }
+  ]
+}
