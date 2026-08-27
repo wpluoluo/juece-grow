@@ -5,6 +5,7 @@ import config from '@payload-config'
 
 import { err, ok } from '../../../../../lib/envelope'
 import { memberProjectIds } from '../../../../../access'
+import { aggregateBySource } from '../../../../../lib/leadStats'
 
 /** 线索阶段（按转化漏斗顺序）。 */
 const PIPE_ORDER = ['new', 'contacted', 'converted', 'closed'] as const
@@ -48,31 +49,25 @@ export async function GET(req: NextRequest) {
         owner: true,
         followUpNote: true,
         nextFollowUpAt: true,
+        dealAmount: true,
         createdAt: true,
         title: true,
       },
     })
 
-    const total = doc.docs.length
     const statusCount = new Map<string, number>()
-    const sourceTotal = new Map<string, number>()
-    const sourceConverted = new Map<string, number>()
     const ownerCount = new Map<string, number>()
-    let converted = 0
 
     for (const lead of doc.docs) {
-      const source = typeof lead.source === 'string' ? lead.source : 'other'
       const status = typeof lead.status === 'string' ? lead.status : 'unknown'
       const ownerKey = lead.owner == null ? 'unassigned' : String(lead.owner)
 
       statusCount.set(status, (statusCount.get(status) ?? 0) + 1)
-      sourceTotal.set(source, (sourceTotal.get(source) ?? 0) + 1)
       ownerCount.set(ownerKey, (ownerCount.get(ownerKey) ?? 0) + 1)
-      if (status === CONVERTED_STATUS) {
-        converted += 1
-        sourceConverted.set(source, (sourceConverted.get(source) ?? 0) + 1)
-      }
     }
+
+    // 来源/成交金额：单一实现，见 lib/leadStats。
+    const { bySource, totalCount, convertedCount, totalAmount, convertedRate } = aggregateBySource(doc.docs)
 
     // 跟进人名称：一次查询 users 批量解析 owner 显示名。
     const ownerIds = [...ownerCount.keys()].filter((k) => k !== 'unassigned')
@@ -94,17 +89,8 @@ export async function GET(req: NextRequest) {
     const funnel = PIPE_ORDER.map((status) => ({
       status,
       count: statusCount.get(status) ?? 0,
-      share: rate(statusCount.get(status) ?? 0, total),
+      share: rate(statusCount.get(status) ?? 0, totalCount),
     }))
-
-    const bySource = [...sourceTotal.entries()]
-      .map(([source, count]) => ({
-        source,
-        total: count,
-        converted: sourceConverted.get(source) ?? 0,
-        convertedRate: rate(sourceConverted.get(source) ?? 0, count),
-      }))
-      .sort((a, b) => b.total - a.total)
 
     const byOwner = [...ownerCount.entries()]
       .map(([key, count]) => ({ owner: key, name: labeledOwner(key), count }))
@@ -211,9 +197,10 @@ export async function GET(req: NextRequest) {
     })
 
     return ok({
-      total,
-      converted,
-      convertedRate: rate(converted, total),
+      total: totalCount,
+      converted: convertedCount,
+      convertedRate,
+      totalAmount,
       funnel,
       byStatus,
       bySource,

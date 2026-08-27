@@ -33,6 +33,25 @@ export const Leads: CollectionConfig = {
     delete: authenticated,
   },
   hooks: {
+    beforeDelete: [
+      // 级联清理线索关联数据，避免 Postgres 外键约束导致删除报错。
+      async ({ id, req }) => {
+        const { payload } = req
+        const leadId = String(id)
+        await Promise.all([
+          payload.delete({
+            collection: 'lead-activities',
+            overrideAccess: true,
+            where: { lead: { equals: leadId } },
+          }),
+          payload.delete({
+            collection: 'reminder-notices',
+            overrideAccess: true,
+            where: { lead: { equals: leadId } },
+          }),
+        ])
+      },
+    ],
     beforeChange: [
       // 列表标题：公司名 > 称呼 > 手机号 > 微信号，保证后台不出现空白行。
       ({ data }) => {
@@ -314,6 +333,19 @@ export const Leads: CollectionConfig = {
             path: './components/StatusCell.tsx',
             exportName: 'StatusCell',
           },
+        },
+      },
+    },
+    {
+      name: 'dealAmount',
+      type: 'number',
+      min: 0,
+      label: { zh: '成交金额（元）', en: 'Deal Amount (CNY)' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          zh: '成交金额，标记为“已成交”时填写（单位：元，可选）。',
+          en: 'Deal amount recorded when converted (CNY, optional).',
         },
       },
     },

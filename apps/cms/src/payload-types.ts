@@ -181,6 +181,10 @@ export interface Lead {
    */
   status?: ('new' | 'contacted' | 'converted' | 'closed') | null;
   /**
+   * Deal amount recorded when converted (CNY, optional).
+   */
+  dealAmount?: number | null;
+  /**
    * Dedupe key (phone or wechat), auto-written.
    */
   dedupKey?: string | null;
@@ -752,6 +756,7 @@ export interface LeadsSelect<T extends boolean = true> {
   source?: T;
   owner?: T;
   status?: T;
+  dealAmount?: T;
   dedupKey?: T;
   followUpNote?: T;
   nextFollowUpAt?: T;

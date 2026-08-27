@@ -3,7 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated, everyone } from '../access'
 
 /** 删除项目时自动清理关联数据，避免数据库外键约束报错。 */
-async function cascadeDelete({ req, id }: { req: any; id: number }): Promise<void> {
+async function cascadeDelete({ req, id }: { req: any; id: string | number }): Promise<void> {
   const related: { slug: string; label: string }[] = [
     { slug: 'reminder-notices', label: '待跟进提醒' },
     { slug: 'lead-activities', label: '线索动态' },

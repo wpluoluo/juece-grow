@@ -4,6 +4,7 @@ import Link from 'next/link'
 import config from '@payload-config'
 import { getPayload } from 'payload'
 import { Donut, DailyDualBars, RankedBars, type Slice } from './DashboardCharts'
+import { aggregateBySource, formatAmount } from '../src/lib/leadStats'
 
 /** 来源切片配色（与 DashboardCharts 的 COLOR_WHEEL 保持一致）。 */
 const SLICE_COLORS = [
@@ -89,29 +90,20 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   }
 
-  // 来源渠道分布：自由文本，按出现次数聚合。
-  const srcCount = new Map<string, number>()
-  for (const doc of sourceRows.docs) {
-    const src = String(doc.source || 'unknown')
-    srcCount.set(src, (srcCount.get(src) || 0) + 1)
-  }
-  // 来源成交数：用于来源归因展示转化。
-  const sourceConverted = new Map<string, number>()
-  for (const doc of sourceRows.docs) {
-    if (String(doc.status || '') === 'converted') {
-      const src = String(doc.source || 'unknown')
-      sourceConverted.set(src, (sourceConverted.get(src) || 0) + 1)
-    }
-  }
-  const sourceLabel: Record<string, string> = { website: '官网表单', unknown: '未标识', manual: '手动录入' }
-  const sourceSlices = [...srcCount.entries()]
-    .sort((a, b) => b[1] - a[1])
+  // 来源渠道归因（数量/成交/金额单一实现）：见 lib/leadStats。
+  const { bySource, totalCount, convertedCount, totalAmount, convertedRate } = aggregateBySource(
+    sourceRows.docs as { source?: unknown; status?: unknown; dealAmount?: number | null }[],
+  )
+  const sourceLabel: Record<string, string> = { website: '官网表单', unknown: '未标识', other: '未标识', manual: '手动录入' }
+  const sourceSlices = bySource
     .slice(0, 5)
-    .map(([key, value], i) => ({
-      key,
-      label: sourceLabel[key] || key,
-      value,
-      converted: sourceConverted.get(key) || 0,
+    .map((s, i) => ({
+      key: s.source,
+      label: sourceLabel[s.source] || s.source,
+      value: s.total,
+      converted: s.converted,
+      amount: s.amount,
+      avgAmount: s.avgAmount,
       color: SLICE_COLORS[i % SLICE_COLORS.length],
     }))
 
@@ -208,16 +200,15 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
   }
   const trendHasData = dualBars.some((b) => b.newValue > 0 || b.converted > 0)
 
-  const conversion = totalLeads.totalDocs
-    ? Math.round((convertedLeads.totalDocs / totalLeads.totalDocs) * 1000) / 10
-    : 0
+  const conversion = convertedRate
 
   const statCards = [
     { key: 'total', label: '累计线索', value: String(totalLeads.totalDocs), hint: '全部留资来源', icon: 'users' },
     { key: 'today', label: '今日新增', value: String(todayLeads.totalDocs), hint: '今日 00:00 起', icon: 'clock' },
     { key: 'follow', label: '待跟进', value: String(newLeads.totalDocs), hint: 'new 状态等待接洽', icon: 'bell', tone: 'amber' },
     { key: 'reminder', label: '待跟进提醒', value: String(openReminders.totalDocs), hint: '规则命中未处理', icon: 'flag', tone: 'amber' },
-    { key: 'rate', label: '成交转化率', value: `${conversion}%`, hint: `${convertedLeads.totalDocs} 已成交 / ${totalLeads.totalDocs} 总量`, icon: 'percent' },
+    { key: 'rate', label: '成交转化率', value: `${conversion}%`, hint: `${convertedCount} 已成交 / ${totalCount} 总量`, icon: 'percent' },
+    { key: 'amount', label: '累计成交金额', value: formatAmount(totalAmount), hint: `${convertedCount} 单已成交`, icon: 'money' },
     { key: 'followup', label: '跟进次数', value: String(followUpCount), hint: 'follow_up 动态累计', icon: 'write' },
     { key: 'cycle', label: '平均成交周期', value: avgCycle == null ? '—' : `${avgCycle}h`, hint: '入池到成交平均用时', icon: 'watch' },
     { key: 'article', label: '已发布文章', value: String(articles.totalDocs), hint: '对公开站可见', icon: 'doc' },
@@ -278,7 +269,11 @@ export async function JueceDashboard(_props: AdminViewServerProps) {
                   <li key={i}>
                     <span className="admin-dot" style={{ background: s.color || 'var(--theme-elevation-400)' }} />
                     <span className="admin-legend-label">{s.label}</span>
-                    <span className="admin-legend-value">{s.value}</span>
+                    <span className="admin-legend-value">
+                      {s.value} 单
+                      {s.converted ? ` · ${s.converted} 成交` : ''}
+                      {s.amount ? ` · ￥${formatAmount(s.amount)}` : ''}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -444,6 +439,13 @@ function MetricIcon({ name }: { name: string }) {
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
         <path d="M12 2v3M12 19v3" />
+      </>
+    ),
+    money: (
+      <>
+        <rect x="2" y="6" width="20" height="12" rx="2" />
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M6 10h.01M18 14h.01" />
       </>
     ),
   }
