@@ -30,3 +30,9 @@ next-env.d.ts
 
 # env
 !.env.example
+
+# 运行时资产 / 中间产物（不入库）
+apps/cms/media/
+apps/cms/public/
+content-drafts/
+cms-cookies.txt

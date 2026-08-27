@@ -18,7 +18,12 @@ export type Article = {
   status: 'draft' | 'published'
   publishedAt?: string
   createdAt?: string
+  updatedAt?: string
   project: number | Project
+  /** 封面图（media 关联）。 */
+  coverImage?: { id: number; url: string; alt?: string } | number
+  /** 作者署名。 */
+  author?: string
   /** Lexical 富文本正文（SerializedEditorState）。 */
   body?: unknown
   seoTitle?: string

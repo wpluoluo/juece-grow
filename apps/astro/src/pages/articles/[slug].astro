@@ -35,39 +35,78 @@ function formatDate(value?: string): string {
 
 const url = new URL(`/articles/${article.slug}/`, Astro.site || Astro.url).href
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: article.title,
-  description,
-  datePublished: article.publishedAt || article.createdAt || undefined,
-  inLanguage: 'zh-CN',
-  author: { '@type': 'Organization', name: '觉策增长' },
-}
+const coverImage = article.coverImage && typeof article.coverImage === 'object' ? article.coverImage as { url: string; alt?: string } : undefined
+const coverImageUrl = coverImage
+  ? new URL(coverImage.url, import.meta.env.PUBLIC_CMS_ORIGIN).href
+  : undefined
+
+const ogImageUrl = coverImageUrl || new URL('/og-cover.svg', Astro.site || Astro.url).href
+
+const categoryName =
+  article.category && typeof article.category === 'object' && 'name' in article.category
+    ? (article.category as { name: string }).name
+    : ''
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description,
+    datePublished: article.publishedAt || article.createdAt || undefined,
+    dateModified: article.updatedAt || undefined,
+    inLanguage: 'zh-CN',
+    author: { '@type': 'Organization', name: article.author },
+    publisher: { '@type': 'Organization', name: '觉策科技', url: 'https://juece.cloud' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    image: ogImageUrl,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: new URL('/', Astro.site || Astro.url).href },
+      { '@type': 'ListItem', position: 2, name: '文章', item: new URL('/#articles', Astro.site || Astro.url).href },
+      ...(categoryName ? [{ '@type': 'ListItem', position: 3, name: categoryName }] : []),
+    ],
+  },
+]
 ---
 
 <Layout
   title={title}
   description={description}
   url={url}
+  image={ogImageUrl}
   type="article"
   jsonLd={jsonLd}
+  articlePublishedTime={article.publishedAt || article.createdAt || undefined}
+  articleModifiedTime={article.updatedAt || undefined}
+  articleTag={categoryName || undefined}
 >
   <article class="article">
     <header class="article__header">
       <nav class="breadcrumb" aria-label="面包屑">
         <a href="/">首页</a>
         <span>/</span>
-        <span>文章</span>
+        <a href="/#articles">文章</a>
+        {categoryName && <><span>/</span><span>{categoryName}</span></>}
       </nav>
       {projectName && <p class="article__project">{projectName}</p>}
       <h1>{article.title}</h1>
       {article.excerpt && <p class="article__excerpt">{article.excerpt}</p>}
       <p class="article__meta">
+        {article.author && <span class="article__author">{article.author}</span>}
+        {article.author && article.publishedAt && <span class="article__sep">·</span>}
         <time datetime={article.publishedAt || article.createdAt}>
           {formatDate(article.publishedAt || article.createdAt)}
         </time>
       </p>
+      {coverImageUrl && (
+        <figure class="article__cover">
+          <img src={coverImageUrl} alt={coverImage?.alt || article.title} width="1200" height="630" />
+        </figure>
+      )}
     </header>
 
     <div class="article__body" set:html={bodyHTML}></div>
@@ -125,6 +164,23 @@ const jsonLd = {
       font-size: 14px;
       padding-bottom: 32px;
       border-bottom: 1px solid var(--neutral-200);
+    }
+    .article__author {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .article__sep {
+      margin: 0 8px;
+    }
+    .article__cover {
+      margin: 0 0 48px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .article__cover img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     /* 正文排版 */

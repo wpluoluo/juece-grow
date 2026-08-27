@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c2a2e"/>
+      <stop offset="100%" stop-color="#1b5f65"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="rgba(47,143,150,0.3)"/>
+      <stop offset="100%" stop-color="rgba(47,143,150,0)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- Grid texture -->
+  <g opacity="0.06" stroke="#fff" stroke-width="0.5">
+    <line x1="0" y1="70" x2="1200" y2="70"/>
+    <line x1="0" y1="140" x2="1200" y2="140"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="280" x2="1200" y2="280"/>
+    <line x1="0" y1="350" x2="1200" y2="350"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="490" x2="1200" y2="490"/>
+    <line x1="0" y1="560" x2="1200" y2="560"/>
+    <line x1="100" y1="0" x2="100" y2="630"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="500" y1="0" x2="500" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="700" y1="0" x2="700" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+    <line x1="1100" y1="0" x2="1100" y2="630"/>
+  </g>
+  <!-- Logo mark -->
+  <g transform="translate(80, 80)">
+    <rect width="48" height="48" rx="12" fill="#2f8f96"/>
+    <path d="M16 33V18L24 12L32 18V33L24 39L16 33Z" stroke="white" stroke-width="2.4" fill="none"/>
+    <circle cx="24" cy="25" r="4.5" fill="white" opacity="0.85"/>
+  </g>
+  <!-- Title -->
+  <text x="120" y="310" fill="white" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif" font-size="62" font-weight="800" letter-spacing="-0.03em">
+    觉策科技
+  </text>
+  <text x="120" y="380" fill="rgba(255,255,255,0.7)" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif" font-size="28" font-weight="500" letter-spacing="0.02em">
+    开店有人帮 · 接单有人管 · AI 有人配
+  </text>
+  <!-- URL -->
+  <text x="120" y="490" fill="rgba(255,255,255,0.4)" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif" font-size="20" font-weight="400">
+    juece.cloud
+  </text>
+  <!-- Decorative lines -->
+  <line x1="120" y1="430" x2="500" y2="430" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+</svg>

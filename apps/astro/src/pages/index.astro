@@ -4,6 +4,30 @@ import { getArticles } from '../lib/payload'
 
 const articles = await getArticles()
 
+const homepageJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://juece.cloud/#organization',
+      name: '觉策科技',
+      url: 'https://juece.cloud',
+      logo: 'https://juece.cloud/og-cover.svg',
+      description: '智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。',
+      contactPoint: { '@type': 'ContactPoint', email: '58379760@qq.com', contactType: 'sales' },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://juece.cloud/#website',
+      url: 'https://juece.cloud',
+      name: '觉策科技',
+      description: '智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。',
+      publisher: { '@id': 'https://juece.cloud/#organization' },
+      inLanguage: 'zh-CN',
+    },
+  ],
+}
+
 function formatDate(value?: string): string {
   if (!value) return ''
   return new Date(value).toLocaleDateString('zh-CN', {
@@ -38,6 +62,7 @@ const solutions = [
 <Layout
   title="觉策科技 · 开店有人帮，接单有人管，AI 有人配"
   description="智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。"
+  jsonLd={homepageJsonLd}
 >
   <!-- ═══ 01 · Hero ═══ -->
   <section class="hero">
@@ -360,18 +385,26 @@ const solutions = [
           <p class="blog-empty">还没有发布文章，去后台写第一篇吧。</p>
         ) : (
           <ul class="blog-grid">
-            {articles.map((a, i) => (
+            {articles.map((a, i) => {
+              const coverImg = a.coverImage && typeof a.coverImage === 'object' ? a.coverImage as { url: string; alt?: string } : undefined
+              const coverUrl = coverImg ? new URL(coverImg.url, import.meta.env.PUBLIC_CMS_ORIGIN).href : undefined
+              return (
               <li data-reveal>
                 <a class="blog-card" href={`/articles/${a.slug}/`}>
-                  <span class="blog-card__meta">
-                    {a.project && typeof a.project === 'object' && 'name' in a.project ? (a.project as { name: string }).name : ''} · {formatDate(a.publishedAt)}
+                  {coverUrl && <span class="blog-card__img"><img src={coverUrl} alt={coverImg?.alt || a.title} width="800" height="600" /></span>}
+                  <span class="blog-card__inner">
+                    <span class="blog-card__meta">
+                      {a.project && typeof a.project === 'object' && 'name' in a.project ? (a.project as { name: string }).name : ''} · {formatDate(a.publishedAt)}
+                    </span>
+                    <h3>{a.title}</h3>
+                    {a.excerpt && <p>{a.excerpt}</p>}
+                    {a.author && <span class="blog-card__author">{a.author}</span>}
+                    <span class="blog-card__more">阅读全文 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                   </span>
-                  <h3>{a.title}</h3>
-                  {a.excerpt && <p>{a.excerpt}</p>}
-                  <span class="blog-card__more">阅读全文 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 </a>
               </li>
-            ))}
+              )
+            })}
           </ul>
         )
       }
@@ -1155,9 +1188,33 @@ const solutions = [
       transform: translateY(-3px);
       box-shadow: var(--shadow-lg);
     }
+    .blog-card__img {
+      display: block;
+      margin: -26px -26px 0;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      overflow: hidden;
+      aspect-ratio: 800 / 600;
+    }
+    .blog-card__img img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .blog-card__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
     .blog-card__meta {
       font-size: 13px;
       color: var(--text-tertiary);
+    }
+    .blog-card__author {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 600;
     }
     .blog-card h3 {
       margin: 0;
