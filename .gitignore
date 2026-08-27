@@ -12,6 +12,7 @@ secrets/test-accounts.json
 # node / build
 node_modules/
 dist/
+dist-*/
 .next/
 .astro/
 *.log

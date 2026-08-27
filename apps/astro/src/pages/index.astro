@@ -1,28 +1,56 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import { getArticles } from '../lib/payload'
+import { siteId, type SiteId } from '../site'
+import { home, type IconKey } from '../content/home'
 
 const articles = await getArticles()
+const c = home
+
+/** 图标集：按 IconKey 返回对应 SVG 内部路径。 */
+const iconPaths: Record<IconKey, string> = {
+  saas: '<path d="M3 9l9-6 9 6v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 20v-7h8v7" stroke="currentColor" stroke-width="1.6"/>',
+  erp: '<rect x="4" y="4" width="6" height="16" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="7" height="9" stroke="currentColor" stroke-width="1.6"/>',
+  yunque: '<rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/>',
+}
+
+/** 图解节点底色：tone → CSS class。 */
+const nodeClass: Record<IconKey, string> = { saas: 'node-saas', erp: 'node-erp', yunque: 'node-yunque' }
+
+/** 图解核心渐变：按站点取主色。 */
+const coreGradient: Record<SiteId, [string, string]> = {
+  juece: ['#3aa4ab', '#1b5f65'],
+  erp: ['#5a8fb5', '#284a63'],
+  yunque: ['#d3a360', '#7f5c29'],
+}
+const coreStops = coreGradient[siteId]
+
+const BASE_URL: Record<SiteId, string> = {
+  juece: 'https://juece.cloud',
+  erp: 'https://erp.juece.cloud',
+  yunque: 'https://yunque.juece.cloud',
+}
+const baseUrl = BASE_URL[siteId]
 
 const homepageJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://juece.cloud/#organization',
-      name: '觉策科技',
-      url: 'https://juece.cloud',
-      logo: 'https://juece.cloud/og-cover.svg',
-      description: '智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。',
+      '@id': `${baseUrl}/#organization`,
+      name: c.meta.title,
+      url: baseUrl,
+      logo: `${baseUrl}/og-cover.svg`,
+      description: c.meta.description,
       contactPoint: { '@type': 'ContactPoint', email: '58379760@qq.com', contactType: 'sales' },
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://juece.cloud/#website',
-      url: 'https://juece.cloud',
-      name: '觉策科技',
-      description: '智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。',
-      publisher: { '@id': 'https://juece.cloud/#organization' },
+      '@id': `${baseUrl}/#website`,
+      url: baseUrl,
+      name: c.meta.title,
+      description: c.meta.description,
+      publisher: { '@id': `${baseUrl}/#organization` },
       inLanguage: 'zh-CN',
     },
   ],
@@ -36,63 +64,44 @@ function formatDate(value?: string): string {
     day: 'numeric',
   })
 }
-
-const solutions = [
-  {
-    title: '实体门店数字化',
-    audience: '教培 · 体育 · 餐饮 · 到店服务',
-    desc: '开店卖货、拉新、留客，一套智云收尾到营业报表，账目清清楚楚。',
-    points: ['开店：顾客手机下单，店里线上收单', '拉新：活动上线即抢，有现成玩法', '留客：会员积分复购，回头客记在账上'],
-  },
-  {
-    title: '广告制作行业管理',
-    audience: '广告制作公司 · 加工企业',
-    desc: '报价、生产、回款落到系统，把靠人盯、靠嘴问这一套换成有据可查的流程。',
-    points: ['报价快：素材导入，尺寸价格自动算出', '进度清：排产与外协实时可见', '回款稳：对账、开票、回款逐环留痕'],
-  },
-  {
-    title: '智能体工作与协作',
-    audience: '研发团队 · 创新组织',
-    desc: 'AI 能不能用上，看工作台、记忆和协作配没配齐。这一层到位，智能体就能正式用。',
-    points: ['工作台：对话、画布、文档一个空间', '有记忆：协作不丢上下文', '可管控：权限到位，放给团队用'],
-  },
-]
 ---
 
 <Layout
-  title="觉策科技 · 开店有人帮，接单有人管，AI 有人配"
-  description="智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。"
+  title={c.meta.title}
+  description={c.meta.description}
   jsonLd={homepageJsonLd}
 >
   <!-- ═══ 01 · Hero ═══ -->
   <section class="hero">
     <div class="site-container hero-shell">
       <div class="hero-copy">
-        <span class="kicker" data-reveal>觉策科技 · 开店 · 接单 · 用 AI</span>
+        <span class="kicker" data-reveal>{c.hero.kicker}</span>
         <h1 class="hero-title" data-reveal>
-          <span class="line">开店有人帮，<em>接单有人管，AI 有人配</em></span>
+          {c.hero.titleLines.map((line) => (
+            line.em
+              ? <span class="line"><em>{line.text}</em></span>
+              : <span class="line">{line.text}</span>
+          ))}
         </h1>
         <p class="hero-desc" data-reveal>
-          智云管线上开店，ERP 管制作交付，云雀管 AI 落地。三条产品线，各帮你管住一件正事。
+          {c.hero.desc}
         </p>
         <div class="hero-actions" data-reveal>
-          <button class="btn btn--primary" type="button" data-open-lead>免费试用</button>
-          <a class="btn btn--outline" href="/solutions/">看行业方案</a>
+          {c.hero.primary.action === 'lead' ? (
+            <button class="btn btn--primary" type="button" data-open-lead>{c.hero.primary.label}</button>
+          ) : (
+            <a class="btn btn--primary" href={c.hero.primary.href}>{c.hero.primary.label}</a>
+          )}
+          <a class="btn btn--outline" href={c.hero.secondary.href}>{c.hero.secondary.label}</a>
         </div>
 
         <div class="hero-strip" data-reveal>
-          <div class="hero-stat">
-            <strong>开单有数</strong>
-            <span>线上卖货，流水天天看得见</span>
-          </div>
-          <div class="hero-stat">
-            <strong>交付可查</strong>
-            <span>报价到回款，每一环有记录</span>
-          </div>
-          <div class="hero-stat">
-            <strong>AI 用得起</strong>
-            <span>工作台、记忆、权限配齐</span>
-          </div>
+          {c.hero.stats.map((s) => (
+            <div class="hero-stat">
+              <strong>{s.strong}</strong>
+              <span>{s.span}</span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -108,31 +117,24 @@ const solutions = [
             <g class="dg-core">
               <circle cx="136" cy="250" r="46" fill="url(#gcore)" />
               <circle cx="136" cy="250" r="46" stroke="rgba(255,255,255,.18)" stroke-width="1.5" />
-              <text x="136" y="242" text-anchor="middle" class="core-name">觉策</text>
-              <text x="136" y="264" text-anchor="middle" class="core-sub">科技</text>
+              <text x="136" y="242" text-anchor="middle" class="core-name">{c.hero.diagram.coreName}</text>
+              <text x="136" y="264" text-anchor="middle" class="core-sub">{c.hero.diagram.coreSub}</text>
             </g>
-            <g class="dg-node">
-              <rect x="286" y="92" width="150" height="92" rx="18" class="node node-saas" />
-              <text x="322" y="128" text-anchor="start" class="node-no">01</text>
-              <text x="322" y="152" text-anchor="start" class="node-name">觉策智云</text>
-              <text x="322" y="174" text-anchor="start" class="node-sub">开店 / 卖货 / 会员</text>
-            </g>
-            <g class="dg-node">
-              <rect x="286" y="204" width="150" height="92" rx="18" class="node node-erp" />
-              <text x="322" y="240" text-anchor="start" class="node-no">02</text>
-              <text x="322" y="264" text-anchor="start" class="node-name">觉策ERP V3</text>
-              <text x="322" y="286" text-anchor="start" class="node-sub">报价 / 排产 / 回款</text>
-            </g>
-            <g class="dg-node">
-              <rect x="286" y="316" width="150" height="92" rx="18" class="node node-yunque" />
-              <text x="322" y="352" text-anchor="start" class="node-no">03</text>
-              <text x="322" y="376" text-anchor="start" class="node-name">云雀 Yunque</text>
-              <text x="322" y="398" text-anchor="start" class="node-sub">智能体协作工作台</text>
-            </g>
+            {c.hero.diagram.nodes.map((node, i) => {
+              const y = 92 + i * 112
+              return (
+                <g class="dg-node">
+                  <rect x="286" y={y} width="150" height="92" rx="18" class={`node ${nodeClass[node.tone]}`} />
+                  <text x="322" y={y + 36} text-anchor="start" class="node-no">{node.no}</text>
+                  <text x="322" y={y + 60} text-anchor="start" class="node-name">{node.name}</text>
+                  <text x="322" y={y + 82} text-anchor="start" class="node-sub">{node.sub}</text>
+                </g>
+              )
+            })}
             <defs>
               <linearGradient id="gcore" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#3aa4ab" />
-                <stop offset="1" stop-color="#1b5f65" />
+                <stop offset="0" stop-color={coreStops[0]} />
+                <stop offset="1" stop-color={coreStops[1]} />
               </linearGradient>
               <linearGradient id="gsaas" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#2f8f96" />
@@ -140,9 +142,9 @@ const solutions = [
               </linearGradient>
             </defs>
           </svg>
-          <div class="dg-chip chip-a">实体商业数字化</div>
-          <div class="dg-chip chip-b">广告行业管理</div>
-          <div class="dg-chip chip-c">智能体协作</div>
+          <div class="dg-chip chip-a">{c.hero.diagram.chips[0]}</div>
+          <div class="dg-chip chip-b">{c.hero.diagram.chips[1]}</div>
+          <div class="dg-chip chip-c">{c.hero.diagram.chips[2]}</div>
         </div>
       </div>
     </div>
@@ -153,61 +155,46 @@ const solutions = [
     <div class="site-container">
       <div class="sec-head split" data-reveal>
         <div>
-          <span class="kicker">产品矩阵</span>
-          <h2 class="section-title left">你的生意有三件正事</h2>
+          <span class="kicker">{c.products.kicker}</span>
+          <h2 class="section-title left">{c.products.heading}</h2>
         </div>
         <p class="section-desc left">
-          开店要有人帮，交付要有人管，AI 要有人配。三条产品线，正好管住这三件正事。
+          {c.products.desc}
         </p>
       </div>
 
       <div class="product-layout">
         <article class="spotlight" data-reveal>
           <div class="spotlight-top">
-            <span class="spot-tag">实体商业 SaaS</span>
+            <span class="spot-tag">{c.products.spotlight.tag}</span>
             <span class="spot-no tnum">01</span>
           </div>
           <div class="spot-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9l9-6 9 6v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 20v-7h8v7" stroke="currentColor" stroke-width="1.6"/></svg>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={iconPaths[c.products.spotlight.icon]}></svg>
           </div>
-          <h3>觉策智云</h3>
-          <p class="spot-desc">
-            把店开到顾客手机上：顾客看货、下单、付款，你在线收单，流水自动归总，天天看得见卖了多少。
-          </p>
+          <h3>{c.products.spotlight.name}</h3>
+          <p class="spot-desc">{c.products.spotlight.desc}</p>
           <ul class="spot-list">
-            <li>开店：商城+小程序+H5，顾客在线下单</li>
-            <li>活动：拼团、砍价、秒杀，放上线就能接单</li>
-            <li>会员：积分、等级、复购，把路人做成熟客</li>
+            {c.products.spotlight.points.map((p) => <li>{p}</li>)}
           </ul>
-          <a class="text-link" href="/features/">看智云能做什么 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="text-link" href={c.products.spotlight.link.href} target={c.products.spotlight.link.external ? '_blank' : undefined} rel={c.products.spotlight.link.external ? 'noopener' : undefined}>{c.products.spotlight.link.label} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
 
         <div class="product-side">
-          <article class="side-card" data-reveal>
-            <div class="side-head">
-              <span class="spot-tag">广告行业 ERP</span>
-              <span class="side-no tnum">02</span>
-            </div>
-            <div class="side-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="16" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="7" height="9" stroke="currentColor" stroke-width="1.6"/></svg>
-            </div>
-            <h3>觉策ERP V3</h3>
-            <p>从接单到收钱，管住每一单：报价、生产、回款都在系统里，哪一单到哪一步，翻开就清楚。</p>
-            <a class="text-link" href="//erp.juece.cloud/" target="_blank" rel="noopener">看 ERP 怎么管 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </article>
-
-          <article class="side-card yunque" data-reveal>
-            <div class="side-head">
-              <span class="spot-tag">开放智能体工作系统</span>
-              <span class="side-no tnum">03</span>
-            </div>
-            <div class="side-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/></svg>
-            </div>
-            <h3>云雀 Yunque</h3>
-            <p>把 AI 用在正事上：工作台、记忆、权限配齐，团队就能把智能体放进实际工作里，而不是留在演示里。</p>
-            <a class="text-link" href="//yunque.juece.cloud/" target="_blank" rel="noopener">看云雀怎么做 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </article>
+          {c.products.side.map((side, i) => (
+            <article class={`side-card${side.icon === 'yunque' ? ' yunque' : ''}`} data-reveal>
+              <div class="side-head">
+                <span class="spot-tag">{side.tag}</span>
+                <span class="side-no tnum">{String(i + 2).padStart(2, '0')}</span>
+              </div>
+              <div class="side-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={iconPaths[side.icon]}></svg>
+              </div>
+              <h3>{side.name}</h3>
+              <p>{side.desc}</p>
+              <a class="text-link" href={side.link.href} target={side.link.external ? '_blank' : undefined} rel={side.link.external ? 'noopener' : undefined}>{side.link.label} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </article>
+          ))}
         </div>
       </div>
     </div>
@@ -218,15 +205,17 @@ const solutions = [
     <div class="site-container">
       <div class="sec-head split" data-reveal>
         <div>
-          <span class="kicker">行业与场景</span>
-          <h2 class="section-title left">你的行业，<br />有为你写的解法</h2>
+          <span class="kicker">{c.solutions.kicker}</span>
+          <h2 class="section-title left">{c.solutions.heading.split('\n').map((line, i, arr) => (
+            <>{line}{i < arr.length - 1 ? <br /> : null}</>
+          ))}</h2>
         </div>
-        <a class="to-all" href="/solutions/">看全部行业方案 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="to-all" href={c.solutions.moreHref}>{c.solutions.moreLabel} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
       <div class="solution-rows">
         {
-          solutions.map((s, i) => (
+          c.solutions.rows.map((s, i) => (
             <a class="s-row" href="/solutions/" data-reveal>
               <span class="row-no tnum">0{i + 1}</span>
               <div class="row-body">
@@ -249,37 +238,34 @@ const solutions = [
     <div class="site-container">
       <div class="sec-head split" data-reveal>
         <div>
-          <span class="kicker">几单真实用法</span>
-          <h2 class="section-title left">看看这几单，<br />是怎么跑起来的</h2>
+          <span class="kicker">{c.cases.kicker}</span>
+          <h2 class="section-title left">{c.cases.heading.split('\n').map((line, i, arr) => (
+            <>{line}{i < arr.length - 1 ? <br /> : null}</>
+          ))}</h2>
         </div>
       </div>
 
       <div class="case-layout">
         <article class="case-feature" data-reveal>
-          <div class="cf-band">觉策智云</div>
-          <h3>连锁门店，把线上生意和会员做在一起</h3>
-          <p class="cf-desc">
-            活动券发出去，老客回来复购，营收增长落到经营报表上，进项一栏清清楚楚。
-          </p>
+          <div class="cf-band">{c.cases.feature.band}</div>
+          <h3>{c.cases.feature.title}</h3>
+          <p class="cf-desc">{c.cases.feature.desc}</p>
           <div class="cf-foot">
-            <span class="cf-metric tnum">+28%<small>复购率提升（示例）</small></span>
-            <span class="cf-metric tnum">3 端<small>H5 · 小程序 · 后台</small></span>
+            {c.cases.feature.metrics.map((m) => (
+              <span class="cf-metric tnum">{m.value}<small>{m.label}</small></span>
+            ))}
           </div>
         </article>
 
         <div class="case-stack">
-          <article class="case-mini" data-reveal>
-            <div class="cm-head"><span class="cm-band">觉策ERP</span><span class="cm-no tnum">A</span></div>
-            <h3>广告公司全流程协同</h3>
-            <p>从报价到交付，进度、单据都进系统，一句问就有，省了来回打听。</p>
-            <span class="cm-tag">交付效率与回款账期</span>
-          </article>
-          <article class="case-mini" data-reveal>
-            <div class="cm-head"><span class="cm-band yb">云雀 Yunque</span><span class="cm-no tnum">B</span></div>
-            <h3>团队智能体落地</h3>
-            <p>工作台、记忆、治理到位，让智能体从个人演示，走到团队一起用。</p>
-            <span class="cm-tag yb">平台化与协作效率</span>
-          </article>
+          {c.cases.minis.map((mini, i) => (
+            <article class="case-mini" data-reveal>
+              <div class="cm-head"><span class={`cm-band${mini.tone === 'yunque' ? ' yb' : ''}`}>{mini.band}</span><span class="cm-no tnum">{['A', 'B'][i]}</span></div>
+              <h3>{mini.title}</h3>
+              <p>{mini.desc}</p>
+              <span class={`cm-tag${mini.tone === 'yunque' ? ' yb' : ''}`}>{mini.tag}</span>
+            </article>
+          ))}
         </div>
       </div>
     </div>
@@ -289,34 +275,20 @@ const solutions = [
   <section class="resource">
     <div class="site-container">
       <div class="res-inner" data-reveal>
-        <span class="kicker kicker--center">先看看，不着急</span>
-        <h2 class="section-title">选产品之前，先了解清楚</h2>
-        <p class="section-desc">先按角色挑一条进去看，看清楚了再定。看看行业方案、价格与合作方式、云雀的技术方向。</p>
+        <span class="kicker kicker--center">{c.resource.kicker}</span>
+        <h2 class="section-title">{c.resource.heading}</h2>
+        <p class="section-desc">{c.resource.desc}</p>
         <div class="res-links">
-          <a class="res-link" href="/solutions/" data-reveal>
-            <span class="rl-no tnum">01</span>
-            <span class="rl-main">
-              <strong>行业方案</strong>
-              <small>教培、体育、餐饮、广告制作……你在哪个行业？</small>
-            </span>
-            <svg class="rl-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="res-link" href="/pricing/" data-reveal>
-            <span class="rl-no tnum">02</span>
-            <span class="rl-main">
-              <strong>价格与合作</strong>
-              <small>SaaS 定价透明，ERP 和云雀单议专属方案</small>
-            </span>
-            <svg class="rl-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="res-link" href="//yunque.juece.cloud/" target="_blank" rel="noopener" data-reveal>
-            <span class="rl-no tnum">03</span>
-            <span class="rl-main">
-              <strong>云雀 Yunque</strong>
-              <small>面向技术团队，了解开放智能体工作系统</small>
-            </span>
-            <svg class="rl-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+          {c.resource.links.map((l, i) => (
+            <a class="res-link" href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined} data-reveal>
+              <span class="rl-no tnum">{String(i + 1).padStart(2, '0')}</span>
+              <span class="rl-main">
+                <strong>{l.title}</strong>
+                <small>{l.sub}</small>
+              </span>
+              <svg class="rl-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          ))}
         </div>
       </div>
     </div>
@@ -328,42 +300,37 @@ const solutions = [
       <div class="cta-panel">
         <div class="grid-texture"></div>
         <div class="cta-head" data-reveal>
-          <span class="kicker kicker--white kicker--center">选择你的入口</span>
-          <h2>你是什么角色，就走哪扇门</h2>
-          <p>实体商家、广告公司、技术团队，各有各的入口，自己挑。</p>
+          <span class="kicker kicker--white kicker--center">{c.cta.kicker}</span>
+          <h2>{c.cta.heading}</h2>
+          <p>{c.cta.desc}</p>
         </div>
 
         <div class="cta-rows">
-          <button class="cta-row" type="button" data-open-lead data-reveal>
-            <span class="cr-left">
-              <span class="cr-icon saas"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9l9-6 9 6v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 20v-7h8v7" stroke="currentColor" stroke-width="1.6"/></svg></span>
-              <span>
-                <h3>我是实体商家</h3>
-                <p>把店开进顾客手机里，顾客下单、付款、复购，账目天天看得见。</p>
-              </span>
-            </span>
-            <span class="cr-act">免费试用觉策智云 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </button>
-          <a class="cta-row" href="//erp.juece.cloud/" target="_blank" rel="noopener" data-reveal>
-            <span class="cr-left">
-              <span class="cr-icon erp"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="16" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="7" height="9" stroke="currentColor" stroke-width="1.6"/></svg></span>
-              <span>
-                <h3>我是广告公司</h3>
-                <p>报价、生产、回款进系统，每一环都能交代。</p>
-              </span>
-            </span>
-            <span class="cr-act">预约 ERP 演示 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </a>
-          <a class="cta-row" href="//yunque.juece.cloud/" target="_blank" rel="noopener" data-reveal>
-            <span class="cr-left">
-              <span class="cr-icon yunque"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></span>
-              <span>
-                <h3>我是技术团队</h3>
-                <p>工作台、记忆、权限配齐，智能体就能正式用。</p>
-              </span>
-            </span>
-            <span class="cr-act">了解云雀平台 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </a>
+          {c.cta.rows.map((row) => (
+            row.action === 'lead' ? (
+              <button class="cta-row" type="button" data-open-lead data-reveal>
+                <span class="cr-left">
+                  <span class={`cr-icon ${row.icon}`}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={iconPaths[row.icon]}></svg></span>
+                  <span>
+                    <h3>{row.head}</h3>
+                    <p>{row.desc}</p>
+                  </span>
+                </span>
+                <span class="cr-act">{row.act} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </button>
+            ) : (
+              <a class="cta-row" href={row.href} target={row.external ? '_blank' : undefined} rel={row.external ? 'noopener' : undefined} data-reveal>
+                <span class="cr-left">
+                  <span class={`cr-icon ${row.icon}`}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={iconPaths[row.icon]}></svg></span>
+                  <span>
+                    <h3>{row.head}</h3>
+                    <p>{row.desc}</p>
+                  </span>
+                </span>
+                <span class="cr-act">{row.act} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a>
+            )
+          ))}
         </div>
       </div>
     </div>
@@ -374,10 +341,10 @@ const solutions = [
     <div class="site-container">
       <div class="sec-head split" data-reveal>
         <div>
-          <span class="kicker">文章</span>
-          <h2 class="section-title left">产品思路与增长实践</h2>
+          <span class="kicker">{c.blog.kicker}</span>
+          <h2 class="section-title left">{c.blog.heading}</h2>
         </div>
-        <p class="section-desc left">记录做的过程：选型、权衡，以及真实踩过的坑。</p>
+        <p class="section-desc left">{c.blog.desc}</p>
       </div>
 
       {

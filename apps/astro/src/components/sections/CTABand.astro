@@ -1,0 +1,98 @@
+---
+interface Props {
+  kicker?: string
+  heading: string
+  desc?: string
+  btnText?: string
+}
+
+const { kicker, heading, desc, btnText = '联系我们' } = Astro.props
+---
+
+<!-- 收尾转化带：深色渐变居中，按钮接入留资弹窗 data-open-lead，多站点/多页复用 -->
+<section class="ctaband">
+  <div class="grid-texture"></div>
+  <div class="site-container">
+    <div class="ctaband-inner" data-reveal>
+      {kicker && <span class="kicker kicker--white kicker--center">{kicker}</span>}
+      <h2>{heading}</h2>
+      {desc && <p>{desc}</p>}
+      <button class="ctaband-btn" type="button" data-open-lead>
+        {btnText}
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ctaband {
+    position: relative;
+    padding: 88px 0;
+    background:
+      radial-gradient(circle at 82% 20%, rgba(184, 134, 63, 0.14), transparent 36%),
+      linear-gradient(150deg, #0c2a2e 0%, #164a50 60%, #1b5f65 100%);
+    color: #fff;
+    text-align: center;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .ctaband-inner {
+    position: relative;
+  }
+  .ctaband-inner h2 {
+    margin: 0 0 16px;
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 800;
+  }
+  .ctaband-inner p {
+    margin: 0 auto 36px;
+    max-width: 46ch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .ctaband-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 32px;
+    height: 48px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--brand-color-active);
+    font-size: 15px;
+    font-weight: 700;
+    border: 0;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+  }
+  .ctaband-btn svg {
+    transition: transform var(--transition-fast);
+  }
+  .ctaband-btn:hover {
+    transform: translateY(-2px);
+  }
+  .ctaband-btn:hover svg {
+    transform: translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ctaband-btn,
+    .ctaband-btn svg {
+      transition: none;
+    }
+    .ctaband-btn:hover {
+      transform: none;
+    }
+    .ctaband-btn:hover svg {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ctaband {
+      padding: 64px 0;
+    }
+  }
+</style>

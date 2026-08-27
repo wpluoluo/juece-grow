@@ -1,0 +1,273 @@
+---
+interface Plan {
+  name: string
+  price: string
+  unit?: string
+  currency?: string
+  desc: string
+  btnText: string
+  highlight: boolean
+  recTag?: string
+  features: string[]
+}
+
+interface Props {
+  plans: Plan[]
+}
+
+const { plans } = Astro.props
+---
+
+<!-- 价格方案堆叠带：纯数据驱动，按钮接入留资弹窗 data-open-lead -->
+<section class="pricing-section">
+  <div class="site-container">
+    <div class="plan-list">
+      {
+        plans.map((plan, i) => (
+          <article class={`plan-band${plan.highlight ? ' highlight' : ''}`} data-reveal="40">
+            <div class="band-left">
+              <div class="no-row">
+                <span class="plan-no tnum">0{i + 1}</span>
+                {plan.highlight && <span class="rec-tag">{plan.recTag || '重点推荐'}</span>}
+              </div>
+              <h2 class="plan-name">{plan.name}</h2>
+              <div class="plan-price tnum">
+                {plan.currency !== '' && <span class="currency">{plan.currency || '¥'}</span>}
+                <span class={`amount${!/^[0-9]+$/.test(plan.price) ? ' soft' : ''}`}>{plan.price}</span>
+                {plan.unit && <span class="unit">{plan.unit}</span>}
+              </div>
+              <p class="plan-desc">{plan.desc}</p>
+              <button class={`plan-btn${plan.highlight ? ' ghost' : ''}`} type="button" data-open-lead>
+                {plan.btnText}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+
+            <div class="band-features">
+              {plan.features.map((f) => (
+                <div class="feat-item">
+                  <span class="feat-tick"></span>
+                  <span>{f}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing-section {
+    padding: 88px 0 96px;
+  }
+  .plan-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .plan-band {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 48px;
+    padding: 40px 44px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--neutral-200);
+    background: #fff;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  .plan-band:hover {
+    border-color: var(--brand-color);
+    box-shadow: var(--shadow-md);
+  }
+  .plan-band.highlight {
+    border-color: transparent;
+    background:
+      radial-gradient(circle at 88% 8%, rgba(47, 143, 150, 0.28), transparent 46%),
+      linear-gradient(150deg, #0c2a2e 0%, #133d42 58%, #1b5f65 100%);
+    color: #fff;
+    box-shadow: 0 30px 60px rgba(9, 34, 38, 0.22);
+  }
+  .no-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .plan-no {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--neutral-200);
+    letter-spacing: -0.02em;
+  }
+  .rec-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9fe1e5;
+    background: rgba(47, 143, 150, 0.28);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+  .highlight .plan-no {
+    color: rgba(255, 255, 255, 0.18);
+  }
+  .plan-name {
+    margin: 0 0 18px;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .highlight .plan-name {
+    color: #fff;
+  }
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .currency {
+    font-size: 22px;
+    font-weight: 600;
+    margin-right: 4px;
+    color: var(--text-primary);
+  }
+  .amount {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--brand-color-active);
+  }
+  .highlight .currency,
+  .highlight .amount {
+    color: #fff;
+  }
+  /* 非纯数字（面议 / 按团队等）：收敛字号，避免 52px 巨字失衡 */
+  .amount.soft {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+  .highlight .amount.soft {
+    font-size: 28px;
+  }
+  .unit {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-left: 4px;
+  }
+  .highlight .unit {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .plan-desc {
+    margin: 0 0 28px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .highlight .plan-desc {
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .plan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid var(--neutral-200);
+    background: #fff;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .plan-btn svg {
+    transition: transform var(--transition-fast);
+  }
+  .plan-btn:hover {
+    border-color: var(--brand-color);
+    color: var(--brand-color-active);
+  }
+  .plan-btn:hover svg {
+    transform: translateX(3px);
+  }
+  .plan-btn.ghost {
+    background: #fff;
+    border-color: #fff;
+    color: var(--brand-color-active);
+    font-weight: 700;
+  }
+  .plan-btn.ghost:hover {
+    transform: translateY(-2px);
+  }
+  .band-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 28px;
+    align-content: center;
+  }
+  .feat-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14.5px;
+    color: var(--text-primary);
+  }
+  .feat-tick {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: var(--brand-color-bg);
+    position: relative;
+    margin-top: 3px;
+  }
+  .feat-tick::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    width: 4px;
+    height: 7px;
+    border: solid var(--brand-color-active);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .highlight .band-features .feat-item {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .highlight .band-features .feat-tick {
+    background: rgba(127, 211, 216, 0.22);
+  }
+  .highlight .band-features .feat-tick::after {
+    border-color: #9fe1e5;
+  }
+
+  @media (max-width: 900px) {
+    .plan-band {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 32px;
+    }
+    .band-features {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 768px) {
+    .pricing-section {
+      padding: 64px 0 72px;
+    }
+    .plan-band {
+      padding: 28px 22px;
+    }
+    .band-features {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

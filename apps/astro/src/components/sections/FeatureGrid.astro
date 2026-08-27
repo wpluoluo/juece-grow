@@ -1,0 +1,106 @@
+---
+interface FeatureItem {
+  title: string
+  desc?: string
+}
+
+interface Props {
+  kicker?: string
+  heading?: string
+  items: FeatureItem[]
+}
+
+const { kicker, heading, items } = Astro.props
+---
+
+<!-- 功能卡片网格：标题 + 描述，纯数据驱动，多站点/多页复用 -->
+<section class="fg">
+  <div class="site-container">
+    {
+      (kicker || heading) && (
+        <div class="fg-head" data-reveal>
+          {kicker && <span class="kicker">{kicker}</span>}
+          {heading && <h2>{heading}</h2>}
+        </div>
+      )
+    }
+    <div class="fg-grid" data-reveal>
+      {
+        items.map((item) => (
+          <div class="fg-item">
+            <span class="fi-name">{item.title}</span>
+            {item.desc && <p>{item.desc}</p>}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .fg {
+    padding: 88px 0;
+    background: var(--neutral-50);
+    border-top: 1px solid var(--neutral-100);
+  }
+  .fg-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  .fg-head .kicker {
+    margin-bottom: 8px;
+  }
+  .fg-head h2 {
+    margin: 0;
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .fg-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--neutral-200);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .fg-item {
+    padding: 26px 24px;
+    background: #fff;
+  }
+  .fi-name {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .fg-item p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-tertiary);
+  }
+
+  @media (max-width: 1080px) {
+    .fg-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .fg {
+      padding: 56px 0;
+    }
+    .fg-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .fg-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

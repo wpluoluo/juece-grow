@@ -1,0 +1,108 @@
+---
+/**
+ * 内页页头：kicker + 标题(slot) + 描述 + 可选统计条。
+ * 由 features / solutions / pricing 等内页复用，样式内聚于此，避免各页双写。
+ */
+interface Props {
+  /** 眉标文本（页面分区）。 */
+  kicker: string
+  /** 描述文案。 */
+  description?: string
+  /** 统计条（value 为数字、label 为说明），缺省则不渲染。 */
+  stats?: { value: string; label: string }[]
+}
+
+const { kicker, description, stats = [] } = Astro.props
+---
+
+<section class="page-hero">
+  <div class="grid-texture"></div>
+  <div class="site-container">
+    <div class="hero-inner">
+      <span class="kicker kicker--white" data-reveal>{kicker}</span>
+      <h1 class="hero-title" data-reveal><slot /></h1>
+      {description && <p class="hero-desc" data-reveal>{description}</p>}
+      {stats.length > 0 && (
+        <div class="hero-meta" data-reveal>
+          {stats.map((s) => (
+            <span><b class="tnum">{s.value}</b>{s.label}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    padding: 88px 0 96px;
+    background:
+      radial-gradient(circle at 80% 12%, rgba(47, 143, 150, 0.22), transparent 40%),
+      linear-gradient(150deg, #0c2a2e 0%, #133d42 55%, #1b5f65 100%);
+    color: #fff;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 720px;
+  }
+  .hero-title {
+    margin: 0 0 22px;
+    font-size: var(--fs-h1);
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+  }
+  .hero-title em {
+    font-style: normal;
+    position: relative;
+    color: #7fd3d8;
+  }
+  .hero-title em::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.04em;
+    height: 0.14em;
+    background: linear-gradient(90deg, rgba(127, 211, 216, 0.4), transparent);
+    z-index: -1;
+    border-radius: 2px;
+  }
+  .hero-desc {
+    margin: 0;
+    max-width: 54ch;
+    font-size: 17px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    margin-top: 34px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .hero-meta span {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.66);
+  }
+  .hero-meta b {
+    font-size: 18px;
+    font-weight: 800;
+    color: #7fd3d8;
+    margin-right: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .page-hero {
+      padding: 56px 0 64px;
+    }
+    .hero-meta {
+      gap: 16px;
+    }
+  }
+</style>

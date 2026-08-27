@@ -9,6 +9,8 @@
     "cms:build": "pnpm --filter cms build",
     "astro:dev": "pnpm --filter astro dev",
     "astro:build": "pnpm --filter astro build",
+    "astro:build:erp": "pnpm --filter astro build:erp",
+    "astro:build:yunque": "pnpm --filter astro build:yunque",
     "e2e:test": "pnpm --filter e2e test",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down"
