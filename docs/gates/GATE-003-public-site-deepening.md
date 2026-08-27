@@ -32,6 +32,7 @@
 - 2026-08-27 · 站点差异化内容源（四个落地页全部内容驱动）：新增 `src/content/{home,features,solutions,pricing}.ts` 四份内容源，结构为 `Record<SiteId, Content>`，按 `siteId` 返回当前站文案并设类型；`index/features/solutions/pricing.astro` 由手写硬编码改造为从内容源读取（模板不变、内容随站切换），`PricingTable.astro` 支持可选货币/单位/推荐角标以适配三站计费差异。三站四页构建 ✅；对构建产物做互斥断言（首页/功能/行业/价格页各站标题与关键文案互不出现在他站，价格页计费口径 按年/按项目授权/按团队规模 各自独立），差异化正确。自研新文件均 ≤1000 行、无兜底/双写。
 - 2026-08-27 · 内容源驱动后的视觉打磨（价格/行业页）：价格页非纯数字（面议/按团队）字号由 52px 收敛至 28px，避免与数字价失衡；FAQ 展开由 display 硬切改为 max-height+opacity 平滑过渡（`prefers-reduced-motion` 下直显）；行业页新增 `--color-erp`/`--color-erp-bg` 低饱和蓝变量，三条产品线（智云青 / ERP 蓝 / 云雀琥珀）在展开区做色彩区隔，场景卡片加克制 hover 微动效（reduced-motion 关闭）。三站构建 ✅。
 - 2026-08-27 · 修复多站点品牌色注入 bug：原将 `{site.brand.colors.themeActive}` 等直接写入 `<style>`（Astro 不对 CSS 做模板插值，渲染成无效字面量 `{site…}`），导致 `--brand-color-active` 等被后置 `:root` 覆盖为无效、高亮卡/CTA 按钮文字回退继承 `#fff` 而白字白底。改由 Layout `<style is:global define:vars>` 把 `site.brand.colors.*` 注入为真实 CSS 变量（`<html style="--brand-color-active:#1b5f65;…">`）。三站构建产物已无 `themeActive` 字面量残留，按钮文字恢复正常。
+- 2026-08-27 · 红线自检归零（自研文件 ≤1000 行）：`Layout.astro`（1307 行）与 `index.astro`（1290 行）超出单文件 1000 行红线，主体为大段内联 CSS。抽 `src/styles/layout.css`（Layout 全局样式）与 `src/styles/home.css`（首页样式）为外部样式，`Layout.astro` 保留 `define:vars` 品牌色注入块内联（该机制必须内联），首页样式由作用域改全局（类名唯一、无冲突）。拆分后 `Layout.astro` 524 行、`index.astro` 382 行；三站构建 ✅，浏览器实测首页样式/交互正常，无 CSS 加载错误。
 - 红线复核：pagefind 属构建期工具依赖，产物为 `dist/pagefind/*` 静态文件随 SSG 部署，不新增运行期后端依赖；内容仍存自有 Postgres 由 Payload 提供，Pagefind 只读 HTML 文本，不改变数据归属。
 
 ### 2.3 多站点模板复用
@@ -50,8 +51,8 @@
 
 ## 4. 自检
 - [x] 默认站点（无 Site 配置）访问 `/` 仍渲染原「觉策科技」内容，不回归
-- [ ] 区块化后 features/solutions/pricing 渲染一致，无样式漂移
+- [x] 区块化后 features/solutions/pricing 渲染一致，无样式漂移（三站构建 + 浏览器实测）
 - [x] 站内搜索索引产物为静态 HTML，index.html 可独立部署；浏览器实测检索返回结果
 - [x] 多站点：子域分站（独立构建）三套站点配置按 SITE_ID 出站，SEO/品牌各自生效
-- [ ] 不新增非构建期后端依赖；线索数据仍在自有 Postgres
-- [ ] 自研文件 ≤1000 行；无兜底/双写/兼容写法
+- [x] 不新增非构建期后端依赖；线索数据仍在自有 Postgres（pagefind 仅构建期静态产物）
+- [x] 自研文件 ≤1000 行；无兜底/双写/兼容写法（Layout.astro 524 / index.astro 382，见拆分记录）
