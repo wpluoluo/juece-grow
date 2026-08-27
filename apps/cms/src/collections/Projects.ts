@@ -2,6 +2,42 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated, everyone } from '../access'
 
+/** 删除项目时自动清理关联数据，避免数据库外键约束报错。 */
+async function cascadeDelete({ req, id }: { req: any; id: number }): Promise<void> {
+  const related: { slug: string; label: string }[] = [
+    { slug: 'reminder-notices', label: '待跟进提醒' },
+    { slug: 'lead-activities', label: '线索动态' },
+    { slug: 'leads', label: '线索' },
+    { slug: 'articles', label: '文章' },
+    { slug: 'sites', label: '站点' },
+    { slug: 'memberships', label: '项目成员' },
+    { slug: 'reminder-rules', label: '提醒规则' },
+  ]
+
+  for (const c of related) {
+    let page = 1
+    let hasMore = true
+    while (hasMore) {
+      const { docs } = await req.payload.find({
+        collection: c.slug,
+        where: { project: { equals: id } },
+        limit: 100,
+        page,
+        depth: 0,
+        pagination: false,
+      })
+      if (!docs || docs.length === 0) {
+        hasMore = false
+      } else {
+        for (const doc of docs) {
+          await req.payload.delete({ collection: c.slug, id: doc.id, overrideAccess: true })
+        }
+        page++
+      }
+    }
+  }
+}
+
 /** 项目/产品：一个工作区下管理多个产品。 */
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -22,6 +58,9 @@ export const Projects: CollectionConfig = {
     create: authenticated,
     update: authenticated,
     delete: authenticated,
+  },
+  hooks: {
+    beforeDelete: [cascadeDelete],
   },
   fields: [
     {
