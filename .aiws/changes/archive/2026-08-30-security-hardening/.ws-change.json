@@ -1,0 +1,26 @@
+{
+  "ws_change_version": 2,
+  "id": "security-hardening",
+  "title": "整套系统安全与功能闭环修复（GATE-004）",
+  "phase": "archived",
+  "created_at": "2026-08-27T00:00:00Z",
+  "base_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1787661746,
+      "sha256": "c9cd47442714381651e50c6fdb02e031715010b9b6c9c487cfb4960ddfc3c024"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787673432,
+      "sha256": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1787749241,
+      "sha256": "68d230586ffe2b259b36d5e6b51e70ac2e4bde02c7c70558a1557a3cc5df8f6e"
+    }
+  },
+  "base_branch": "main",
+  "base_branch_set_at": "2026-08-27T00:00:00Z",
+  "archived_at": "2026-08-30T00:00:00Z",
+  "archived_to": "F:\\juece-grow\\.aiws\\changes\\archive\\2026-08-30-security-hardening",
+  "commit": "8ed1dab"
+}

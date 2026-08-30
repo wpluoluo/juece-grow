@@ -50,6 +50,20 @@ memories:
     summary: >-
       Astro + Payload + Postgres 工程骨架（单站点 + 表单线索入池）已完成：Requirement=REQ-0001，改动覆盖根 workspace/pnpm/postgres、apps/cms
       Payload 3 + Postgres、apps/astro SSG、/api/v2 信封与表单提交闭环、e2e 烟测。reboot 提交已完成，main 已包含全部交付。归...
+  decision://security-hardening:
+    title: GATE-004 安全加固已归档
+    domain: decision
+    path: decision/security-hardening.md
+    created: '2026-08-30T08:30:57.317Z'
+    updated: '2026-08-30T08:31:04.692Z'
+    tags:
+      - security
+      - auth
+      - webhook
+      - gate-004
+    summary: >-
+      GATE-004 安全加固（commit 8ed1dab，已推送 gitee/main）：后台鉴权全收敛为项目隔离 Access 函数（Users adminOnly / Leads leadScopedWrite /
+      Memberships membershipScopedManage / Projects projectManage），防跨项目建账/改删/搬家/越权分配；新增公开内容面 ...
   general://implementation-plan:
     title: Implementation Plan
     domain: general
