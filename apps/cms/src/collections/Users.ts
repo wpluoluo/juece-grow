@@ -22,6 +22,53 @@ export const Users: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
+  hooks: {
+    beforeDelete: [
+      // 级联清理用户关联数据，避免 Postgres 外键约束导致删除报「未知错误」。
+      async ({ id, req }) => {
+        const { payload, user } = req
+        if (user && String(user.id) === String(id)) {
+          throw new Error('不能删除当前登录的账号')
+        }
+        const userId = String(id)
+        await Promise.all([
+          // 成员关系是纯连接行，用户删除即删除。
+          payload.delete({
+            collection: 'memberships',
+            overrideAccess: true,
+            where: { user: { equals: userId } },
+          }),
+          // 已归属但未成交的线索：负责人置空，留待重新分配。
+          payload.update({
+            collection: 'leads',
+            overrideAccess: true,
+            where: { owner: { equals: userId } },
+            data: { owner: null },
+          }),
+          // 线索动态操作人已失效：置空，保留事件记录。
+          payload.update({
+            collection: 'lead-activities',
+            overrideAccess: true,
+            where: { actor: { equals: userId } },
+            data: { actor: null },
+          }),
+          // 提醒规则对象已失效：置空（空 = 提醒线索负责人）。
+          payload.update({
+            collection: 'reminder-rules',
+            overrideAccess: true,
+            where: { target: { equals: userId } },
+            data: { target: null },
+          }),
+          // 待处理提醒接收人已失效：删除整条通知。
+          payload.delete({
+            collection: 'reminder-notices',
+            overrideAccess: true,
+            where: { receiver: { equals: userId } },
+          }),
+        ])
+      },
+    ],
+  },
   fields: [
     {
       name: 'username',
