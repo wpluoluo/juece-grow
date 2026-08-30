@@ -1,5 +1,6 @@
 ---
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+import sanitizeHtml from 'sanitize-html'
 
 import Layout from '../../layouts/Layout.astro'
 import { getArticles, getArticleBySlug, type Article } from '../../lib/payload'
@@ -19,8 +20,26 @@ if (!article) {
 
 const title = article.seoTitle || article.title
 const description = article.seoDescription || article.excerpt || ''
+// 正文来自 CMS 富文本，渲染前过滤风险标签/属性并限制协议，防内容型 XSS。
 const bodyHTML = article.body
-  ? convertLexicalToHTML({ data: article.body as Parameters<typeof convertLexicalToHTML>[0]['data'] })
+  ? sanitizeHtml(convertLexicalToHTML({ data: article.body as Parameters<typeof convertLexicalToHTML>[0]['data'] }), {
+      allowedTags: [
+        'h2', 'h3', 'h4', 'p', 'a', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote',
+        'code', 'pre', 'img', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'br',
+      ],
+      allowedAttributes: {
+        a: ['href', 'target', 'rel'],
+        img: ['src', 'alt', 'width', 'height'],
+        code: ['class'],
+        th: ['colspan', 'rowspan'],
+        td: ['colspan', 'rowspan'],
+      },
+      allowedSchemes: ['http', 'https', 'mailto'],
+      allowedSchemesByTag: { img: ['http', 'https'] },
+      transformTags: {
+        a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer', target: '_blank' }, true),
+      },
+    })
   : ''
 
 const projectName =

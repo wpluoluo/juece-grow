@@ -18,6 +18,7 @@ export const Media: CollectionConfig = {
     },
   },
   access: {
+    // 仅收录 image/*，供公开站封面/logo 直接展示，故保留匿名读；接受项（无 PII、仅图片字节）。
     read: everyone,
     create: authenticated,
     update: authenticated,

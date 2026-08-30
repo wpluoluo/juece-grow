@@ -1,6 +1,6 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Where } from 'payload'
 
-import { authenticated, membershipManage } from '../access'
+import { membershipScopedManage, projectScopedRead } from '../access'
 
 /** 项目成员与角色：把用户挂到一个项目，设 owner/admin/editor/viewer。 */
 export const Memberships: CollectionConfig = {
@@ -18,16 +18,44 @@ export const Memberships: CollectionConfig = {
     },
   },
   access: {
-    read: authenticated,
-    create: membershipManage,
-    update: membershipManage,
-    delete: membershipManage,
+    read: projectScopedRead,
+    create: membershipScopedManage,
+    update: membershipScopedManage,
+    delete: membershipScopedManage,
   },
   hooks: {
     beforeChange: [
       ({ data }) => {
         if (data?.user) data.title = String(data.user)
         return data
+      },
+    ],
+    beforeDelete: [
+      // 成员被移除后，清空其在该项目名下的负责人/提醒接收人，避免 owner 指向非成员（孤儿）。
+      async ({ id, req }) => {
+        const { payload } = req
+        const dep = await payload.findByID({ collection: 'memberships', overrideAccess: true, id, depth: 0 })
+        const projectId = Number(dep?.project)
+        const userId = String(dep?.user ?? '')
+        if (!projectId || !userId) return
+        const where: Where = { and: [{ project: { equals: projectId } }, { owner: { equals: userId } }] }
+        await payload.update({
+          collection: 'leads',
+          overrideAccess: true,
+          where,
+          data: { owner: null },
+        })
+        await payload.delete({
+          collection: 'reminder-notices',
+          overrideAccess: true,
+          where: {
+            and: [
+              { project: { equals: projectId } },
+              { receiver: { equals: userId } },
+              { status: { equals: 'open' } },
+            ],
+          },
+        })
       },
     ],
   },

@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "@payloadcms/richtext-lexical": "^3.88.0",
-    "astro": "^6.0.0"
+    "astro": "^6.0.0",
+    "sanitize-html": "^2.17.7"
   },
   "devDependencies": {
+    "@types/sanitize-html": "^2.16.1",
     "cross-env": "^7.0.3",
     "pagefind": "^1.5.2"
   }

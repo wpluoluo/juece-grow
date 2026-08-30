@@ -1,6 +1,6 @@
 import { addDataAndFileToRequest, type CollectionConfig } from 'payload'
 
-import { authenticated, everyone, memberCanWrite } from '../access'
+import { authenticated, memberCanWrite, memberCanWriteProject } from '../access'
 
 /** 站点：挂在项目下，独立可访问，SEO 字段独立配置。 */
 export const Sites: CollectionConfig = {
@@ -18,7 +18,8 @@ export const Sites: CollectionConfig = {
     },
   },
   access: {
-    read: everyone,
+    // 匿名不可枚举站点结构（subdomain/meta），杜绝非必要曝光（C4）。公开站为静态构建，不读原生 /api/sites。
+    read: authenticated,
     create: authenticated,
     update: authenticated,
     delete: authenticated,
@@ -75,13 +76,33 @@ export const Sites: CollectionConfig = {
             depth: 0,
           })
 
+          // 防跨项目：来源站点与落盘项目都须是当前用户可写，避免克隆他人站点/写入他项目。
+          const projectId = data.projectId ?? Number(source.project)
+          const sourceProjectId = Number(source.project)
+          if (projectId <= 0) {
+            return Response.json(
+              { success: false, error: { code: 'INVALID_PROJECT', message: '来源站点未绑定项目' } },
+              { status: 400 },
+            )
+          }
+          const [canTarget, canSource] = await Promise.all([
+            memberCanWriteProject(req, projectId),
+            memberCanWriteProject(req, sourceProjectId),
+          ])
+          if (!canTarget || !canSource) {
+            return Response.json(
+              { success: false, error: { code: 'FORBIDDEN', message: '无权复制该站点' } },
+              { status: 403 },
+            )
+          }
+
           const name = (data.name || '').trim() || `${source.name} 副本`
           const clone = await req.payload.create({
             collection: 'sites',
             overrideAccess: true,
             data: {
               name,
-              project: data.projectId ?? Number(source.project),
+              project: projectId,
               subdomain: source.subdomain || undefined,
               pathSlug: source.pathSlug || undefined,
               themeColor: source.themeColor || undefined,

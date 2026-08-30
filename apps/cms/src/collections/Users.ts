@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../access'
+import { adminOnly, authenticated } from '../access'
 
 /** 用户：仅后台人员。role 决定可操作的集合。 */
 export const Users: CollectionConfig = {
@@ -18,9 +18,9 @@ export const Users: CollectionConfig = {
   },
   access: {
     read: authenticated,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    create: adminOnly,
+    update: adminOnly,
+    delete: adminOnly,
   },
   hooks: {
     beforeDelete: [

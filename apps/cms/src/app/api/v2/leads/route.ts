@@ -7,7 +7,7 @@ import { err, ok } from '../../../../lib/envelope'
 import { LEAD_SOURCE_VALUES, type LeadSourceValue } from '../../../../lib/leadSources'
 
 type LeadInput = {
-  projectId: string
+  projectSlug?: string
   name?: string
   phone?: string
   wechat?: string
@@ -36,11 +36,11 @@ function validateBody(data: {
 
 export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => null)) as LeadInput | null
-  if (!body) return err('INVALID_JSON', '请求体必须是 JSON')
+  if (!body) return err('INVALID_JSON', '请求体必须是 JSON', 400, req)
 
-  const projectIdNum = Number(body.projectId)
-  if (!Number.isInteger(projectIdNum) || projectIdNum <= 0) {
-    return err('MISSING_PROJECT', '缺少有效的 projectId')
+  const projectSlug = (body.projectSlug || '').trim()
+  if (!projectSlug) {
+    return err('MISSING_PROJECT', '缺少有效的 projectSlug', 400, req)
   }
 
   const name = (body.name || '').trim()
@@ -49,25 +49,26 @@ export async function POST(req: NextRequest) {
   const note = (body.note || '').trim()
   const source = (body.source || 'website') as LeadSourceValue
 
-  if (!phone && !wechat) return err('VALIDATION', 'phone 与 wechat 至少填一个')
-  if (phone && !PHONE_RE.test(phone)) return err('VALIDATION', '手机号格式不正确')
-  if (wechat && !WECHAT_RE.test(wechat)) return err('VALIDATION', '微信号格式不正确（6~20 位字母数字）')
+  if (!phone && !wechat) return err('VALIDATION', 'phone 与 wechat 至少填一个', 400, req)
+  if (phone && !PHONE_RE.test(phone)) return err('VALIDATION', '手机号格式不正确', 400, req)
+  if (wechat && !WECHAT_RE.test(wechat)) return err('VALIDATION', '微信号格式不正确（6~20 位字母数字）', 400, req)
 
   const fieldError = validateBody({ name, phone, wechat, note, source })
-  if (fieldError) return err('VALIDATION', fieldError)
+  if (fieldError) return err('VALIDATION', fieldError, 400, req)
 
   try {
     const payload = await getPayload({ config })
 
-    // 校验 project 真实存在，避免写入孤儿线索。
+    // 校验 project 真实存在，避免写入孤儿线索；用稳定 slug 解析，不依赖数值 id。
     const project = await payload.find({
       collection: 'projects',
       overrideAccess: true,
-      where: { id: { equals: projectIdNum } },
+      where: { slug: { equals: projectSlug } },
       limit: 1,
       depth: 0,
     })
-    if (project.docs.length === 0) return err('PROJECT_NOT_FOUND', '项目不存在')
+    if (project.docs.length === 0) return err('PROJECT_NOT_FOUND', '项目不存在', 400, req)
+    const projectIdNum = project.docs[0].id
 
     // 去重合并：同一项目下相同 dedupKey 已存在时，把本次留资的缺失信息合并进既有线索，避免重复与丢信息。
     const dedupKey = phone || wechat
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
             data: patch,
           })
         }
-        return ok({ id: cur.id, duplicate: true })
+        return ok({ id: cur.id, duplicate: true }, req)
       }
     }
 
@@ -117,9 +118,9 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    return ok({ id: lead.id, duplicate: false })
+    return ok({ id: lead.id, duplicate: false }, req)
   } catch {
-    return err('LEAD_CREATE_FAILED', '线索写入失败，请稍后再试', 500)
+    return err('LEAD_CREATE_FAILED', '线索写入失败，请稍后再试', 500, req)
   }
 }
 

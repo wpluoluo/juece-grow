@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated, everyone } from '../access'
+import { authenticated } from '../access'
 
 /** 由标题生成 URL 友好的 slug。 */
 function slugify(value: string): string {
@@ -28,7 +28,9 @@ export const Articles: CollectionConfig = {
     },
   },
   access: {
-    read: everyone,
+    // 公开文章读取统一走 /api/v2/content/articles（白名单过滤 + 项目隔离）。
+    // 原生 REST 仅登录可见：匿名不能读，杜绝草稿/未发布内容枚举（C2）。
+    read: authenticated,
     create: authenticated,
     update: authenticated,
     delete: authenticated,

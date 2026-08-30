@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated, isGlobalAdmin, projectScopedRead, projectWrite } from '../access'
+import { isGlobalAdmin, projectScopedRead, projectScopedWrite, projectWrite } from '../access'
 
 /**
  * 提醒规则：可配置的跟进提醒（due 到期 / sla 首次跟进超时）。
@@ -24,7 +24,7 @@ export const ReminderRules: CollectionConfig = {
   access: {
     read: projectScopedRead,
     create: projectWrite,
-    update: projectWrite,
+    update: projectScopedWrite,
     delete: ({ req }) => isGlobalAdmin(req.user),
   },
   hooks: {

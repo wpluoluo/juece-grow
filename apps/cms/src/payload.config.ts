@@ -224,7 +224,12 @@ export default buildConfig({
     },
     fallbackLanguage: 'zh',
   },
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret:
+    (() => {
+      const s = process.env.PAYLOAD_SECRET
+      if (!s) throw new Error('PAYLOAD_SECRET 未配置，禁止空密钥启动')
+      return s
+    })(),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

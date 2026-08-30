@@ -1,10 +1,9 @@
 import { addDataAndFileToRequest, type CollectionConfig } from 'payload'
 
 import {
-  authenticated,
-  everyone,
   isGlobalAdmin,
   isProjectMember,
+  leadScopedWrite,
   memberCanWriteProject,
   projectScopedRead,
 } from '../access'
@@ -28,9 +27,9 @@ export const Leads: CollectionConfig = {
   },
   access: {
     read: projectScopedRead,
-    create: everyone,
-    update: authenticated,
-    delete: authenticated,
+    create: leadScopedWrite,
+    update: leadScopedWrite,
+    delete: leadScopedWrite,
   },
   hooks: {
     beforeDelete: [

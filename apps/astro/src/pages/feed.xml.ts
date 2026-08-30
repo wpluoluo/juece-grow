@@ -10,6 +10,7 @@ export async function GET({ site }: { site?: URL }) {
       const pubDate = a.publishedAt || a.createdAt
       if (!pubDate) return ''
       const url = `${origin}/articles/${a.slug}/`
+      const urlEsc = url.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
       const title = a.seoTitle || a.title
       const desc = (a.seoDescription || a.excerpt || '')
         .replace(/&/g, '&amp;')
@@ -19,8 +20,8 @@ export async function GET({ site }: { site?: URL }) {
       const date = new Date(pubDate).toUTCString()
       return `    <item>
       <title><![CDATA[${title}]]></title>
-      <link>${url}</link>
-      <guid isPermaLink="true">${url}</guid>
+      <link>${urlEsc}</link>
+      <guid isPermaLink="true">${urlEsc}</guid>
       <description>${desc}</description>
       <pubDate>${date}</pubDate>
     </item>`

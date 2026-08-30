@@ -13,8 +13,8 @@ const DICT: Dict = {
     zh: '抖音 / 小红书等渠道的线索在此手动录入，与其他来源统一归到一个池子。',
     en: 'Manually add leads from Douyin / Xiaohongshu and other channels into the shared pool.',
   },
-  projectId: { zh: '项目 ID', en: 'Project ID' },
-  projectIdPlaceholder: { zh: '正整数', en: 'positive integer' },
+  projectSlug: { zh: '项目标识（slug）', en: 'Project Slug' },
+  projectSlugPlaceholder: { zh: '如 juece-grow', en: 'e.g. juece-grow' },
   source: { zh: '来源', en: 'Source' },
   name: { zh: '称呼', en: 'Name' },
   namePlaceholder: { zh: '客户称呼（可空）', en: 'Customer name (optional)' },
@@ -38,7 +38,7 @@ const DICT: Dict = {
 function IntakeForm() {
   const { t } = useLocale()
   const [source, setSource] = useState<string>(LEAD_SOURCES[2].value) // 默认“抖音”
-  const [projectId, setProjectId] = useState('')
+  const [projectSlug, setProjectSlug] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [wechat, setWechat] = useState('')
@@ -51,7 +51,7 @@ function IntakeForm() {
       const res = await fetch('/api/v2/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId, source, name, phone, wechat, note }),
+        body: JSON.stringify({ projectSlug, source, name, phone, wechat, note }),
       })
       const json = (await res.json()) as {
         success: boolean
@@ -85,14 +85,13 @@ function IntakeForm() {
       <p style={{ color: '#666', fontSize: 13, marginBottom: 24 }}>{t('subtitle')}</p>
 
       <label style={labelStyle}>
-        {t('projectId')}
+        {t('projectSlug')}
         <input
-          type="number"
-          min={1}
-          value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
+          type="text"
+          value={projectSlug}
+          onChange={(e) => setProjectSlug(e.target.value)}
           style={inputStyle}
-          placeholder={t('projectIdPlaceholder')}
+          placeholder={t('projectSlugPlaceholder')}
         />
       </label>
 

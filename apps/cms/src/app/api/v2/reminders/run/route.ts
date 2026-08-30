@@ -13,12 +13,12 @@ export async function POST(req: NextRequest) {
     const payload = await getPayload({ config })
     const { user } = await payload.auth({ headers: req.headers })
     if (!user || !isGlobalAdmin(user)) {
-      return err('FORBIDDEN', '仅管理员可手动触发提醒扫描', 403)
+      return err('FORBIDDEN', '仅管理员可手动触发提醒扫描', 403, req)
     }
 
     const result = await runReminderScan(payload)
-    return ok(result)
+    return ok(result, req)
   } catch {
-    return err('REMINDER_SCAN_FAILED', '提醒扫描失败，请稍后再试', 500)
+    return err('REMINDER_SCAN_FAILED', '提醒扫描失败，请稍后再试', 500, req)
   }
 }

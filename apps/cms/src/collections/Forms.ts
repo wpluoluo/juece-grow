@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated, everyone } from '../access'
+import { authenticated } from '../access'
 
 /** 留资表单定义：挂到站点下，字段结构存 JSON。 */
 export const Forms: CollectionConfig = {
@@ -18,7 +18,8 @@ export const Forms: CollectionConfig = {
     },
   },
   access: {
-    read: everyone,
+    // 表单定义属后台配置，匿名无需读取；杜绝字段结构枚举（C4）。
+    read: authenticated,
     create: authenticated,
     update: authenticated,
     delete: authenticated,

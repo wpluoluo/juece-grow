@@ -30,18 +30,13 @@ function relId(value: unknown): number | null {
   return Number(typeof value === 'object' ? (value as { id: number }).id : value)
 }
 
-/** 判重：同一 lead + rule + kind 已存在 status=open 的记录即跳过。 */
-async function alreadyOpen(payload: Payload, leadId: number, ruleId: number, kind: string): Promise<boolean> {
+/** 判重：同一 lead + rule + kind 已存在任意状态的通知（含已处理 done）即跳过，避免无限重复提醒。 */
+async function alreadyNotified(payload: Payload, leadId: number, ruleId: number, kind: string): Promise<boolean> {
   const hit = await payload.find({
     collection: 'reminder-notices',
     overrideAccess: true,
     where: {
-      and: [
-        { lead: { equals: leadId } },
-        { rule: { equals: ruleId } },
-        { kind: { equals: kind } },
-        { status: { equals: 'open' } },
-      ],
+      and: [{ lead: { equals: leadId } }, { rule: { equals: ruleId } }, { kind: { equals: kind } }],
     },
     limit: 1,
     depth: 0,
@@ -85,7 +80,7 @@ export async function runReminderScan(payload: Payload): Promise<{ created: numb
       and.push({ nextFollowUpAt: { less_than: new Date(now).toISOString() } })
     } else {
       const graceHours = Number(raw.graceHours) || 24
-      and.push({ status: { equals: 'new' } })
+      and.push({ status: { in: applyStatuses } })
       and.push({ createdAt: { less_than: new Date(now - graceHours * 60 * 60 * 1000).toISOString() } })
     }
     where.and = and
@@ -103,9 +98,11 @@ export async function runReminderScan(payload: Payload): Promise<{ created: numb
       const leadId = Number(leadRaw.id)
       const projectId = relId(leadRaw.project)
       if (projectId === null) continue
-      if (await alreadyOpen(payload, leadId, ruleId, kind)) continue
+      if (await alreadyNotified(payload, leadId, ruleId, kind)) continue
 
       const receiverId = relId(raw.target) ?? relId(leadRaw.owner)
+      // 无接收人（规则未指定且线索无负责人）时不落孤儿提醒，跳过本次。
+      if (receiverId === null) continue
 
       // 应处理时间：due 用 nextFollowUpAt；sla 用 createdAt + graceHours。
       let dueAt: string | null = null

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated, everyone } from '../access'
+import { authenticated } from '../access'
 
 /** 文章分类：方便按主题筛选与批量管理文章。 */
 export const Categories: CollectionConfig = {
@@ -14,7 +14,8 @@ export const Categories: CollectionConfig = {
     defaultColumns: ['name', 'description'],
   },
   access: {
-    read: everyone,
+    // 分类为后台维度，公开站经 v2 内容端点拿到脱敏分类名；原生 REST 仅登录可见。
+    read: authenticated,
     create: authenticated,
     update: authenticated,
     delete: authenticated,

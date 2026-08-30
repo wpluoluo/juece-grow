@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated, everyone } from '../access'
+import { adminOnly, authenticated, projectManage } from '../access'
 
 /** 删除项目时自动清理关联数据，避免数据库外键约束报错。 */
 async function cascadeDelete({ req, id }: { req: any; id: string | number }): Promise<void> {
@@ -54,10 +54,12 @@ export const Projects: CollectionConfig = {
     },
   },
   access: {
-    read: everyone,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    // 匿名不可枚举项目，杜绝联系人（邮箱/电话）越权暴露（C3）。
+    // 公开站仅经 /api/v2/content/articles 拿到经脱敏的 project 摘要。
+    read: authenticated,
+    create: adminOnly,
+    update: projectManage,
+    delete: projectManage,
   },
   hooks: {
     beforeDelete: [cascadeDelete],

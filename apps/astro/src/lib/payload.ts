@@ -1,4 +1,6 @@
-/** Astro 侧从 Payload REST 拉取公开数据的客户端。 */
+/** Astro 侧从 Payload 拉取公开数据的客户端。数据只经 /api/v2/content/articles（跨端隔离 + 脱敏），不直连原生 REST。 */
+
+import { siteId, type SiteId } from '../site'
 
 /** Payload CMS 源地址，单一事实来源：来自 PUBLIC_CMS_ORIGIN（apps/astro/.env）。缺省即 fail-fast。 */
 export const CMS_ORIGIN = import.meta.env.PUBLIC_CMS_ORIGIN
@@ -7,7 +9,6 @@ export type Project = {
   id: number
   name: string
   slug: string
-  description?: string
 }
 
 export type Article = {
@@ -19,47 +20,41 @@ export type Article = {
   publishedAt?: string
   createdAt?: string
   updatedAt?: string
-  project: number | Project
-  /** 封面图（media 关联）。 */
-  coverImage?: { id: number; url: string; alt?: string } | number
-  /** 作者署名。 */
+  project?: Project
+  category?: { id: number; name: string }
+  coverImage?: { id: number; url: string; alt?: string }
   author?: string
-  /** Lexical 富文本正文（SerializedEditorState）。 */
   body?: unknown
   seoTitle?: string
   seoDescription?: string
 }
 
-type PayloadList<T> = {
-  docs: T
-  totalDocs: number
-}
+type ContentList = { articles: Article[] }
 
-async function fetchList<T>(
-  collection: string,
-  query: string,
-): Promise<T> {
-  const url = `${CMS_ORIGIN}/api/${collection}?depth=2&limit=50&${query}`
+async function fetchContent(query: string): Promise<ContentList> {
+  const url = `${CMS_ORIGIN}/api/v2/content/articles?${query}`
   const res = await fetch(url, { headers: { 'Content-Type': 'application/json' } })
-  if (!res.ok) throw new Error(`Payload ${collection} 拉取失败: ${res.status}`)
-  const body = (await res.json()) as PayloadList<T>
-  return body.docs
+  if (!res.ok) throw new Error(`Content 拉取失败: ${res.status}`)
+  const body = (await res.json()) as { success: boolean; data: ContentList }
+  if (!body.success) throw new Error('Content 拉取失败: response not success')
+  return body.data
 }
 
-/** 已发布文章列表。 */
+/** 当前站点的文章列表：主站返回全部已发布，分站由 v2 按项目隔离。 */
 export async function getArticles(): Promise<Article[]> {
-  return fetchList<Article[]>('articles', 'where[status][equals]=published&sort=-publishedAt')
+  const data = await fetchContent(`site=${siteId}`)
+  return data.articles
 }
 
-/** 按 slug 取单篇已发布文章。 */
-export async function getArticleBySlug(slug: string): Promise<Article[] | null> {
-  return fetchList<Article[]>(
-    'articles',
-    `where[slug][equals]=${encodeURIComponent(slug)}&where[status][equals]=published`,
-  )
+/** 按 slug 取单篇（同样按当前站点隔离）。 */
+export async function getArticleBySlug(slug: string): Promise<Article[]> {
+  const data = await fetchContent(`site=${siteId}&slug=${encodeURIComponent(slug)}`)
+  return data.articles
 }
 
-/** 项目列表。 */
-export async function getProjects(): Promise<Project[]> {
-  return fetchList<Project[]>('projects', 'sort=name')
+/** 各站点对应的项目 slug，作为留资归属的单一映射；主站 juece 对应 juece-grow 项目。 */
+export const siteProjectSlug: Record<SiteId, string> = {
+  juece: 'juece-grow',
+  erp: 'juece-erp',
+  yunque: 'yunque',
 }

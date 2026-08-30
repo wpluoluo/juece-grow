@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { timingSafeEqual } from 'node:crypto'
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -8,21 +9,23 @@ import { err, ok } from '../../../../../lib/envelope'
 /** Chatwoot 收件 webhook：把客服/网页会话消息写回自有 Postgres 线索池（source=support）。 */
 export async function POST(req: NextRequest) {
   const url = new URL(req.url)
-  const token = url.searchParams.get('token')
+  // 鉴权走 Authorization: Bearer <secret>，避免 token 落入网关日志。
+  const authHeader = req.headers.get('authorization') || ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
   const secret = process.env.CHATWOOT_WEBHOOK_SECRET
-  if (!secret || token !== secret) return err('UNAUTHORIZED', '无效的 webhook token', 401)
+  if (!secret || !secretEqualsSecurely(token, secret)) return err('UNAUTHORIZED', '无效的 webhook 凭证', 401, req)
 
   const projectIdNum = Number(url.searchParams.get('projectId'))
   if (!Number.isInteger(projectIdNum) || projectIdNum <= 0) {
-    return err('INVALID_PROJECT', 'projectId 必须是正整数', 400)
+    return err('INVALID_PROJECT', 'projectId 必须是正整数', 400, req)
   }
 
   const body = (await req.json().catch(() => null)) as ChatwootEvent | null
-  if (!body) return err('INVALID_JSON', '请求体必须是 JSON')
+  if (!body) return err('INVALID_JSON', '请求体必须是 JSON', 400, req)
 
   // 仅处理顾客（Contact）发来的消息事件，其余事件直接确认。
   if (body.event !== 'message_created' || body.message?.sender_type !== 'Contact') {
-    return ok({ accepted: false })
+    return ok({ accepted: false }, req)
   }
 
   try {
@@ -55,7 +58,7 @@ export async function POST(req: NextRequest) {
       if (Object.keys(patch).length > 0) {
         await payload.update({ collection: 'leads', overrideAccess: true, id: cur.id, data: patch })
       }
-      return ok({ id: cur.id, duplicate: true })
+      return ok({ id: cur.id, duplicate: true }, req)
     }
 
     const lead = await payload.create({
@@ -71,9 +74,9 @@ export async function POST(req: NextRequest) {
         status: 'new',
       },
     })
-    return ok({ id: lead.id, duplicate: false })
+    return ok({ id: lead.id, duplicate: false }, req)
   } catch {
-    return err('LEAD_CREATE_FAILED', '线索写入失败，请稍后再试', 500)
+    return err('LEAD_CREATE_FAILED', '线索写入失败，请稍后再试', 500, req)
   }
 }
 
@@ -83,6 +86,15 @@ function normalizePhone(raw?: string): string {
   if (/^\+?86\d{11}$/.test(digits)) return digits.replace(/^\+?86/, '')
   if (/^\d{11}$/.test(digits)) return digits
   return ''
+}
+
+/** 恒时比较 token 与 secret，避免时序侧信道泄露比对信息。 */
+function secretEqualsSecurely(token: string | null, secret: string): boolean {
+  if (!token) return false
+  const a = Buffer.from(token)
+  const b = Buffer.from(secret)
+  if (a.length !== b.length) return false
+  return timingSafeEqual(a, b)
 }
 
 type ChatwootEvent = {

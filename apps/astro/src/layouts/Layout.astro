@@ -1,6 +1,10 @@
 ---
-import { site } from '../site'
+import { site, siteId } from '../site'
+import { siteProjectSlug } from '../lib/payload'
 import '../styles/layout.css'
+
+// 留资归属用当前站点的项目 slug，不暴露数值 id。
+const projectSlug = siteProjectSlug[siteId]
 
 interface Props {
   title: string
@@ -81,7 +85,7 @@ const enableChat = Boolean(chatwootUrl && chatwootToken)
     {type === 'article' && articleModifiedTime && <meta property="article:modified_time" content={articleModifiedTime} />}
     {type === 'article' && articleTag && <meta property="article:tag" content={articleTag} />}
 
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />}
 
     <style is:global define:vars={{
       'brand-color': site.brand.colors.themeColor,
@@ -240,7 +244,7 @@ const enableChat = Boolean(chatwootUrl && chatwootToken)
         <p class="lead-modal__desc">
           告诉我们你做什么生意、卡在哪一环，我们给你一套顺口的推荐，直接照着谈。
         </p>
-        <form id="lead-form" class="lead-form" data-project-id="1" novalidate>
+        <form id="lead-form" class="lead-form" data-project-slug={projectSlug} novalidate>
           <div class="field">
             <label for="lead-name">称呼</label>
             <input id="lead-name" name="name" type="text" autocomplete="name" placeholder="怎么称呼你" />
@@ -361,7 +365,7 @@ const enableChat = Boolean(chatwootUrl && chatwootToken)
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
-    const projectId = form.dataset.projectId as string
+    const projectSlug = form.dataset.projectSlug as string
     const nameEl = form.elements.namedItem('name') as HTMLInputElement
     const phoneEl = form.elements.namedItem('phone') as HTMLInputElement
     const wechatEl = form.elements.namedItem('wechat') as HTMLInputElement
@@ -398,7 +402,7 @@ const enableChat = Boolean(chatwootUrl && chatwootToken)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          projectId,
+          projectSlug,
           name: nameEl.value.trim(),
           phone,
           wechat,

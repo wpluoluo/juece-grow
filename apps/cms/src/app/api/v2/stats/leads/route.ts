@@ -209,8 +209,8 @@ export async function GET(req: NextRequest) {
       avgConvertCycleHours,
       trend,
       recent,
-    })
+    }, req)
   } catch {
-    return err('STATS_FETCH_FAILED', '统计失败，请稍后再试', 500)
+    return err('STATS_FETCH_FAILED', '统计失败，请稍后再试', 500, req)
   }
 }
