@@ -37,3 +37,6 @@ apps/cms/media/
 apps/cms/public/
 content-drafts/
 cms-cookies.txt
+
+# 构建产物（本地 docker 打包，不入库）
+juece-grow-cms.tar

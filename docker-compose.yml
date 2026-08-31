@@ -1,3 +1,6 @@
+# 本地开发 / 测试专用数据库（Linux/Podman 容器 Postgres，端口 5434，供 AI_WORKSPACE 的
+# test_db_url 与本地 cms 使用）。生产环境不部署本套：生产数据库由服务器原生 PostgreSQL
+# 提供（见 docker-compose.prod.yml 与 docs/08-deployment.md），请勿用容器承载生产数据。
 services:
   postgres:
     image: postgres:16-alpine
