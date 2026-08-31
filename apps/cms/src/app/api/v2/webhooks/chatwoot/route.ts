@@ -1,26 +1,31 @@
 import { NextRequest } from 'next/server'
-import { timingSafeEqual } from 'node:crypto'
+import { createHmac, timingSafeEqual } from 'node:crypto'
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { err, ok } from '../../../../../lib/envelope'
 
+/** 签名时间戳允许的最大偏差（秒）：防旧请求重放。 */
+const SIGNATURE_TTL_SECONDS = 300
+
 /** Chatwoot 收件 webhook：把客服/网页会话消息写回自有 Postgres 线索池（source=support）。 */
 export async function POST(req: NextRequest) {
   const url = new URL(req.url)
-  // 鉴权走 Authorization: Bearer <secret>，避免 token 落入网关日志。
-  const authHeader = req.headers.get('authorization') || ''
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+
+  // 鉴权走 Chatwoot 官方签名校验：X-Chatwoot-Timestamp + X-Chatwoot-Signature(HMAC-SHA256)。
+  const rawBody = await req.text()
   const secret = process.env.CHATWOOT_WEBHOOK_SECRET
-  if (!secret || !secretEqualsSecurely(token, secret)) return err('UNAUTHORIZED', '无效的 webhook 凭证', 401, req)
+  if (!secret || !verifySignature(req.headers, rawBody, secret)) {
+    return err('UNAUTHORIZED', '无效的 webhook 签名', 401, req)
+  }
 
   const projectIdNum = Number(url.searchParams.get('projectId'))
   if (!Number.isInteger(projectIdNum) || projectIdNum <= 0) {
     return err('INVALID_PROJECT', 'projectId 必须是正整数', 400, req)
   }
 
-  const body = (await req.json().catch(() => null)) as ChatwootEvent | null
+  const body = (parseJson(rawBody) as ChatwootEvent | null) ?? null
   if (!body) return err('INVALID_JSON', '请求体必须是 JSON', 400, req)
 
   // 仅处理顾客（Contact）发来的消息事件，其余事件直接确认。
@@ -88,13 +93,30 @@ function normalizePhone(raw?: string): string {
   return ''
 }
 
-/** 恒时比较 token 与 secret，避免时序侧信道泄露比对信息。 */
-function secretEqualsSecurely(token: string | null, secret: string): boolean {
-  if (!token) return false
-  const a = Buffer.from(token)
-  const b = Buffer.from(secret)
-  if (a.length !== b.length) return false
-  return timingSafeEqual(a, b)
+/** 校验 Chatwoot 官方签名：X-Chatwoot-Timestamp + X-Chatwoot-Signature=sha256=HMAC(secret, "{ts}.{body}")。 */
+function verifySignature(headers: Headers, rawBody: string, secret: string): boolean {
+  const tsHeader = headers.get('x-chatwoot-timestamp')
+  const sigHeader = headers.get('x-chatwoot-signature')
+  if (!tsHeader || !sigHeader) return false
+
+  const ts = Number(tsHeader)
+  if (!Number.isInteger(ts)) return false
+  // 防重放：时间戳超出波动窗口则拒绝。
+  if (Math.abs(Math.floor(Date.now() / 1000) - ts) > SIGNATURE_TTL_SECONDS) return false
+
+  const expected = createHmac('sha256', secret).update(`${ts}.${rawBody}`).digest('hex')
+  const provided = sigHeader.startsWith('sha256=') ? sigHeader.slice('sha256='.length) : null
+  if (!provided || expected.length !== provided.length) return false
+  return timingSafeEqual(Buffer.from(expected), Buffer.from(provided))
+}
+
+/** 安全解析 JSON，失败返回 null。 */
+function parseJson(raw: string): unknown {
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
 }
 
 type ChatwootEvent = {

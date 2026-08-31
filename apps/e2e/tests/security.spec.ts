@@ -341,18 +341,18 @@ test.describe('C6 后台鉴权边界（跨项目隔离）', () => {
 })
 
 // ---------------------------------------------------------------------------
-// C7 Chatwoot webhook 鉴权（Authorization Bearer 头）
+// C7 Chatwoot webhook 鉴权（Chatwoot 官方签名：X-Chatwoot-Timestamp + X-Chatwoot-Signature）
 // ---------------------------------------------------------------------------
-// 回归本次鉴权改造：webhook 不再接受查询参数 token，改用 Authorization: Bearer <secret>。
+// 回归本次鉴权改造：webhook 不再接受 Bearer 头，改用 Chatwoot 官方 HMAC-SHA256 签名校验。
 // 安全不变量（数据无关，不造线索）：
-//  - 无头 / 错 secret / 未配置 secret → 一律 401（fail-closed）。
-//  - 正确 Bearer 才放行进入业务层——以「缺 projectId 触发 400 INVALID_PROJECT」证明鉴权已通过，
+//  - 无签名头 / 错误签名 / 过期时间戳 → 一律 401（fail-closed）。
+//  - 正确签名才放行进入业务层——以「缺 projectId 触发 400 INVALID_PROJECT」证明鉴权已通过，
 //    绝不返回 401（若仍 401 即鉴权改造回归）。
 test.describe('C7 Chatwoot webhook 鉴权', () => {
   const secret = process.env.CHATWOOT_WEBHOOK_SECRET
   const path = '/api/v2/webhooks/chatwoot'
 
-  test('未携带 Authorization 头 → 401 + UNAUTHORIZED（fail-closed）', async () => {
+  test('未携带签名头 → 401 + UNAUTHORIZED（fail-closed）', async () => {
     const res = await fetch(`${CMS_ORIGIN}${path}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -363,28 +363,58 @@ test.describe('C7 Chatwoot webhook 鉴权', () => {
     expect(body.error.code).toBe('UNAUTHORIZED')
   })
 
-  test('携带错误 Bearer secret → 401（恒时比较，误凭据被拒）', async () => {
+  test('携带错误签名 → 401（误凭据被拒）', async () => {
+    const ts = String(Math.floor(Date.now() / 1000))
     const res = await fetch(`${CMS_ORIGIN}${path}`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: 'Bearer obviously-wrong-secret' },
+      headers: {
+        'content-type': 'application/json',
+        'x-chatwoot-timestamp': ts,
+        'x-chatwoot-signature': `sha256=${'0'.repeat(64)}`,
+      },
       body: '{}',
     })
     expect(res.status).toBe(401)
   })
 
-  test('正确 Bearer 放行进入业务层（以缺 projectId 返回 400 INVALID_PROJECT 断言鉴权已通过）', async () => {
-    test.skip(!secret, '未设置 CHATWOOT_WEBHOOK_SECRET，跳过正确凭据用例')
+  test('过期时间戳（超出波动窗口）→ 401（重放防护）', async () => {
+    test.skip(!secret, '未设置 CHATWOOT_WEBHOOK_SECRET，跳过过期时间戳用例')
+    const staleTs = String(Math.floor(Date.now() / 1000) - 3600)
+    const sig = createChatwootSignature(secret as string, staleTs, '{}')
     const res = await fetch(`${CMS_ORIGIN}${path}`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: `Bearer ${secret}` },
+      headers: {
+        'content-type': 'application/json',
+        'x-chatwoot-timestamp': staleTs,
+        'x-chatwoot-signature': sig,
+      },
       body: '{}',
+    })
+    expect(res.status).toBe(401)
+  })
+
+  test('正确签名放行进入业务层（以缺 projectId 返回 400 INVALID_PROJECT 断言鉴权已通过）', async () => {
+    test.skip(!secret, '未设置 CHATWOOT_WEBHOOK_SECRET，跳过正确凭据用例')
+    const body = '{}'
+    const ts = String(Math.floor(Date.now() / 1000))
+    const sig = createChatwootSignature(secret as string, ts, body)
+    const res = await fetch(`${CMS_ORIGIN}${path}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-chatwoot-timestamp': ts, 'x-chatwoot-signature': sig },
+      body,
     })
     // 鉴权已放行 → 落到业务校验：缺 projectId 返回 400；仍 401 即鉴权逻辑回归。
     expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(body.error.code).toBe('INVALID_PROJECT')
+    const json = await res.json()
+    expect(json.error.code).toBe('INVALID_PROJECT')
   })
 })
+
+/** 构造 Chatwoot 官方签名：sha256=HMAC-SHA256(secret, "{ts}.{body}")。 */
+function createChatwootSignature(secret: string, ts: string, body: string): string {
+  const { createHmac } = require('node:crypto')
+  return `sha256=${createHmac('sha256', secret).update(`${ts}.${body}`).digest('hex')}`
+}
 
 /** 登录并返回 payload-token cookie 值。 */
 async function loginToken(username: string, password: string): Promise<string> {
