@@ -1,0 +1,55 @@
+# 生产部署编排：仅承载 Chatwoot 应用进程，DB 与 Redis 一律使用服务器原生服务（不落容器）。
+# - PostgreSQL：服务器原生 `1Panel-postgresql-ZTyL`，chatwoot_production 库（见 docs/08-deployment.md §1）。
+# - Redis：服务器原生 `1Panel-redis-FiQR`（1panel-network，需密码）。
+# - 两容器加入外部 1panel-network 以解析上述原生服务。
+# 用法：docker compose -f docker-compose.prod.yml up -d
+services:
+  chatwoot-web:
+    image: chatwoot/chatwoot:latest
+    restart: unless-stopped
+    networks:
+      - chatwoot-net
+    entrypoint: /bin/sh -c 'bundle exec rails db:chatwoot_prepare || true && bundle exec rails s -p 3000 -b 0.0.0.0'
+    environment:
+      # 服务器原生 PostgreSQL（chatwoot_production 库），不要指向任何容器。
+      POSTGRES_HOST: ${PROD_PG_HOST}
+      POSTGRES_PORT: '${PROD_PG_PORT:-5432}'
+      POSTGRES_USERNAME: ${PROD_PG_USER}
+      POSTGRES_PASSWORD: ${PROD_PG_PASSWORD}
+      POSTGRES_DATABASE: chatwoot_production
+      REDIS_URL: ${CHATWOOT_REDIS_URL}
+      SECRET_KEY_BASE: ${CHATWOOT_SECRET_KEY_BASE}
+      RAILS_ENV: production
+      NODE_ENV: production
+      RAILS_LOG_TO_STDOUT: 'true'
+      LOG_LEVEL: info
+      FRONTEND_URL: ${CHATWOOT_FRONTEND_URL}
+      DEFAULT_LOCALE: zh_CN
+      ENABLE_ACCOUNT_SIGNUP: 'false'
+    ports:
+      - '127.0.0.1:${CHATWOOT_HTTP_PORT:-3300}:3000'
+
+  chatwoot-sidekiq:
+    image: chatwoot/chatwoot:latest
+    restart: unless-stopped
+    networks:
+      - chatwoot-net
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    environment:
+      POSTGRES_HOST: ${PROD_PG_HOST}
+      POSTGRES_PORT: '${PROD_PG_PORT:-5432}'
+      POSTGRES_USERNAME: ${PROD_PG_USER}
+      POSTGRES_PASSWORD: ${PROD_PG_PASSWORD}
+      POSTGRES_DATABASE: chatwoot_production
+      REDIS_URL: ${CHATWOOT_REDIS_URL}
+      SECRET_KEY_BASE: ${CHATWOOT_SECRET_KEY_BASE}
+      RAILS_ENV: production
+      NODE_ENV: production
+      RAILS_LOG_TO_STDOUT: 'true'
+      LOG_LEVEL: info
+      FRONTEND_URL: ${CHATWOOT_FRONTEND_URL}
+
+networks:
+  chatwoot-net:
+    name: 1panel-network
+    external: true

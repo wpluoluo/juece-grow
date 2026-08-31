@@ -1,0 +1,17 @@
+.git
+.gitignore
+node_modules
+**/node_modules
+**/.next
+**/dist
+**/dist-erp
+**/dist-yunque
+apps/cms/.env
+apps/astro/.env
+backups
+docker-compose*.yml
+infra
+docs
+scripts
+backup-*
+*.log

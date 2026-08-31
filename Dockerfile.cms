@@ -1,0 +1,40 @@
+# juece-grow CMS（Payload 3 + Next 16）生产镜像 —— 本地构建，上传服务器 docker load。
+# 多阶段：builder 内安装 linux 原生依赖（sharp 等）并 next build；runner 只保留运行产物。
+# 需构建参数：PAYLOAD_SECRET（构建期缺省即抛错）。DATABASE_URL 首选运行时容器环境注入。
+
+# ---------- base：node 运行时 + pnpm ----------
+FROM node:20-alpine AS base
+# libc6-compat 可选（sharp/esbuild 有 linuxmusl 预编译产物）；apk 源不可达时跳过不阻塞构建。
+RUN (apk add --no-cache libc6-compat || true) \
+  && corepack enable
+WORKDIR /app
+
+# ---------- deps：按 lock 安装 cms 生产+开发依赖（linux 原生 binary） ----------
+FROM base AS deps
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/cms/package.json apps/cms/package.json
+COPY apps/astro/package.json apps/astro/package.json
+COPY apps/e2e/package.json apps/e2e/package.json
+RUN pnpm install --frozen-lockfile --filter cms
+
+# ---------- builder：拷贝源码 + 构建 ----------
+FROM deps AS builder
+ARG PAYLOAD_SECRET=build-time-secret
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET \
+    NEXT_DISABLE_TURBOPACK=1 \
+    NODE_OPTIONS=--no-deprecation
+COPY apps/cms apps/cms
+RUN pnpm --filter cms build
+
+# ---------- runner：只保留运行产物 ----------
+FROM base AS runner
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    NODE_OPTIONS=--no-deprecation \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/cms ./apps/cms
+WORKDIR /app/apps/cms
+EXPOSE 3000
+CMD ["node_modules/.bin/next", "start"]
