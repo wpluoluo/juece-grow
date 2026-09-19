@@ -42,6 +42,11 @@ const WARM_TARGETS = [
   `${CMS_ORIGIN}/api/v2/health`,
   `${CMS_ORIGIN}/api/v2/content/articles?site=juece`,
   `${CMS_ORIGIN}/api/v2/leads`,
+  // reminders/run 与上一条 leads 一样只导出 POST：GET 命中 405 即完成编译，不写数据、不触发提醒扫描。
+  `${CMS_ORIGIN}/api/v2/reminders/run`,
+  // Payload 集合 CRUD 与自定义端点（/api/leads/assign、/api/sites/clone）共用
+  // src/app/(payload)/api/[...slug]/route.ts 这一个捕获路由；未登录 GET 返回 403，不读不写。
+  `${CMS_ORIGIN}/api/leads`,
 ]
 
 export default async function globalSetup(): Promise<void> {
@@ -66,11 +71,21 @@ function listening(origin: string): Promise<boolean> {
 }
 
 async function warmUpRoutes(): Promise<void> {
-  if (!(await listening(CMS_ORIGIN)) || !(await listening(WEB_ORIGIN))) {
+  // 每个 origin 只探测一次端口，预热只覆盖在监听的那个：
+  // 「CMS 已起、astro 没起」时 CMS 路由照样该被编译，否则白付冷编译（见文件头注释的根因）。
+  const up = new Map<string, boolean>([
+    [CMS_ORIGIN, await listening(CMS_ORIGIN)],
+    [WEB_ORIGIN, await listening(WEB_ORIGIN)],
+  ])
+  if (![...up.values()].some(Boolean)) {
     console.info('[e2e] 未检测到 CMS dev(:3000) 与公开站 dev(:4321)：跳过预热，由用例自身的连接错误指明未启动服务')
     return
   }
   for (const url of WARM_TARGETS) {
+    if (!up.get(new URL(url).origin)) {
+      console.info(`[e2e] 跳过预热 ${url}（所属服务未监听）`)
+      continue
+    }
     const started = Date.now()
     let outcome: string
     try {

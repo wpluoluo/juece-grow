@@ -36,7 +36,15 @@ if (!uri) {
   )
   process.exit(1)
 }
-const DB_NAME = new URL(uri).pathname.replace(/^\//, '') || 'juece_grow'
+const url = new URL(uri)
+const DB_NAME = url.pathname.replace(/^\//, '')
+if (!DB_NAME) {
+  console.error(
+    `[backup] 连接串缺少库名：${url.protocol}//${url.username}@${url.host}。` +
+      '不提供内置默认，以免备份到非预期的库并把文件名与旧备份清理前缀写错。',
+  )
+  process.exit(1)
+}
 
 const stamp = new Date().toISOString().replace(/[:.]/g, '-')
 const file = join(backupsDir, `${DB_NAME}-${stamp}.sql`)
@@ -51,10 +59,9 @@ try {
   })
 } catch (e) {
   // 不回显完整连接串：口令会随 cron 邮件/日志外泄
-  const { protocol, username, hostname, port, pathname } = new URL(uri)
   console.error(
     `[backup] pg_dump 失败。确认连接串正确且本机已安装 pg_dump：` +
-      `${protocol}//${username}@${hostname}:${port}${pathname}（口令已隐去）`,
+      `${url.protocol}//${url.username}@${url.host}${url.pathname}（口令已隐去）`,
   )
   process.exit(1)
 }

@@ -52,14 +52,14 @@
 |---|---|
 | `REQUIREMENTS.md` | 合并重复 `## Backlog`；REQ-0001/0002 连同验收条目移入「已完成」，并按证据类型标注（真跑 / 代码核实 / 沿用 8-26 归档） |
 | `.aiws/requirements/CHANGELOG.md` | 删 `| YYYY-MM-DD |` 模板行 + 追加本轮真值同步记录 |
-| 两份 jsonl 台账 | 问题台账 PROB-001..013（删 `PROB-000` 模板种子行）；需求合同行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At` |
+| 两份 jsonl 台账 | 问题台账 PROB-001..014（删 `PROB-000` 模板种子行）；需求合同行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At` |
 | `AI_WORKSPACE.md` | 补齐本仓可复现的验证入口（build / e2e / gate / 前置），并点名 `PUBLIC_CORS_ORIGINS` |
 | `apps/cms/src/collections/Leads.ts` | 删 `activity` array 字段块；修正指向不存在的 `lib/leadActivity` 的注释 |
 | `apps/cms/src/migrations/` + `payload-types.ts` | 新增 `20260919_093340_drop_lead_activity` 迁移并登记；类型再生成 |
 | `apps/cms/src/lib/envelope.ts` | 删 `DEFAULT_CORS_ORIGINS`；未配置时**首个 `/api/v2/*` 请求**抛错（500，无堆栈外泄），无 dev 分支 |
 | `apps/cms/.env.example`、`scripts/cms-run.sh`、`docs/08-deployment.md` | CORS 配置先行；`cms-run.sh` 用 `${VAR:?}` 把漏配前移到 `docker run` 之前终止；部署文档补生产迁移不自动执行的前置说明 |
 | `apps/cms/scripts/` | `create-e2e-admin.ts`（e2e 管理员账号，幂等 + 原子写凭据文件） |
-| `apps/e2e/` | 新增 reminders / leads-assign / sites-clone 三个 spec 及其 helpers/setup 与 config 接线；`helpers/origins.ts` 收为 dev origin 唯一来源；`setup/global-setup.ts` 增跑测前路由预热（PROB-012）；删 3 个空目录 |
+| `apps/e2e/` | 新增 reminders / leads-assign / sites-clone 三个 spec 及其 helpers/setup 与 config 接线；`helpers/origins.ts` 收为 dev origin 唯一来源；`setup/global-setup.ts` 增跑测前路由预热（PROB-012） |
 | `scripts/backup.mjs` | 删内置 `DEFAULT_URI` 兜底（含明文口令），改为连接串必给其一；失败输出不回显口令（PROB-010） |
 | `.aiws/goals/`、`.aiws/plan/`、`.aiws/changes/<id>/` | 本 change 的 goal / intake / plan / proposal / tasks / review / evidence 产物 |
 

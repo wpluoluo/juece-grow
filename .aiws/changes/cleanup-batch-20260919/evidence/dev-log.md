@@ -768,11 +768,11 @@ grep -c SECRETpw999 backup-failclosed.log → 0
    而 `apps/e2e/playwright.config.ts:7` 的 `timeout: 30_000` 是用例级预算 ⇒ 冷编译吃掉预算，报成超时（该路由现由 §8.3 的 `globalSetup` 预热覆盖）。
    修法：跑测前 (a) 预检 `:3000`/`:4321` 空闲（否则响应请求的是上一轮遗留进程，台账不成立），
    (b) 分别轮询两个 origin 就绪（astro 比 CMS 慢），(c) 预热各路由——`/api/v2/leads` 用 **GET** 触发同一模块编译（期望 405），不写任何数据。
-   结果：加入后连续两轮 `56 passed / 2 skipped`（51.5s、29.3s）。已把三步写进「独立重跑配方」。
+   结果：加入后两轮 `56 passed / 2 skipped`——`e2e-final.log`（19:16）**29.3s**、`e2e-final-2.log`（20:17）**19.1s**。已把三步写进「独立重跑配方」。
    配方里的 curl 行按语法就地校验过（对已关闭端口跑 `-w 'astro=%{http_code}\n'`，输出 `astro=000` 且 `exit=7`）；
    200/405 的语义由台账内等价的 node fetch 记录证明。
 
-### 8.2 台账终态（23 条，全 success）
+### 8.2 台账终态（32 条，全 success）
 
 | 段 | 条数 | 内容 |
 |---|---|---|
@@ -782,8 +782,14 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 | D 补记 | 2 | scratch 清理后的 `--check-scope` 复跑、末轮 e2e 之后的两组库侧探针 |
 | E 冷启动复跑 | 2 | 「只等 TCP listen、不预取路由」的冷启动前置、缓存真空下的全量 e2e（§8.3 证明） |
 | F 收口轮 | 1 | 所有编辑定格后的 `pnpm --filter e2e test` 复跑（§8.4） |
+| G 提交后审查修复轮 | 5 | backup 三条（无 uri / 无库名 / 带库名回显，全部 `exit=1` 为通过）、修复轮全量 e2e、该轮之后的库侧残留探针（§8.5） |
+| H 修复轮门禁 | 3 | 修复轮收口序列（`change sync` + `validate . --stamp` + `--strict` + `tasks validate`）、`aiws verify-bc`、修复轮的 `--strict --check-evidence --check-scope`（`exit=2` 为通过，越界项仍只有 memory-bank 两条）（§8.5） |
 
-负向用例的"通过"= 期望的非零退出码；两条 backup 记录带 `expected_exit_code: 1`，加强门禁两条带 `2`。
+32 行对应 **31 个不同命令**：唯一重复的 `--strict --check-evidence --check-scope` 是我在 scratch 清理前后各跑过一次（#9/#20，两条工件不同），保留是有意的。
+**自指限制（不藏）**：H 段这 3 条要写进台账，写完又把整套门禁复跑了一遍——四条全绿、`verify-bc` `exit=0` 且 `legacy evidence assumed` 计数 `0`、加强门禁 `exit=2` 且越界项不变 ⇒ 追加记录不改变门禁结论。严格讲，台账里最后一条记录必然早于最后一次门禁运行，这是「用台账证明门禁」这件事本身的自指，不是遗漏。工件：`37-gates-postfix.log`、`38-verify-bc-postfix.log` 与追加后的第二遍 `39-gates-after-ledger.log`。
+`started_at/finished_at` 的 C/D/G 段取工件 mtime（补记口径），A/B/E/F 段是脚本当场记的真实起止。
+
+负向用例的"通过"= 期望的非零退出码；三条 backup 记录带 `expected_exit_code: 1`，加强门禁两条带 `2`。
 唯一**本地不可验证**项仍是备份成功路径（无 `pg_dump`），在台账里以缺记体现，并在 §A「—」行与 §F-6 说明——不写成 success。
 
 ### 8.3 §8.1(2) 的产品侧收口：预热从我的 scratch 脚本搬进用例自身（PROB-012，追加）
@@ -809,3 +815,20 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 - **`aiws verify-bc cleanup-batch-20260919`**：`ok: all gates passed (tier=strict)`、`exit=0`，且 `warn: no evidence/verification.jsonl — legacy evidence assumed (not machine-verifiable)` **不再出现**（对该输出 grep 计数 `0`）。这是 §8 整轮的验收目标：验证从"人写的表"变成工具可独立复核。
 
 新发现（PROB-013，登记 OPEN 不随本批改工具）：为核对「手工追加 `verification.jsonl` 到 `Evidence_Path` 会不会被工具覆盖」而**第二次**跑 `aiws change evidence`，结果它每次都用本次 UTC 时间戳新建一套工件（`change-status` / `change-validate-strict` / `aiws-validate-stamp` / `change-sync-stamp` / `collaboration-summary` / `delivery-summary`）并**追加**进 `proposal.md` 与 plan 的 `Evidence_Path`，不去重不回收 ⇒ 字段从 10 项涨到 16 项。处置：删第二次的 6 个盖戳工件，`Evidence_Path` 重写为「人工三件 + 首轮机器六件 + `verification.jsonl`」共 10 项，再用 `check-evidence-path.mjs` 逐项核对在盘存在（两文件各 `条目=10 死链=无`）。操作规则写进 `follow-ups.md`：**收口阶段该命令只跑一次**。
+
+### 8.5 提交后独立审查（针对 `e14c684`）抓到的 6 件事与本轮修复
+
+审查对象是**已提交的树**（记忆条目「提交后默认追一轮独立审查」）。它抓到 6 件事，全部本轮处置：
+
+1. **台账被我自己的脚本写重复（最严重）**：`final-tree-rerun.mjs` 的追加分支把「读到的整表 + 新行」整体 `appendFileSync` 回去 ⇒ 一次运行让 23 行变 47 行，且 `前23行 === 第24–46行` 逐字相等（可复现）。更糟的是这条重复**已经随 `e14c684` 进了 git**。处置：`dedupe-ledger.mjs` 逐行 `JSON.parse`（解析失败即抛，不静默丢行）→ 保序去重 → 写回后断言 `status=success` 且 `exit_code===expected_exit_code`，实测 `before=47 after=24 重复=0 非success或期望码不符=0`；并把 append 逻辑改成**只写新行 + 回读核对增量恰为 +1**。
+2. **两处无工件支撑的数字**：`51.5s` 与「21:38 那一轮」在盘上不存在。已按 mtime/台账时间戳重排为完整时间线（见 `verify-before-complete.md` §A-4）。
+3. **两处范围口径写错**：plan 的 `apps/e2e/` 行残留「删 3 个空目录」（本批在 e2e 里没删过任何目录，已删该句）；proposal「结构」条只写「删 6 个空目录」而没写净效果（`apps/cms/scripts` 被本批的 `create-e2e-admin.ts` 重建 ⇒ 净减 5，已与「目标」条对齐）。
+4. **`scripts/backup.mjs` 的库名内置默认**（原 `:39` `new URL(uri).pathname.replace(...) || 'juece_grow'`）：违反本仓「禁止兜底」红线，真触发时会把备份文件名与旧备份清理前缀一起写错。改为解析一次 URL、库名缺失即 `exit=1`，并去掉 pg_dump 失败分支里的第二次 `new URL(uri)` ⇒ 全文件只剩一条解析路径。三条负向实测：无 uri / 无库名 / 带库名回显（`30/31/32-*.log`，均 `exit=1` 为通过），口令仍不外泄（三份日志 `grep -c SECRETpw999` = `0`）。
+5. **`apps/e2e/helpers/cmsRest.ts` 的两处 `??`**：`adminSession()` 的 `relId(...) ?? 0`（0 会把"登录响应形状不对"伪装成一条难定位的断言失败）→ 改显式抛错；`createRequired()` 的 `res.body.doc ?? res.body`（调用方全是 Payload 原生集合的 POST 创建，响应只有 `{doc}` 一种形状）→ 只认 `doc`。本轮全量复跑 `56 passed (1.3m) / 2 skipped`、`exit=0` 就是"被删的那条分支从未被走过"的证明（死兜底，不是我在换行为）。
+6. **预热的两个真实缺口**：(a) 原实现任一端口没监听就**整体跳过**预热 ⇒「CMS 起了、astro 没起」这种常见情形下 CMS 仍白付冷编译；改为两个 origin 分别判定、只预热在监听那个名下的目标。(b) 清单漏了本批 spec 自己首请求的路由：`/api/v2/reminders/run` 与 Payload 捕获路由 `src/app/(payload)/api/[...slug]/route.ts`（`/api/leads`、`/api/leads/assign`、`/api/sites/clone` 共用它）。补上后实测 `reminders/run -> 405 (318ms)`、`/api/leads -> 403 (6476ms)`（GET 不写数据、不触发扫描），astro `/` 的 **41.9s** 编译费仍落在 `globalSetup` 内。
+7. **修复轮我自己又踩两次同一类坑（写共享文件的脚本没有回读核对）**：跑 `sync-postfix-docs.mjs` 做文档同步时，(a) 幂等判定先问「旧串是否出现 1 次」——但追加型替换的新串把旧串当前缀，于是第二遍运行又追加了一次 ③ 条款；(b) 我手工去重时切片写错（`s.slice(0,i)+s.slice(j+len)`），把**两份**一起删了。两处都由「写回后重新读入并数出现次数」这一步抓出来，最终态 ③ 恰 1 次、`§A-17` 恰 1 次。脚本已改为**先认新串判幂等**，并复跑证明第二遍 `skip=11 / 替换=0`。这与第 1 条同源：往共享文件写东西，必须「只写增量 + 回读核对增量」，不看脚本自述。
+
+**残留（记账，不粉饰）**
+- 证据工件全部在 gitignore 的 `.aiws/tmp/` 下 ⇒ "在盘可核"只对**这台机器**成立；随提交进仓的可核对物是台账 JSONL 本身与代码。
+- `apps/e2e` 没有 `tsconfig.json` 也没有 typecheck 入口 ⇒ 本轮的类型收窄（`doc`/`id`）只由 e2e 运行时证明，**未经编译器证明**。作为观察项记账，不在本批新开门禁。
+- 预热搬走的是"谁付编译费"，不是编译费本身：修复轮全量 1.3m（含 41.9s 冷编译）。

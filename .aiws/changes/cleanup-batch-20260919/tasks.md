@@ -19,9 +19,9 @@
 ## 1. 需求/问题合同（如适用）
 
 - [x] 1.1 需求交付：补齐/更新 `REQUIREMENTS.md` 验收条款（REQ-0001/0002 移入「已完成」并按实测勾选；不新增需求）
-- [x] 1.2 同步 `.aiws/requirements/requirements-issues.jsonl` 与 `.aiws/issues/problem-issues.jsonl`（问题台账现为 PROB-001..013：001..004 与 010、012 `DONE`（010 在本批内修掉并实测）、005..009 与 011、013 `OPEN` 另案处置不随本批静默修；需求合同两行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At`）
+- [x] 1.2 同步 `.aiws/requirements/requirements-issues.jsonl` 与 `.aiws/issues/problem-issues.jsonl`（问题台账现为 PROB-001..014：001..004 与 010、012 `DONE`（010 在本批内修掉并实测）、005..009 与 011、013、014 `OPEN` 另案处置不随本批静默修；需求合同两行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At`）
 - [x] 1.3 记录到 `.aiws/requirements/CHANGELOG.md`（删 `| YYYY-MM-DD |` 模板行 + 追加真值同步记录）
-- [x] 1.4 删除 `.aiws/issues/problem-issues.jsonl` 遗留的模板种子行 `PROB-000`（`示例问题（模板种子）`，`Status=OPEN`）：它会让台账恒报一条不存在的开放问题，与 c9cbc2d 对 `requirements-issues.jsonl` 示例行的清理同源；删后台账全为真实问题（现为 PROB-001..013，本批新增 005..013）
+- [x] 1.4 删除 `.aiws/issues/problem-issues.jsonl` 遗留的模板种子行 `PROB-000`（`示例问题（模板种子）`，`Status=OPEN`）：它会让台账恒报一条不存在的开放问题，与 c9cbc2d 对 `requirements-issues.jsonl` 示例行的清理同源；删后台账全为真实问题（现为 PROB-001..014，本批新增 005..014）
 
 ## 2. 实现
 
@@ -54,7 +54,7 @@
 - [x] 3.4 负向：`PUBLIC_CORS_ORIGINS= pnpm --filter cms dev` 后带任意 Origin 请求 `/api/v2/content/articles?site=juece` → 实测：客户端 `http_status=500` 且响应体为空（不外泄堆栈）；服务端日志 `.aiws/tmp/cleanup-batch-20260919/cors-failfast-dev.log:29` 打印 `Error: PUBLIC_CORS_ORIGINS 未配置或为空：CORS 白名单无内置默认…`。注意语义修正：抛错发生在**首个请求**（`allowedOrigin()` 在 handler 内被调用），不是进程启动即崩；因此部署门禁前移到 `scripts/cms-run.sh` 的 `:?` 检查（2.2）
 - [x] 3.5 收口门禁（所有编辑定格后依次执行）：`aiws change sync cleanup-batch-20260919` → `aiws validate . --stamp` → `aiws change validate cleanup-batch-20260919 --strict` → 实测：`✓ aiws change sync`（`Changed files: REQUIREMENTS.md`）/ `✓ aiws validate: F:\juece-grow` / `ok: change validated` `exit=0`；三份工件见 evidence §A-8。**范围由工具校验过**：另跑 `--strict --check-evidence --check-scope` 后，本批改动文件全部落在 plan 的机读 allow-list 内，唯一被报越界的是 `.aiws/memory-bank/` 两条（你在先产物，本批不 stage）——注意默认 `--strict` 并**不**含 scope/evidence 校验，故旧写法「期望：均通过，无 scope 越界」属空签，已按实测改写（见 evidence §G·H2 与 PROB-011）
 - [x] 3.6 AGENTS.md §9 自检清单逐条过（camelCase 三层映射、无兜底/双写、自研文件 ≤1000 行、SEO 无回归、影响范围已说明、线索仍在自有 Postgres）
-- [x] 3.7 验证本身可机器复核：`evidence/verification.jsonl`（24 条，全 `status=success`；负向用例带 `expected_exit_code`，逐条指向 `.aiws/tmp/cleanup-batch-20260919/` 工件）⇒ `aiws verify-bc` 不再报 `legacy evidence assumed`。含两条专项复跑：① 缓存真空（`rm -rf apps/cms/.next`、脚本层不预取）下 e2e 仍 `56 passed / 2 skipped`，证明 PROB-012 的预热已内置于 `global-setup.ts`；② 所有编辑定格后的最终树复跑（见 evidence §A-16、dev-log §8.3/§8.4）
+- [x] 3.7 验证本身可机器复核：`evidence/verification.jsonl`（32 条，全 `status=success`；负向用例带 `expected_exit_code`，逐条指向 `.aiws/tmp/cleanup-batch-20260919/` 工件）⇒ `aiws verify-bc` 不再报 `legacy evidence assumed`。含三条专项复跑：① 缓存真空（`rm -rf apps/cms/.next`、脚本层不预取）下 e2e 仍 `56 passed / 2 skipped`，证明 PROB-012 的预热已内置于 `global-setup.ts`；② 所有编辑定格后的最终树复跑（见 evidence §A-16、dev-log §8.3/§8.4）；③ 提交后独立审查修复轮（去 `backup.mjs` 库名兜底、去 `cmsRest.ts` 两条 `??` 死兜底、预热按 origin 分流并回补 2 个目标）后全量复跑 `56 passed (1.3m) / 2 skipped`（见 evidence §A-17、dev-log §8.5）
 
 ## 4. 交付与归档
 
@@ -66,4 +66,4 @@
 ## 5. 移交（不计入本批完成判定的开放项）
 
 - [x] 5.1 生产侧发布前置（迁移在生产不会自动生效、执行前行数与账本核实、`PUBLIC_CORS_ORIGINS` 注入、部署后回归、运维核对清单）已移交 `evidence/release-prerequisites.md`。本批全程只连本地容器库 `127.0.0.1:5434`，未触碰线上资源。
-- [x] 5.2 本批新发现且**不随批静默修**的 9 项（PROB-005..013）与本地迁移账本 R5 事实已移交 `evidence/follow-ups.md`；台账真值在 `.aiws/issues/problem-issues.jsonl`（PROB-005..009、011、013 = OPEN；PROB-010、012 在本批内修掉并实测）。
+- [x] 5.2 本批新发现且**不随批静默修**的 10 项（PROB-005..014）与本地迁移账本 R5 事实已移交 `evidence/follow-ups.md`；台账真值在 `.aiws/issues/problem-issues.jsonl`（PROB-005..009、011、013、014 = OPEN；PROB-010、012 在本批内修掉并实测）。

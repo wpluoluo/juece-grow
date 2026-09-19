@@ -1,6 +1,6 @@
 # 本批发现但未随批修的问题 · cleanup-batch-20260919
 
-> 真值：`.aiws/issues/problem-issues.jsonl`（PROB-005..013 逐条含定位与证据）。本文件只补「为什么不在本批修」与「修的时候要注意什么」，从 `tasks.md §6` 移交至此。
+> 真值：`.aiws/issues/problem-issues.jsonl`（PROB-005..014 逐条含定位与证据）。本文件只补「为什么不在本批修」与「修的时候要注意什么」，从 `tasks.md §6` 移交至此。
 > 日期：2026-09-19
 
 ## 一、为什么不随本批静默修
@@ -72,6 +72,14 @@
 处置（已完成）：删第二次运行的 6 个盖戳工件，`Evidence_Path` 重写为「人工三件 + 首轮机器六件 + `verification.jsonl`」共 10 项，并用 `.aiws/tmp/cleanup-batch-20260919/check-evidence-path.mjs` 逐项核对在盘存在（死链 `=0`，见 dev-log §8.4）。
 操作规则（给下一轮）：**收口阶段该命令只跑一次**，跑完不再复跑；若必须复跑，先删上一轮盖戳工件或立即校对该字段。
 正解在上游：追加前按 basename 去重，或整体重写该字段而非增量 append。与 PROB-011 同属 aiws 工具侧，不在本仓代码范围，故不随本批"顺手修"。
+
+### PROB-014（P3, OPEN）`apps/e2e` 无 tsconfig / typecheck 入口
+
+`apps/e2e/package.json` 只有 `test: playwright test`，包内没有 `tsconfig.json`。Playwright 用 esbuild 转译 TS，**不做类型检查** ⇒ helper 与 spec 的类型错误（返回值形状写错、字段名拼错后取到 `undefined`）只在运行时以断言失败或假绿表现。
+
+触发点：提交后独立审查轮清掉 `cmsRest.ts` 的两条死兜底（`relId(...) ?? 0`、`res.body.doc ?? res.body`）时做的类型收窄，只由全量 e2e 绿灯证明，**未经编译器证明**（同 §F-8）。
+
+正解（独立 change）：给 `apps/e2e` 建 tsconfig（`module: ESNext` + `types: ["node"]`），把 `pnpm --filter e2e exec tsc --noEmit` 并入 `AI_WORKSPACE.md` 的 `gate_cmd`。不在本批做的原因：会新增 devDependency 与第二条验证入口，属"新增能力"而非"清理"，且要与本批既定的零参数验收口径对齐。
 
 ## 三、库侧遗留事实（R5）
 

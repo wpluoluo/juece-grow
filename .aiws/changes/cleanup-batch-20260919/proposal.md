@@ -10,7 +10,7 @@
 - 消除 `REQUIREMENTS.md` 与执行合同的漂移：REQ-0001/REQ-0002 已 `Impl_Status=DONE` 却仍留在重复的 `## Backlog` 段、验收框全未勾、`已完成` 区仅有注释示例。
 - 删除 Payload 死模型 `Leads.activity` 及其 `leads_activity` 表（AGENTS.md §4 禁止双写）。
 - 收敛 `envelope.ts` 的 CORS 内置默认白名单为 fail-fast（AGENTS.md §4 禁止兜底），并做到「配置先行」，使漏配在部署阶段显式失败而非静默损坏线上留资。
-- 清理 6 个空目录与指向不存在的 `lib/leadActivity` 的失效注释。
+- 清理 6 个空目录（其中 `apps/cms/scripts` 随后为本批的 `create-e2e-admin.ts` 重建 ⇒ 净减 5 个目录）与指向不存在的 `lib/leadActivity` 的失效注释。
 - 补齐 e2e 对提醒扫描、`/api/leads/assign`、`/api/sites/clone` 的覆盖（当前零覆盖）。
 
 **非目标：**
@@ -49,7 +49,7 @@
 - 真值：`REQUIREMENTS.md` 收敛为单一 Backlog 区，REQ-0001/0002 连同已实测的验收条目移入「已完成」；`CHANGELOG.md` 删模板行并追加本轮记录；`aiws change sync` 刷新基线。
 - **BREAKING（部署契约）**：`PUBLIC_CORS_ORIGINS` 从「可选、缺省走内置默认」改为「必需、缺失即请求期抛错（500），且部署脚本先行终止」。同时以 `.env.example` / `scripts/cms-run.sh`（`${VAR:?}`）/ `docs/08-deployment.md` 三处配置先行，使漏配表现为部署脚本终止而非线上静默故障。
 - **BREAKING（schema）**：删 `Leads.activity` 字段并新增迁移 `20260919_093340_drop_lead_activity`：up 为 `DROP TABLE "leads_activity" CASCADE; DROP TYPE "public"."enum_leads_activity_type";`（**无 `IF EXISTS` ⇒ 非幂等，重复执行会报错**，重跑前须先核表是否还在）；`payload-types.ts` 再生成。经查适配器源码（`@payloadcms/db-postgres/dist/connect.js:116`）：生产仅在传 `prodMigrations` 时才启动 migrate，而 `payload.config.ts` 未传 ⇒ **该迁移不会在下次部署自动执行**，线上清理需维护窗口显式跑 `payload migrate`，发布前置写入证据。
-- 结构：删 6 个空目录；`Leads.ts` 失效注释改指实际实现（`afterChange` 钩子内联）。
+- 结构：删 6 个空目录（`apps/cms/scripts` 随后被本批的 `create-e2e-admin.ts` 重建 ⇒ 净减 5 个）；`Leads.ts` 失效注释改指实际实现（`afterChange` 钩子内联）。
 - 测试：新增 `reminders.spec.ts`、`leads-assign.spec.ts`、`sites-clone.spec.ts`；造数以 admin 会话直调 Payload REST 并自清理，不新增产品代码。
 - 测试自足性（PROB-012，验证过程中实测发现并在本批内修掉）：dev origin 收敛到 `apps/e2e/helpers/origins.ts` 单一来源（HEAD 4 处 + 本批 `cmsRest.ts` 1 处共 5 处字面量 → 2 行），并在 `setup/global-setup.ts` 注入凭据前用 TCP 探测 CMS/Astro 端口（冷编译会让 HTTP 探活自身超时），在监听则逐个 GET 预编译路由。根因：Next 16 dev（Turbopack）按首次请求编译路由，单条冷编译实测 41.7–48.3s，大于 Playwright 用例级 `timeout: 30_000` ⇒ **功能正常也会首跑假红**。不引入 playwright `webServer`（会接管服务生命周期，与本批「服务由外部启动」约定冲突）。
 
@@ -135,7 +135,7 @@
 - `REQUIREMENTS.md`：需要——REQ-0001/0002 移入「已完成」并按本轮实测勾选验收条目；不新增需求。
 - `.aiws/requirements/CHANGELOG.md`：需要——删模板行 + 追加真值同步记录。
 - `.aiws/requirements/requirements-issues.jsonl`：已回填——两行 `Notes` 追加 2026-09-19 复验指针并刷新 `Updated_At`；`REQ-0001.Evidence` 由未归档的 `.aiws/changes/phase1-skeleton/…`（死链）改指 `archive/2026-08-26-phase1-skeleton/…`；两行 `Tests` 里不可跑的 `pnpm --filter @juece/e2e exec playwright test` 改为 `pnpm --filter e2e test`；Spec/Impl 状态不变。
-- `.aiws/issues/problem-issues.jsonl`：已回填——PROB-001..004 置 DONE（附实测说明）；删模板种子行 PROB-000；双审查新增 PROB-005..009 为 OPEN（另案处置）；PROB-010（`scripts/backup.mjs` 内置默认连接串兜底 + 失败回显口令）与 PROB-012（e2e 冷缓存首跑假红：路由冷编译吃掉用例级超时预算）在本批内修掉并实测；PROB-011（`aiws --check-scope` 的四处静默失效点）与 PROB-013（`aiws change evidence` 非幂等：重复运行把新盖戳工件累加进 `Evidence_Path`）为工具侧缺陷，本批只记录正确用法与复现口径，不改工具。
+- `.aiws/issues/problem-issues.jsonl`：已回填——PROB-001..004 置 DONE（附实测说明）；删模板种子行 PROB-000；双审查新增 PROB-005..009 为 OPEN（另案处置）；PROB-010（`scripts/backup.mjs` 内置默认连接串兜底 + 失败回显口令）与 PROB-012（e2e 冷缓存首跑假红：路由冷编译吃掉用例级超时预算）在本批内修掉并实测；PROB-011（`aiws --check-scope` 的四处静默失效点）与 PROB-013（`aiws change evidence` 非幂等：重复运行把新盖戳工件累加进 `Evidence_Path`）为工具侧缺陷，本批只记录正确用法与复现口径，不改工具；提交后独立审查轮再新增 PROB-014（`apps/e2e` 无 `tsconfig.json` 与 typecheck 入口 ⇒ 本轮 `cmsRest.ts` 的类型收窄只由运行时绿灯证明，未经编译器证明）为 OPEN 另案。
 - 证据落盘（双层）：
   - 持久：`.aiws/changes/cleanup-batch-20260919/evidence/verify-before-complete.md`、`review/quality-review.md`、`review/spec-review.md`
   - 临时：`.aiws/tmp/cleanup-batch-20260919/`（build/e2e 日志、负向启动报错文本、psql 计数输出）

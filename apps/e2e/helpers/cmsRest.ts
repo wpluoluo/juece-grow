@@ -78,8 +78,9 @@ export async function adminSession(): Promise<{ token: string; id: number }> {
   const res = await login(creds.username, creds.password)
   if (res.status !== 200) throw new Error(`管理员登录失败 ${res.status}：${JSON.stringify(res.body).slice(0, 200)}`)
   const token = String(res.body.token ?? '')
-  const id = relId(res.body.user as { id?: number } | undefined) ?? 0
+  const id = relId(res.body.user as { id?: number } | undefined)
   if (!token) throw new Error('登录响应缺少 token')
+  if (id === null) throw new Error(`登录响应缺少 user.id：${JSON.stringify(res.body).slice(0, 200)}`)
   return { token, id }
 }
 
@@ -133,8 +134,9 @@ export async function listDocs(
 export async function createRequired(token: string, path: string, data: Record<string, unknown>): Promise<number> {
   const res = await createDoc(token, path, data)
   expect([200, 201], `创建 ${path} 失败：${JSON.stringify(res.body).slice(0, 300)}`).toContain(res.status)
-  const doc = (res.body.doc as { id?: unknown } | undefined) ?? res.body
-  return Number((doc as { id: unknown }).id)
+  const doc = res.body.doc as { id: unknown } | undefined
+  if (!doc) throw new Error(`创建 ${path} 响应缺少 doc：${JSON.stringify(res.body).slice(0, 300)}`)
+  return Number(doc.id)
 }
 
 /** 删除文档（404 视为已清理，其余状态断言成功）。 */
