@@ -7,6 +7,8 @@ set -euo pipefail
 : "${PAYLOAD_SECRET:?请先 export PAYLOAD_SECRET}"
 : "${NEXT_PUBLIC_SERVER_URL:=https://juece.cloud}"
 : "${CHATWOOT_WEBHOOK_SECRET:?请先 export CHATWOOT_WEBHOOK_SECRET}"
+# CORS 白名单无内置默认：未注入即在 docker run 之前终止（进程内是首个 /api/v2/* 请求抛错，不是启动期）。
+: "${PUBLIC_CORS_ORIGINS:?请先 export PUBLIC_CORS_ORIGINS（逗号分隔的公开站 origin，可直接复制：https://juece.cloud,https://erp.juece.cloud,https://yunque.juece.cloud）}"
 
 # 写入生产 env（不进 git，仅服务器本机）
 cat > /opt/juece-grow/cms.env <<EOF
@@ -14,6 +16,7 @@ DATABASE_URI=$PROD_DATABASE_URI
 PAYLOAD_SECRET=$PAYLOAD_SECRET
 NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 CHATWOOT_WEBHOOK_SECRET=$CHATWOOT_WEBHOOK_SECRET
+PUBLIC_CORS_ORIGINS=$PUBLIC_CORS_ORIGINS
 EOF
 chmod 600 /opt/juece-grow/cms.env
 

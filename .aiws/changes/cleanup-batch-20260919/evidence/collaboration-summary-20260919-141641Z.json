@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-09-19T14:16:42Z",
+  "ws_root": "F:/juece-grow",
+  "change_id": "cleanup-batch-20260919",
+  "counts": {
+    "analysis": 0,
+    "patches": 0,
+    "review": 2,
+    "evidence": 9,
+    "total": 11
+  },
+  "dirs": {
+    "analysis": {
+      "label": "analysis",
+      "dir": ".aiws/changes/cleanup-batch-20260919/analysis",
+      "exists": true,
+      "count": 0,
+      "files": [],
+      "truncated": false
+    },
+    "patches": {
+      "label": "patches",
+      "dir": ".aiws/changes/cleanup-batch-20260919/patches",
+      "exists": true,
+      "count": 0,
+      "files": [],
+      "truncated": false
+    },
+    "review": {
+      "label": "review",
+      "dir": ".aiws/changes/cleanup-batch-20260919/review",
+      "exists": true,
+      "count": 2,
+      "files": [
+        ".aiws/changes/cleanup-batch-20260919/review/quality-review.md",
+        ".aiws/changes/cleanup-batch-20260919/review/spec-review.md"
+      ],
+      "truncated": false
+    },
+    "evidence": {
+      "label": "evidence",
+      "dir": ".aiws/changes/cleanup-batch-20260919/evidence",
+      "exists": true,
+      "count": 9,
+      "files": [
+        ".aiws/changes/cleanup-batch-20260919/evidence/aiws-validate-stamp-20260919-141641Z.json",
+        ".aiws/changes/cleanup-batch-20260919/evidence/change-status-20260919-141641Z.json",
+        ".aiws/changes/cleanup-batch-20260919/evidence/change-sync-stamp-20260919-141641Z.json",
+        ".aiws/changes/cleanup-batch-20260919/evidence/change-validate-strict-20260919-141641Z.json",
+        ".aiws/changes/cleanup-batch-20260919/evidence/dev-log.md",
+        ".aiws/changes/cleanup-batch-20260919/evidence/follow-ups.md",
+        ".aiws/changes/cleanup-batch-20260919/evidence/release-prerequisites.md",
+        ".aiws/changes/cleanup-batch-20260919/evidence/verification.jsonl"
+      ],
+      "truncated": true
+    }
+  },
+  "note": "aiws collaboration summary; patch files are drafts and must be reviewed before apply."
+}

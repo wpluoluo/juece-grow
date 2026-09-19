@@ -98,6 +98,8 @@ bash deploy-chatwoot.sh
 
 * CMS 主库：`DATABASE_URI=postgres://juece:<强密码>@127.0.0.1:5432/juece_grow`（指向**服务器原生 Postgres**，非容器）。本地开发仍可用容器端口 `5434`。另需 `PAYLOAD_SECRET`、`CHATWOOT_WEBHOOK_SECRET`（与 Chatwoot inbox webhook 签名校验一致：服务端用它对 `X-Chatwoot-Timestamp + body` 做 HMAC-SHA256，比对 `X-Chatwoot-Signature`）。
 
+* CMS 公开 API CORS 白名单：`PUBLIC_CORS_ORIGINS=https://juece.cloud,https://erp.juece.cloud,https://yunque.juece.cloud`。**无内置默认**，缺失或 trim 后为空集合即 fail-fast：容器入口 `scripts/cms-run.sh` 以 `${PUBLIC_CORS_ORIGINS:?}` 在启动前直接终止；进程内则在**首个 `/api/v2/*` 请求**即抛错（错误文本点名 `PUBLIC_CORS_ORIGINS`，`/api/v2/health` 恒返回 500，健康检查不可能转绿），绝不回退成兜底白名单。三个公开站 origin 必须以逗号分隔注入。仅白名单内的请求 Origin 才会得到 `Access-Control-Allow-Origin`，非白名单 Origin 不出 CORS 头。
+
 * 公开站：`PUBLIC_CMS_ORIGIN`（CMS 公网地址）、`PUBLIC_SITE_ORIGIN`（站点公网地址）、`PUBLIC_CHATWOOT_URL` / `PUBLIC_CHATWOOT_WEBSITE_TOKEN`（配了才启用在线客服）。
 
 * 生产 Chatwoot（`docker-compose.prod.yml`）：`PROD_PG_HOST` / `PROD_PG_PORT` / `PROD_PG_USER` / `PROD_PG_PASSWORD`（服务器原生 Postgres）、`CHATWOOT_SECRET_KEY_BASE`、`CHATWOOT_FRONTEND_URL`、`CHATWOOT_HTTP_PORT`。
@@ -143,6 +145,7 @@ psql -h 127.0.0.1 -U juece -d juece_grow < backups/{文件}.sql
 1. `pnpm build` 全量通过。
 2. 备份数据库。
 3. 部署 CMS 产物与 Astro `dist/`。
-4. 迁移（若有）+ 启动。
+4. 迁移（若有）+ 启动。**注意：本仓 `payload.config.ts` 未给 postgresAdapter 传 `prodMigrations`，生产（`NODE_ENV=production`）不会自动跑迁移**（`@payloadcms/db-postgres/dist/connect.js:116`）。
+   待执行迁移须在维护窗口显式跑 `payload migrate`，且该命令会连带跑完所有待执行迁移：先按 §6 备份、核实 `leads_activity` 行数为 0 与 `payload_migrations` 记账，再执行、再冒烟。
 5. 冒烟：admin 登录、公开站首页、表单留资、Chatwoot 客服控件。
 

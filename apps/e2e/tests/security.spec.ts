@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { CMS_ORIGIN } from '../helpers/origins'
 
 /**
  * 规范化安全测试体系 · 跨端访问安全
@@ -12,8 +13,6 @@ import { test, expect } from '@playwright/test'
  *
  * 前置：cms @ 3000 已启动（`pnpm --filter cms dev`）。
  */
-
-const CMS_ORIGIN = 'http://127.0.0.1:3000'
 
 /** 内容端点暴露给公开站的「白名单站点」。 */
 const KNOWN_SITES = ['juece', 'erp', 'yunque'] as const

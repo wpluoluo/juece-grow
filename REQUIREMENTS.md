@@ -26,34 +26,16 @@
 
 ## Backlog
 
-### REQ-0002：线索跟进提醒自动化（到期 + 首次跟进 SLA，核心）
+（当前无待办需求）
 
-**背景 / 问题**
-- 现有 `nextFollowUpAt` 字段已存在但无机制消费，跟进全凭人工记忆，逾期/漏跟无提醒。
-- new 线索长时间无人首响、长期停在未跟进状态，无信号让跟进人感知。
+> 工程治理项（死模型清理、兜底收敛、e2e 缺口、部署契约变更等）不作为需求条目登记，统一走 `.aiws/issues/problem-issues.jsonl`（PROB-001..011），按 `AI_PROJECT.md` §3.1「问题修复」路径归因。
 
-**目标**
-- 支持在后台配置提醒规则（到期提醒 / 首次跟进 SLA），由 node-cron 定时扫描命中线索。
-- 命中后写 `reminder-notices`（后台"待跟进"清单）+ 追加 `LeadActivities`（`reminder` 事件），看板展示待办提醒点。
-- 承诺：同一线索同一规则在未处理前不重复提醒；提醒不改变线索本身状态。
+## 已完成
 
-**非目标**
-- 外部渠道触达（企业微信/钉钉/邮件 webhook 推送）—— 后续独立 change 接入。
-- 自动改线索状态 / 自动分配 / 自动外呼 —— 仅提醒，不代执行动作。
-- 提醒规则的第三方订阅与复杂条件编排（如叠加来源+多标签）—— 先支持项目范围+适用阶段。
+### ✓ REQ-0001：Phase1 工程骨架（单站点可发文、表单线索入池）
 
-**验收标准**
-- [ ] 后台可配置规则：`reminder-rules` 集合含 type(due/sla)、适用阶段、sla 超时阈值(小时)、归属项目(空=全局)、启停，且字段均有中英双语 label
-- [ ] 到期提醒：`nextFollowUpAt` 已过且阶段为进行中(new/contacted)的线索命中，未处理前不重复提醒
-- [ ] 首次跟进 SLA：状态仍为 `new` 且创建超过阈值小时未跟进(pre)线索命中
-- [ ] 命中后生成 `reminder-notices`（线索+类型+接收人+状态 open/done）并追加 `LeadActivities` 事件 `reminder`
-- [ ] 提供 `/api/v2/reminders/run`(POST，管理员) 手动触发扫描，返回 `{ success, data:{ created } }`
-- [ ] 看板展示待办提醒数量/清单；后台 `reminder-notices` 集合即"待跟进"列表
-- [ ] CMS 生产构建通过 TS 校验；调度在构建期不启动定时器
-
-## Backlog
-
-### REQ-0001：Phase1 工程骨架（单站点可发文、表单线索入池）
+- 状态：已完成（change 归档于 2026-08-26，见 `.aiws/changes/archive/2026-08-26-phase1-skeleton/`）
+- 验收：全部通过
 
 **背景 / 问题**
 - 仓库前身为纯文档仓库，无任何可运行工程。无法发文章、无法收表单线索，多产品增长平台无法落地。
@@ -71,20 +53,41 @@
 - 任何外部 CMS / 内容 SaaS
 
 **验收标准**
-- [ ] `docker compose up -d postgres` 起容器，cms 与 astro 在 host 运行，`DATABASE_URI=localhost:5434` 连通 Payload 建表
-- [ ] `GET /api/v2/health` 返回 `{ success: true, data: { status: 'ok' } }`
-- [ ] `POST /api/v2/leads`，缺 phone 且缺 wechat 时返回校验错误信封（`error.code=VALIDATION`）；非法/空 projectId 返回 `MISSING_PROJECT`；非法 JSON 返回 `INVALID_JSON`；DB 异常返回 `LEAD_CREATE_FAILED`(500)
-- [ ] 合法提交（phone 或 wechat 至少填一）后线索落库 `leads` 表，返回 `{ success: true, data: { id } }`
-- [ ] 公开站首页渲染 Payload 已发布文章列表，并展示留资表单；`/articles/[slug]` 渲染已发布文章
-- [ ] Playwright 烟测覆盖：健康信封、首页渲染、表单→Lead 落库、API 直投、非法请求边界、OPTIONS/CORS
+- [x] `docker compose up -d postgres` 起容器，cms 与 astro 在 host 运行，`DATABASE_URI=localhost:5434` 连通 Payload 建表
+- [x] `GET /api/v2/health` 返回 `{ success: true, data: { status: 'ok' } }`
+- [x] `POST /api/v2/leads`，缺 phone 且缺 wechat 时返回校验错误信封（`error.code=VALIDATION`）；非法/空 projectId 返回 `MISSING_PROJECT`；非法 JSON 返回 `INVALID_JSON`；DB 异常返回 `LEAD_CREATE_FAILED`(500)（其中 `LEAD_CREATE_FAILED`(500) 为代码核实：`apps/cms/src/app/api/v2/leads/route.ts:123`；本轮 e2e 未构造 DB 异常）
+- [x] 合法提交（phone 或 wechat 至少填一）后线索落库 `leads` 表，返回 `{ success: true, data: { id } }`
+- [x] 公开站首页渲染 Payload 已发布文章列表，并展示留资表单；`/articles/[slug]` 渲染已发布文章（`/articles/[slug]` 详情页本轮 e2e 仅有 REST 详情断言，页面渲染沿用 8-26 归档证据）
+- [x] Playwright 烟测覆盖：健康信封、首页渲染、表单→Lead 落库、API 直投、非法请求边界、OPTIONS/CORS
 
-## 已完成
+复验证据：见 `.aiws/changes/cleanup-batch-20260919/evidence/verify-before-complete.md`（本批次 2026-09-19 重跑 `pnpm --filter cms build` + Playwright e2e；此处仅声明证据路径，结论由主 session 在 `aiws verify-bc` 时收口，不代表复验已完成）
 
-<!-- 已完成需求归档区。示例：
+### ✓ REQ-0002：线索跟进提醒自动化（到期 + 首次跟进 SLA，核心）
 
-### ✓ PROJ-000：首个需求
-
-- 状态：已完成
+- 状态：已完成（change 归档于 2026-08-26，见 `.aiws/changes/archive/2026-08-26-lead-followup-reminders/`）
 - 验收：全部通过
 
--->
+**背景 / 问题**
+- 现有 `nextFollowUpAt` 字段已存在但无机制消费，跟进全凭人工记忆，逾期/漏跟无提醒。
+- new 线索长时间无人首响、长期停在未跟进状态，无信号让跟进人感知。
+
+**目标**
+- 支持在后台配置提醒规则（到期提醒 / 首次跟进 SLA），由 node-cron 定时扫描命中线索。
+- 命中后写 `reminder-notices`（后台"待跟进"清单）+ 追加 `LeadActivities`（`reminder` 事件），看板展示待办提醒点。
+- 承诺：同一线索同一规则在未处理前不重复提醒；提醒不改变线索本身状态。
+
+**非目标**
+- 外部渠道触达（企业微信/钉钉/邮件 webhook 推送）—— 后续独立 change 接入。
+- 自动改线索状态 / 自动分配 / 自动外呼 —— 仅提醒，不代执行动作。
+- 提醒规则的第三方订阅与复杂条件编排（如叠加来源+多标签）—— 先支持项目范围+适用阶段。
+
+**验收标准**
+- [x] 后台可配置规则：`reminder-rules` 集合含 type(due/sla)、适用阶段、sla 超时阈值(小时)、归属项目(空=全局)、启停，且字段均有中英双语 label
+- [x] 到期提醒：`nextFollowUpAt` 已过且阶段为进行中(new/contacted)的线索命中，未处理前不重复提醒
+- [x] 首次跟进 SLA：状态仍为 `new` 且创建超过阈值小时未跟进(pre)线索命中
+- [x] 命中后生成 `reminder-notices`（线索+类型+接收人+状态 open/done）并追加 `LeadActivities` 事件 `reminder`
+- [x] 提供 `/api/v2/reminders/run`(POST，管理员) 手动触发扫描，返回 `{ success, data:{ created } }`
+- [x] 看板展示待办提醒数量/清单；后台 `reminder-notices` 集合即"待跟进"列表（代码核实：`apps/cms/components/Dashboard.tsx:63,209` 实做 reminder-notices 计数；后台列表由本轮 reminders.spec 经 REST 断言）
+- [x] CMS 生产构建通过 TS 校验；调度在构建期不启动定时器
+
+复验证据：见 `.aiws/changes/cleanup-batch-20260919/evidence/verify-before-complete.md`（本批次 2026-09-19 重跑 `pnpm --filter cms build` + Playwright e2e；此处仅声明证据路径，结论由主 session 在 `aiws verify-bc` 时收口，不代表复验已完成）

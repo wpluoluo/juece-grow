@@ -1,0 +1,41 @@
+{
+  "timestamp": 1789827363,
+  "ws_root": "F:/juece-grow",
+  "change_id": "cleanup-batch-20260919",
+  "change_dir": "F:\\juece-grow\\.aiws\\changes\\cleanup-batch-20260919",
+  "synced_at": "2026-09-19T14:16:03Z",
+  "previous_baseline": {
+    "label": "last sync",
+    "at": "2026-09-19T13:19:22Z",
+    "truth_files": {
+      "AI_PROJECT.md": {
+        "mtime": 1789819241,
+        "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+      },
+      "AI_WORKSPACE.md": {
+        "mtime": 1789821743,
+        "sha256": "6cf3bd87186910d7b52ba9b1c02699f9e8e7fa452c83dfcec9c74e5c15efbea2"
+      },
+      "REQUIREMENTS.md": {
+        "mtime": 1789823578,
+        "sha256": "5d3db0a604dba09ffa3df71a84982391b73a65e0eb5d681e7e8c03cb7d7c9c46"
+      }
+    }
+  },
+  "new_baseline": {
+    "AI_PROJECT.md": {
+      "mtime": 1789819241,
+      "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1789821743,
+      "sha256": "6cf3bd87186910d7b52ba9b1c02699f9e8e7fa452c83dfcec9c74e5c15efbea2"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1789823578,
+      "sha256": "5d3db0a604dba09ffa3df71a84982391b73a65e0eb5d681e7e8c03cb7d7c9c46"
+    }
+  },
+  "changed": [],
+  "note": "aiws change sync stamp; does not contain secrets."
+}

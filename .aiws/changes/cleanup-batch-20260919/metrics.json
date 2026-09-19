@@ -1,0 +1,588 @@
+{
+  "version": 1,
+  "change_id": "cleanup-batch-20260919",
+  "events": [
+    {
+      "type": "change_new",
+      "timestamp": "2026-09-19T09:11:18Z",
+      "payload": {
+        "title": "清理批次：真值漂移+死模型+兜底+空目录+e2e缺口",
+        "created_at": "2026-09-19T09:11:18Z",
+        "base_branch": "main",
+        "templates": "F:/juece-grow/.aiws/changes/templates",
+        "no_design": false
+      }
+    },
+    {
+      "type": "change_start",
+      "timestamp": "2026-09-19T09:11:18Z",
+      "payload": {
+        "mode": "switch",
+        "branch": "change/cleanup-batch-20260919",
+        "from_branch": "main",
+        "current_branch": "change/cleanup-batch-20260919",
+        "hooks": false
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:13:56Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 6,
+        "warnings": 1,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:15:41Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 4,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:16:30Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 3,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:16:47Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:20:36Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:20:44Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T09:49:35Z",
+      "payload": {
+        "synced_at": "2026-09-19T09:49:35Z",
+        "baseline_from": "creation",
+        "baseline_at": "2026-09-19T09:11:18Z",
+        "changed_files": [
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T09:49:36Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T11:19:39Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T11:58:28Z",
+      "payload": {
+        "synced_at": "2026-09-19T11:58:28Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T09:49:35Z",
+        "changed_files": [
+          "AI_PROJECT.md",
+          "AI_WORKSPACE.md",
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T12:00:14Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T12:01:01Z",
+      "payload": {
+        "synced_at": "2026-09-19T12:01:01Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T11:58:28Z",
+        "changed_files": [
+          "AI_PROJECT.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T12:01:13Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T12:11:27Z",
+      "payload": {
+        "synced_at": "2026-09-19T12:11:27Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T12:01:01Z",
+        "changed_files": [
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T12:11:33Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T12:48:05Z",
+      "payload": {
+        "synced_at": "2026-09-19T12:48:05Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T12:11:27Z",
+        "changed_files": [
+          "AI_WORKSPACE.md",
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T12:48:07Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T13:03:05Z",
+      "payload": {
+        "synced_at": "2026-09-19T13:03:05Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T12:48:05Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:03:25Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:03:31Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:10:18Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 2,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T13:15:07Z",
+      "payload": {
+        "synced_at": "2026-09-19T13:15:07Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T13:03:05Z",
+        "changed_files": [
+          "REQUIREMENTS.md"
+        ]
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:15:15Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:15:21Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T13:19:22Z",
+      "payload": {
+        "synced_at": "2026-09-19T13:19:22Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T13:15:07Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:19:28Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:28:22Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:28:24Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:36:52Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:36:54Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:41:27Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:41:28Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T13:45:27Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-19T14:16:03Z",
+      "payload": {
+        "synced_at": "2026-09-19T14:16:03Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T13:19:22Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T14:16:06Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T14:16:16Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T14:16:31Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "evidence",
+      "timestamp": "2026-09-19T14:16:42Z",
+      "payload": {
+        "generated_at": "2026-09-19T14:16:42Z",
+        "created": 8,
+        "strict_validate": "ok",
+        "allow_fail": false
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T14:16:44Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "evidence",
+      "timestamp": "2026-09-19T14:17:44Z",
+      "payload": {
+        "generated_at": "2026-09-19T14:17:44Z",
+        "created": 8,
+        "strict_validate": "ok",
+        "allow_fail": false
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T14:25:47Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-19T14:25:52Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    }
+  ],
+  "updated_at": "2026-09-19T14:25:52Z"
+}

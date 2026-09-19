@@ -1,0 +1,13 @@
+{
+  "timestamp": 1789827363,
+  "ws_root": "F:\\juece-grow",
+  "template_id": "workspace",
+  "aiws_version": "0.0.96",
+  "spec_version": "0.0.96",
+  "started_at": "2026-09-19T14:16:03Z",
+  "finished_at": "2026-09-19T14:16:05Z",
+  "status": "ok",
+  "exit_code": 0,
+  "error": null,
+  "note": "aiws validate stamp; does not include full stdout/stderr; do not put secrets in validation output."
+}

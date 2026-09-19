@@ -1,0 +1,145 @@
+{
+  "ws_change_version": 2,
+  "id": "cleanup-batch-20260919",
+  "title": "清理批次：真值漂移+死模型+兜底+空目录+e2e缺口",
+  "phase": "in-progress",
+  "created_at": "2026-09-19T09:11:18Z",
+  "base_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1788150692,
+      "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1787673432,
+      "sha256": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1788150692,
+      "sha256": "68d230586ffe2b259b36d5e6b51e70ac2e4bde02c7c70558a1557a3cc5df8f6e"
+    }
+  },
+  "base_branch": "main",
+  "base_branch_set_at": "2026-09-19T09:11:18Z",
+  "synced_at": "2026-09-19T14:16:03Z",
+  "synced_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1789819241,
+      "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1789821743,
+      "sha256": "6cf3bd87186910d7b52ba9b1c02699f9e8e7fa452c83dfcec9c74e5c15efbea2"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1789823578,
+      "sha256": "5d3db0a604dba09ffa3df71a84982391b73a65e0eb5d681e7e8c03cb7d7c9c46"
+    }
+  },
+  "sync_events": [
+    {
+      "synced_at": "2026-09-19T09:49:35Z",
+      "baseline_from": "creation",
+      "baseline_at": "2026-09-19T09:11:18Z",
+      "changed": [
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "68d230586ffe2b259b36d5e6b51e70ac2e4bde02c7c70558a1557a3cc5df8f6e",
+          "to": "ea8b79230690a9ff52929ee4f4b513e0f52b3d1d553b1bebf82b69fa44cd0e65"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-09-19T11:58:28Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T09:49:35Z",
+      "changed": [
+        {
+          "file": "AI_PROJECT.md",
+          "from": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0",
+          "to": "8dee5eee0c8e4acf503c44e48fb49c54c85b2a097fdacc41c6141550be59e3df"
+        },
+        {
+          "file": "AI_WORKSPACE.md",
+          "from": "c4089f202abb1176939929b187283cf83e46c3536c20b3d5ceb45d62f85dacd5",
+          "to": "f789d61f0c017e0416355ba5e28261bdf589fe8ac5962b7bce48b8440f7e81fd"
+        },
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "ea8b79230690a9ff52929ee4f4b513e0f52b3d1d553b1bebf82b69fa44cd0e65",
+          "to": "4796d351dc31558a1b8018bef0ded0d5aae8cf6afbfd6695444c028f904fc11f"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-09-19T12:01:01Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T11:58:28Z",
+      "changed": [
+        {
+          "file": "AI_PROJECT.md",
+          "from": "8dee5eee0c8e4acf503c44e48fb49c54c85b2a097fdacc41c6141550be59e3df",
+          "to": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-09-19T12:11:27Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T12:01:01Z",
+      "changed": [
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "4796d351dc31558a1b8018bef0ded0d5aae8cf6afbfd6695444c028f904fc11f",
+          "to": "8e3e2eed033b0c1fe877dd27a676ecfd51284eebd29a291add761f1d4df96436"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-09-19T12:48:05Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T12:11:27Z",
+      "changed": [
+        {
+          "file": "AI_WORKSPACE.md",
+          "from": "f789d61f0c017e0416355ba5e28261bdf589fe8ac5962b7bce48b8440f7e81fd",
+          "to": "6cf3bd87186910d7b52ba9b1c02699f9e8e7fa452c83dfcec9c74e5c15efbea2"
+        },
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "8e3e2eed033b0c1fe877dd27a676ecfd51284eebd29a291add761f1d4df96436",
+          "to": "78e60a25045645f1f9e4b06e62ddc45c5b6dec07ec98340730352c73230a2994"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-09-19T13:03:05Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T12:48:05Z",
+      "changed": []
+    },
+    {
+      "synced_at": "2026-09-19T13:15:07Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T13:03:05Z",
+      "changed": [
+        {
+          "file": "REQUIREMENTS.md",
+          "from": "78e60a25045645f1f9e4b06e62ddc45c5b6dec07ec98340730352c73230a2994",
+          "to": "5d3db0a604dba09ffa3df71a84982391b73a65e0eb5d681e7e8c03cb7d7c9c46"
+        }
+      ]
+    },
+    {
+      "synced_at": "2026-09-19T13:19:22Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T13:15:07Z",
+      "changed": []
+    },
+    {
+      "synced_at": "2026-09-19T14:16:03Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-19T13:19:22Z",
+      "changed": []
+    }
+  ]
+}

@@ -61,7 +61,8 @@ export const Leads: CollectionConfig = {
       },
     ],
     afterChange: [
-      // 线索动态：在唯一写入路径记录关键事件（创建/状态流转/分配/跟进写注），见 lib/leadActivity。
+      // 线索动态：本 afterChange 钩子即唯一写入路径，关键事件（创建/状态流转/分配/跟进写注）
+      // 直接写入 lead-activities 集合（模型见 collections/LeadActivities.ts）。
       async ({ doc, previousDoc, operation, req }) => {
         const { payload, user, transactionID } = req
         const lead = doc as { id: number; project?: { id: number } | number; status?: string; owner?: unknown; followUpNote?: string }
@@ -374,39 +375,6 @@ export const Leads: CollectionConfig = {
         position: 'sidebar',
         description: { zh: '下次跟进提醒时间。', en: 'Reminder for the next follow-up.' },
       },
-    },
-    {
-      name: 'activity',
-      type: 'array',
-      label: { zh: '跟进历史', en: 'Activity' },
-      admin: {
-        initCollapsed: true,
-        description: { zh: '跟进历史时间线。', en: 'Follow-up history timeline.' },
-      },
-      fields: [
-        {
-          name: 'time',
-          type: 'date',
-          required: true,
-          label: { zh: '时间', en: 'Time' },
-        },
-        {
-          name: 'type',
-          type: 'select',
-          label: { zh: '方式', en: 'Type' },
-          options: [
-            { label: { zh: '电话', en: 'Call' }, value: 'call' },
-            { label: { zh: '微信', en: 'WeChat' }, value: 'wechat' },
-            { label: { zh: '到店', en: 'Visit' }, value: 'visit' },
-            { label: { zh: '报价', en: 'Quote' }, value: 'quote' },
-          ],
-        },
-        {
-          name: 'summary',
-          type: 'textarea',
-          label: { zh: '记录', en: 'Summary' },
-        },
-      ],
     },
   ],
 }

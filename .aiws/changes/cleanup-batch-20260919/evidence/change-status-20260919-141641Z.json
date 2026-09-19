@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-09-19T14:16:42Z",
+  "ws_root": "F:/juece-grow",
+  "change_id": "cleanup-batch-20260919",
+  "branch": "change/cleanup-batch-20260919",
+  "phase": "in-progress",
+  "tasks": {
+    "total": 38,
+    "done": 37,
+    "unchecked": 1,
+    "hasCheckboxes": true,
+    "totalAll": 38,
+    "doneAll": 37,
+    "uncheckedAll": 1,
+    "optionalTotal": 0,
+    "optionalUnchecked": 0,
+    "naCount": 0
+  },
+  "bindings": {
+    "contractRow": "Req_ID=REQ-0001,Problem_ID=PROB-001",
+    "planFile": ".aiws/plan/2026-09-19-cleanup-batch.md",
+    "evidencePaths": [
+      ".aiws/changes/cleanup-batch-20260919/evidence/verify-before-complete.md",
+      ".aiws/changes/cleanup-batch-20260919/review/quality-review.md",
+      ".aiws/changes/cleanup-batch-20260919/review/spec-review.md"
+    ]
+  },
+  "truth": {
+    "baseline": {
+      "label": "sync",
+      "at": "2026-09-19T14:16:03Z"
+    },
+    "drift_files": []
+  },
+  "evidence": {
+    "total": 3,
+    "exists": 3,
+    "missing": 0,
+    "tmp": 0,
+    "persistent": 3,
+    "other": 0,
+    "absolute": 0
+  },
+  "collaboration": {
+    "analysis": 0,
+    "patches": 0,
+    "review": 2,
+    "evidence": 5,
+    "total": 7
+  },
+  "note": "aiws change evidence status snapshot; does not contain secrets."
+}

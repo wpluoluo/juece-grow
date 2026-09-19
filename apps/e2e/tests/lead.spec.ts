@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test'
-
-const CMS_ORIGIN = 'http://127.0.0.1:3000'
-const WEB_ORIGIN = 'http://127.0.0.1:4321'
+import { CMS_ORIGIN, WEB_ORIGIN } from '../helpers/origins'
 
 test('健康端点返回统一成功信封', async ({ request }) => {
   const res = await request.get(`${CMS_ORIGIN}/api/v2/health`)

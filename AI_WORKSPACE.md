@@ -28,9 +28,16 @@
 - node_version: "24"
 - node_use_cmd: ""
 
-- playwright_test_cmd: "cd {web_dir} && pnpm playwright test"
-- start_cmd: "pnpm --filter cms dev"
+- playwright_test_cmd: "pnpm --filter e2e test"   # 真实入口在 apps/e2e（独立包名 e2e），不在 web_dir
+- start_cmd: "pnpm --filter cms dev"   # 前置：apps/cms/.env 须含 PUBLIC_CORS_ORIGINS，否则首个 /api/v2/* 请求 500、health_check 永不转绿
 - health_check: "curl -f http://127.0.0.1:3000/api/v2/health"
+
+# 验证入口（本仓实测可复现，均在仓库根执行，零手填参数）
+- build_cmd: "pnpm --filter cms build"             # Next 构建 + 全量 TypeScript 检查（红线：必须 exit=0）
+- astro_build_cmd: "pnpm astro:build"              # 公开站 SSG（可加 :erp / :yunque 跑另两站）
+- server_test_cmd: "pnpm --filter e2e test"        # Playwright：lead / security / reminders / leads-assign / sites-clone
+- e2e_prerequisites: "pnpm db:up && apps/cms/.env 含 PUBLIC_CORS_ORIGINS && pnpm --filter cms dev（:3000）&& pnpm astro:dev（:4321）；CMS_ADMIN_* 由 apps/e2e/setup/global-setup.ts 从 gitignored .aiws/secrets/test-accounts.json 注入，账号重建：pnpm --filter cms exec payload run scripts/create-e2e-admin.ts"
+- gate_cmd: "aiws validate . && aiws change validate <change-id> --strict"   # aiws 为全局 CLI（实测 v0.0.96 在 PATH）
 
 - test_db_url: "postgres://juece:juece@127.0.0.1:5434/juece_grow"  # Docker postgres（5434 映射，禁止 H2 等嵌入式/内存库）
 - test_db_cmd: "docker exec juece-grow-postgres pg_isready -U juece"      # 测试库连通性检查

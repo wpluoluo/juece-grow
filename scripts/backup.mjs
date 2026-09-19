@@ -2,12 +2,12 @@
 /**
  * Payload Postgres 备份脚本：用服务器本机 `pg_dump` 导出，输出到 backups/，按策略清理旧备份。
  * 数据库连接不再依赖容器——生产走服务器原生 PostgreSQL；本地开发用容器暴露的 TCP 端口同样可连。
- * 连接串来源优先级：--uri 参数 > 环境变量 DATABASE_URI > 默认本地 5432。
+ * 连接串来源：--uri 参数 或 环境变量 DATABASE_URI（二者必给其一，无内置默认——不猜要备份哪个库）。
  *
  * 用法：
- *   node scripts/backup.mjs                    # 用默认/环境连接串，保留最近 14 份
- *   node scripts/backup.mjs --uri '<connstr>'  # 显式指定连接串
- *   node scripts/backup.mjs --keep 30          # 自定义保留份数
+ *   DATABASE_URI='postgres://...' node scripts/backup.mjs          # 用环境连接串，保留最近 14 份
+ *   node scripts/backup.mjs --uri '<connstr>'                      # 显式指定连接串
+ *   node scripts/backup.mjs --uri '<connstr>' --keep 30            # 自定义保留份数
  */
 
 import { execFileSync } from 'node:child_process'
@@ -27,10 +27,15 @@ if (!Number.isInteger(keep) || keep <= 0) {
   process.exit(1)
 }
 
-const DEFAULT_URI = 'postgres://juece:juece@127.0.0.1:5432/juece_grow'
 const uriIdx = args.indexOf('--uri')
-const uri =
-  (uriIdx >= 0 && args[uriIdx + 1]) || process.env.DATABASE_URI || DEFAULT_URI
+const uri = (uriIdx >= 0 && args[uriIdx + 1]) || process.env.DATABASE_URI
+if (!uri) {
+  console.error(
+    '[backup] 缺少数据库连接串：传 --uri \'postgres://...\' 或设置环境变量 DATABASE_URI。' +
+      '不提供内置默认，以免在错配的机器上备份到非预期的库。',
+  )
+  process.exit(1)
+}
 const DB_NAME = new URL(uri).pathname.replace(/^\//, '') || 'juece_grow'
 
 const stamp = new Date().toISOString().replace(/[:.]/g, '-')
@@ -45,7 +50,12 @@ try {
     stdio: ['ignore', 'pipe', 'inherit'],
   })
 } catch (e) {
-  console.error('[backup] pg_dump 失败。确认连接串正确且本机已安装 pg_dump：', uri)
+  // 不回显完整连接串：口令会随 cron 邮件/日志外泄
+  const { protocol, username, hostname, port, pathname } = new URL(uri)
+  console.error(
+    `[backup] pg_dump 失败。确认连接串正确且本机已安装 pg_dump：` +
+      `${protocol}//${username}@${hostname}:${port}${pathname}（口令已隐去）`,
+  )
   process.exit(1)
 }
 writeFileSync(file, sql)

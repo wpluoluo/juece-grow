@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "changeId": "cleanup-batch-20260919",
+  "strict": true,
+  "allowTruthDrift": false,
+  "exitCode": 0,
+  "errors": [],
+  "warnings": [],
+  "groups": {
+    "truth_drift": {
+      "errors": [],
+      "warnings": []
+    },
+    "missing_files": {
+      "errors": [],
+      "warnings": []
+    },
+    "placeholders": {
+      "errors": [],
+      "warnings": []
+    },
+    "bindings": {
+      "errors": [],
+      "warnings": []
+    },
+    "scope_gate": {
+      "errors": [],
+      "warnings": []
+    },
+    "finish_gate": {
+      "errors": [],
+      "warnings": []
+    },
+    "plan_quality": {
+      "errors": [],
+      "warnings": []
+    },
+    "other": {
+      "errors": [],
+      "warnings": []
+    }
+  },
+  "raw": ""
+}

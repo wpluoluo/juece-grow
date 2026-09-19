@@ -196,17 +196,6 @@ export interface Lead {
    * Reminder for the next follow-up.
    */
   nextFollowUpAt?: string | null;
-  /**
-   * Follow-up history timeline.
-   */
-  activity?:
-    | {
-        time: string;
-        type?: ('call' | 'wechat' | 'visit' | 'quote') | null;
-        summary?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -760,14 +749,6 @@ export interface LeadsSelect<T extends boolean = true> {
   dedupKey?: T;
   followUpNote?: T;
   nextFollowUpAt?: T;
-  activity?:
-    | T
-    | {
-        time?: T;
-        type?: T;
-        summary?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
