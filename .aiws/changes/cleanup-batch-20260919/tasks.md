@@ -37,6 +37,7 @@
 - [x] 2.10 本地 `.env` 补齐 `PUBLIC_CORS_ORIGINS`（否则 2.3 会让 dev 与 C5 用例失败）
 - [x] 2.11 e2e 端点常量收敛：新增 `apps/e2e/helpers/origins.ts` 作为 CMS/公开站 origin 的**唯一**来源；原先 `helpers/cmsRest.ts:14`、`tests/lead.spec.ts:3-4`、`tests/security.spec.ts:16`、`playwright.config.ts` 的 `baseURL` 各写一遍字面量（改端口要动 5 处），现全部改为 import
 - [x] 2.12 e2e 自带路由预热（PROB-012）：`apps/e2e/setup/global-setup.ts` 先按 TCP 判定 :3000/:4321 是否在监听，在则逐个命中用例要打的端点（`/api/v2/leads` 用 GET 触发同模块编译、405 不写数据），使 Turbopack 冷缓存下的首跑不再把 ~48s 的编译报成 30s 用例超时；不在监听则静默跳过，由用例自身的连接错误说明"服务没起"
+- [x] 2.13 `reference/` 旧 Vue 站快照出库（2026-09-20 owner 裁决「删掉」后追加）：`git rm -r reference/` 删 `reference/juecesass-marketing-20260825/` 的 16 个已入库文件并清掉 7 个目录（含残留空目录），本批累计净减 12 个目录；连带把 `docs/07-design-theme.md` §2.1 的在盘回溯指针改成版本化取回命令 `git checkout 41a258c -- reference/`（该路径历史上只被 `41a258c` 一个提交动过，故删除不丢信息）
 
 ## 2A. 协同（可选）
 
@@ -54,7 +55,7 @@
 - [x] 3.4 负向：`PUBLIC_CORS_ORIGINS= pnpm --filter cms dev` 后带任意 Origin 请求 `/api/v2/content/articles?site=juece` → 实测：客户端 `http_status=500` 且响应体为空（不外泄堆栈）；服务端日志 `.aiws/tmp/cleanup-batch-20260919/cors-failfast-dev.log:29` 打印 `Error: PUBLIC_CORS_ORIGINS 未配置或为空：CORS 白名单无内置默认…`。注意语义修正：抛错发生在**首个请求**（`allowedOrigin()` 在 handler 内被调用），不是进程启动即崩；因此部署门禁前移到 `scripts/cms-run.sh` 的 `:?` 检查（2.2）
 - [x] 3.5 收口门禁（所有编辑定格后依次执行）：`aiws change sync cleanup-batch-20260919` → `aiws validate . --stamp` → `aiws change validate cleanup-batch-20260919 --strict` → 实测：`✓ aiws change sync`（`Changed files: REQUIREMENTS.md`）/ `✓ aiws validate: F:\juece-grow` / `ok: change validated` `exit=0`；三份工件见 evidence §A-8。**范围由工具校验过**：另跑 `--strict --check-evidence --check-scope` 后，本批改动文件全部落在 plan 的机读 allow-list 内，唯一被报越界的是 `.aiws/memory-bank/` 两条（你在先产物，本批不 stage）——注意默认 `--strict` 并**不**含 scope/evidence 校验，故旧写法「期望：均通过，无 scope 越界」属空签，已按实测改写（见 evidence §G·H2 与 PROB-011）
 - [x] 3.6 AGENTS.md §9 自检清单逐条过（camelCase 三层映射、无兜底/双写、自研文件 ≤1000 行、SEO 无回归、影响范围已说明、线索仍在自有 Postgres）
-- [x] 3.7 验证本身可机器复核：`evidence/verification.jsonl`（32 条，全 `status=success`；负向用例带 `expected_exit_code`，逐条指向 `.aiws/tmp/cleanup-batch-20260919/` 工件）⇒ `aiws verify-bc` 不再报 `legacy evidence assumed`。含三条专项复跑：① 缓存真空（`rm -rf apps/cms/.next`、脚本层不预取）下 e2e 仍 `56 passed / 2 skipped`，证明 PROB-012 的预热已内置于 `global-setup.ts`；② 所有编辑定格后的最终树复跑（见 evidence §A-16、dev-log §8.3/§8.4）；③ 提交后独立审查修复轮（去 `backup.mjs` 库名兜底、去 `cmsRest.ts` 两条 `??` 死兜底、预热按 origin 分流并回补 2 个目标）后全量复跑 `56 passed (1.3m) / 2 skipped`（见 evidence §A-17、dev-log §8.5）
+- [x] 3.7 验证本身可机器复核：`evidence/verification.jsonl`（36 条，全 `status=success`；负向用例带 `expected_exit_code`，逐条指向 `.aiws/tmp/cleanup-batch-20260919/` 工件）⇒ `aiws verify-bc` 不再报 `legacy evidence assumed`。含三条专项复跑：① 缓存真空（`rm -rf apps/cms/.next`、脚本层不预取）下 e2e 仍 `56 passed / 2 skipped`，证明 PROB-012 的预热已内置于 `global-setup.ts`；② 所有编辑定格后的最终树复跑（见 evidence §A-16、dev-log §8.3/§8.4）；③ 提交后独立审查修复轮（去 `backup.mjs` 库名兜底、去 `cmsRest.ts` 两条 `??` 死兜底、预热按 origin 分流并回补 2 个目标）后全量复跑 `56 passed (1.3m) / 2 skipped`（见 evidence §A-17、dev-log §8.5）
 
 ## 4. 交付与归档
 

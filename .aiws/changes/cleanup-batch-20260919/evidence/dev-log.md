@@ -832,3 +832,21 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 - 证据工件全部在 gitignore 的 `.aiws/tmp/` 下 ⇒ "在盘可核"只对**这台机器**成立；随提交进仓的可核对物是台账 JSONL 本身与代码。
 - `apps/e2e` 没有 `tsconfig.json` 也没有 typecheck 入口 ⇒ 本轮的类型收窄（`doc`/`id`）只由 e2e 运行时证明，**未经编译器证明**。作为观察项记账，不在本批新开门禁。
 - 预热搬走的是"谁付编译费"，不是编译费本身：修复轮全量 1.3m（含 41.9s 冷编译）。
+
+### 8.6 2026-09-20 裁决回填：口令不轮换 · 线上迁移不单独开窗口 · #7 出库 · #3 另立项
+
+用户对本批移交的待决项一次性裁决，台账同步为「已裁决」，防止后续会话重复追问：
+
+1. **口令不轮换**（git 历史里 `4a7d807` 起的备份连接串字面量）⇒ `PROB-010` 由「DONE + 残留待拍板」变为「DONE 无残留」（同步处：问题账 Notes、`release-prerequisites.md` §5 末条打勾、`follow-ups.md` PROB-010 段、`verify-before-complete.md` §E 的 [S5] 段、`dev-log.md` 步骤 7.2）。
+2. **线上 `payload migrate` 不单独开维护窗口**：那张死表在线上留着不影响功能、不丢数据，攒到下次真实功能上线一并执行；发布前置清单留在 `release-prerequisites.md` 不删（下批仍要用），本批继续不声称线上已清理。
+3. **#7 `reference/` 旧 Vue 站出库 ⇒ 并入本批 T5 结构清理**（见 §8.6.1）。
+4. **#3 Astro 文案入 CMS ⇒ 批准，但另立 change**：属新增内容模型 + 站点取数（产品功能），不混进清理批。
+5. **PROB-005/006 ⇒ 不各自立项，合并为一个改动做掉**（结果与实测见 §8.7）。
+
+#### 8.6.1 #7 出库的实测与一次门禁自撞
+
+- `git rm -r reference/` 删 **16 个已入库文件**；残留目录 `rmdir` 掉 **7 个**（`reference`、`reference/juecesass-marketing-20260825` 及 `public`/`src`/`src/router`/`src/styles`/`src/views`）⇒ 本批目录净减从 5 变 **12**。核对：`git ls-files reference/ | wc -l` = `0`、`ls -d reference` → No such file、`git grep reference/juecesass` 只剩台账里的记述（无代码/构建依赖）。全部输出落 `64-refdrop-probe.txt`，目录计数出自 `count-dirs.mjs`。
+- 删除不丢信息：`git log --oneline -- reference/` 证明该路径历史上**只被 `41a258c`（初始提交）动过**，`git ls-tree 41a258c reference/` 显示 tree 对象仍在 ⇒ 取回命令 `git checkout 41a258c -- reference/` 已写进 `docs/07-design-theme.md` §2.1（原标题把在盘路径当回溯依据，出库后会指空）。
+- **自撞的门禁（值得记）**：我把 #7 写成 Plan 的第 9 步，`aiws validate . --stamp` 与 `aiws change validate --strict` 同时 `exit=2`：`Plan section is too long (9 steps > 8)`（`61-sync-after-refdrop.log`）。处置不是删内容而是按语义归位——#7 与 T5「删不参与构建/运行的死内容」同类 ⇒ 并入 T5，Plan 回到 8 步，两扇门禁复跑 `exit=0`（`62-gates-refdrop.log`）。
+- **allow-list 上限的连带代价**：In Scope 原本正好 12 条（= 上限），要加 `reference/` 就必须把 `scripts/cms-run.sh`+`scripts/backup.mjs` 折成 `scripts/`、`docs/08`+`docs/07` 折成 `docs/` ⇒ 精度再降一档（PROB-011 第 (2) 条在这里第二次应验）。折叠后 `--strict --check-evidence --check-scope` 的越界清单**仍只剩用户在先的两条 memory-bank 文件**（`63-scope-gate-refdrop.log`，`exit=2` 即预期），证明 `reference/` 的删除确实被 Scope 覆盖而不是靠运气。
+

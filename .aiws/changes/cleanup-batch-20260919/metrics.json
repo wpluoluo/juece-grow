@@ -700,7 +700,87 @@
         "warnings": 0,
         "exit_code": 0
       }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-20T03:15:32Z",
+      "payload": {
+        "synced_at": "2026-09-20T03:15:32Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-19T17:01:34Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T03:15:34Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T03:16:34Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T03:16:44Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T03:21:58Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T03:22:01Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
     }
   ],
-  "updated_at": "2026-09-20T02:58:15Z"
+  "updated_at": "2026-09-20T03:22:01Z"
 }

@@ -12,10 +12,10 @@
 - 收敛 `envelope.ts` 的 CORS 内置默认白名单为 fail-fast（AGENTS.md §4 禁止兜底），并做到「配置先行」，使漏配在部署阶段显式失败而非静默损坏线上留资。
 - 清理 6 个空目录（其中 `apps/cms/scripts` 随后为本批的 `create-e2e-admin.ts` 重建 ⇒ 净减 5 个目录）与指向不存在的 `lib/leadActivity` 的失效注释。
 - 补齐 e2e 对提醒扫描、`/api/leads/assign`、`/api/sites/clone` 的覆盖（当前零覆盖）。
+- 出库 `reference/juecesass-marketing-20260825/` 旧 Vue 站快照（`git rm -r` 删 16 个已入库文件、清 7 个目录），并把 `docs/07-design-theme.md` §2.1 的在盘回溯指针改为版本化取回命令。**2026-09-20 owner 裁决「删掉」后追加**。
 
 **非目标：**
-- Astro 首页/功能/方案/价格文案入 CMS（产品范围决策，待用户立项）。
-- `reference/juecesass-marketing-20260825/` 旧 Vue 站出库（涉及删除已入库内容，待用户决策）。
+- Astro 首页/功能/方案/价格文案入 CMS —— **2026-09-20 owner 已批准**，但属新增内容模型 + 站点取数（产品功能，非清理），另立 change 交付。
 - 后台 Lexical 文章编辑 e2e（成本高收益低）。
 - 新增 `dev-seed` 公开端点（扩大攻击面，属新功能）。
 - 任何生产服务器操作（SSH、面板环境变量、线上 SQL）——本批全部本地自证。
@@ -49,7 +49,7 @@
 - 真值：`REQUIREMENTS.md` 收敛为单一 Backlog 区，REQ-0001/0002 连同已实测的验收条目移入「已完成」；`CHANGELOG.md` 删模板行并追加本轮记录；`aiws change sync` 刷新基线。
 - **BREAKING（部署契约）**：`PUBLIC_CORS_ORIGINS` 从「可选、缺省走内置默认」改为「必需、缺失即请求期抛错（500），且部署脚本先行终止」。同时以 `.env.example` / `scripts/cms-run.sh`（`${VAR:?}`）/ `docs/08-deployment.md` 三处配置先行，使漏配表现为部署脚本终止而非线上静默故障。
 - **BREAKING（schema）**：删 `Leads.activity` 字段并新增迁移 `20260919_093340_drop_lead_activity`：up 为 `DROP TABLE "leads_activity" CASCADE; DROP TYPE "public"."enum_leads_activity_type";`（**无 `IF EXISTS` ⇒ 非幂等，重复执行会报错**，重跑前须先核表是否还在）；`payload-types.ts` 再生成。经查适配器源码（`@payloadcms/db-postgres/dist/connect.js:116`）：生产仅在传 `prodMigrations` 时才启动 migrate，而 `payload.config.ts` 未传 ⇒ **该迁移不会在下次部署自动执行**，线上清理需维护窗口显式跑 `payload migrate`，发布前置写入证据。
-- 结构：删 6 个空目录（`apps/cms/scripts` 随后被本批的 `create-e2e-admin.ts` 重建 ⇒ 净减 5 个）；`Leads.ts` 失效注释改指实际实现（`afterChange` 钩子内联）。
+- 结构：删 6 个空目录（`apps/cms/scripts` 随后被本批的 `create-e2e-admin.ts` 重建 ⇒ 净减 5 个），2026-09-20 追加 `reference/` 出库再净减 7 个 ⇒ **本批累计净减 12 个目录**；`Leads.ts` 失效注释改指实际实现（`afterChange` 钩子内联）。
 - 测试：新增 `reminders.spec.ts`、`leads-assign.spec.ts`、`sites-clone.spec.ts`；造数以 admin 会话直调 Payload REST 并自清理，不新增产品代码。
 - 测试自足性（PROB-012，验证过程中实测发现并在本批内修掉）：dev origin 收敛到 `apps/e2e/helpers/origins.ts` 单一来源（HEAD 4 处 + 本批 `cmsRest.ts` 1 处共 5 处字面量 → 2 行），并在 `setup/global-setup.ts` 注入凭据前用 TCP 探测 CMS/Astro 端口（冷编译会让 HTTP 探活自身超时），在监听则逐个 GET 预编译路由。根因：Next 16 dev（Turbopack）按首次请求编译路由，单条冷编译实测 41.7–48.3s，大于 Playwright 用例级 `timeout: 30_000` ⇒ **功能正常也会首跑假红**。不引入 playwright `webServer`（会接管服务生命周期，与本批「服务由外部启动」约定冲突）。
 
@@ -87,8 +87,7 @@
 
 ### Out of Scope（明确不改动）
 
-- `apps/astro/**` - 不动公开站（#3 待立项）
-- `reference/**` - 不动旧 Vue 站（#7 待决策）
+- `apps/astro/**` - 不动公开站（#3 owner 2026-09-20 已批准入 CMS，属新功能，另立 change）
 - `apps/cms/src/collections/{LeadActivities,ReminderRules,ReminderNotices}.ts` - 提醒业务逻辑不改，仅补测试
 - `apps/cms/src/payload.config.ts` - 不动 `DATABASE_URI || ''`（另案）
 - `AI_PROJECT.md` - **不改**：第 20/21/33/58/101 行指向本仓不存在的 `requirements-issues.csv` / `issues/*.csv`（归因链断裂），但这些行全部落在 `AIWS_MANAGED_BEGIN:ai-project:core` 托管块（第 3–103 行）内，手改会触发 `block sha256 mismatch` 门禁 ⇒ 本批已回退改动，登记 PROB-009 走 `aiws update` 正途修正。

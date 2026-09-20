@@ -15,7 +15,7 @@
 
 ## 2. 设计令牌
 
-### 2.1 品牌色（继承公众站，回溯 `reference/juecesass-marketing-20260825`）
+### 2.1 品牌色（继承公众站；旧站快照 `reference/juecesass-marketing-20260825` 已于 2026-09-20 出库，取回：`git checkout 41a258c -- reference/`）
 
 | 令牌 | 色值 | 用途 |
 | ----- | ------- | ----- |

@@ -29,6 +29,8 @@ ws-goal 契约: ws-goal-contract.md 在本仓不存在 → state.json 按 SKILL.
 
 排除（不代用户决策）：#3 Astro 首页/功能/方案/价格文案是否入 CMS（产品范围）；#7 `reference/juecesass-marketing-20260825/` 旧 Vue 站是否出库（删已入库内容）。
 
+> **2026-09-20 裁决回填**（不改动上面的原始排除记录）：#7 决定删除 ⇒ 移入本批执行（16 文件 / 7 目录，见 plan Scope 与 tasks 2.13）；#3 决定做 ⇒ 属新增内容模型与站点取数，另立 change 交付，不并入本清理批。
+
 ## 决策树遍历
 
 ### 分支 A — #2 删字段的执行方式

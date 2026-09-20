@@ -17,11 +17,12 @@
 
 ## Goal
 
-三阶段交付后一次收敛：真值漂移（REQ-0001/0002 已 DONE 却仍挂 Backlog、验收框未勾、CHANGELOG 残留模板行）、Payload 死模型（`Leads.activity`）、CORS 兜底、空目录与失效注释、e2e 覆盖缺口。全程本地 dev/test 自证，线上零操作。
+三阶段交付后一次收敛：真值漂移（REQ-0001/0002 已 DONE 却仍挂 Backlog、验收框未勾、CHANGELOG 残留模板行）、Payload 死模型（`Leads.activity`）、CORS 兜底、空目录与失效注释、e2e 覆盖缺口、`reference/` 旧 Vue 站快照出库（2026-09-20 追加）。全程本地 dev/test 自证，线上零操作。
 
 ## Non-goals
 
-- #3 Astro 文案入 CMS（产品范围，待立项）；#7 `reference/` 旧 Vue 站出库（涉删已入库内容，待决策）。
+- #3 Astro 文案入 CMS —— **owner 2026-09-20 批准**，但属新增内容模型与站点取数（产品功能，非清理），另立 change 交付，不并入本批。
+- ~~#7 `reference/` 旧 Vue 站出库~~ —— owner 2026-09-20 裁决「删掉」，**已移入本批范围**（见下方 Scope 与 Plan 第 5 项 T5）。
 - 后台 Lexical 文章编辑 e2e（成本高收益低）。
 - 新增 `dev-seed` 公开端点（扩大攻击面）。
 - 任何生产服务器操作（SSH / 改面板环境变量 / 跑线上 SQL）。
@@ -30,6 +31,7 @@
 ## Scope
 
 > 机读口径：`### In Scope` 下每条 bullet **只写一个路径**（`aiws change validate --check-scope` 的解析器把整条 bullet 当作一个路径前缀/glob，句后附带说明会让该条匹配失效——本批曾因此把已声明的文件报成越界），且**条目数上限 12**（超过即判 `scope is too broad`）。两条规则合起来迫使 allow-list 只能到目录粒度，因此下表 `apps/cms/` 是本批实际改动文件的**上界**而非许可证：本批在 `apps/cms/` 内只改了 `src/collections/Leads.ts`、`src/lib/envelope.ts`、`src/migrations/`（新增迁移 + `index.ts` 登记）、`src/payload-types.ts`、`scripts/create-e2e-admin.ts`、`.env.example` 六处，`src/payload.config.ts` 与三个提醒集合**未动**（反证：`git status --porcelain` 不含这些路径，spec-review 的 Out-of-Scope 表逐条核实过）。人类说明见下方表格。
+> 2026-09-20 追加 `reference/` 出库时，为守住 12 条上限把 `scripts/cms-run.sh`+`scripts/backup.mjs` 折叠为 `scripts/`、`docs/08-deployment.md`+`docs/07-design-theme.md` 折叠为 `docs/`。allow-list 精度因此再降一档（`scripts/` 下本批只动 `backup.mjs`、`cms-run.sh`，`docs/` 下只动 07/08 两篇），精确性仍由 `git status --porcelain` + spec-review 的 Out-of-Scope 表承担（PROB-011）。
 
 ### In Scope
 
@@ -42,9 +44,9 @@
 - `.aiws/changes/cleanup-batch-20260919/`
 - `apps/cms/`
 - `apps/e2e/`
-- `scripts/cms-run.sh`
-- `scripts/backup.mjs`
-- `docs/08-deployment.md`
+- `scripts/`
+- `docs/`
+- `reference/`
 
 ### 范围说明（人读，不参与机读 allow-list）
 
@@ -61,9 +63,11 @@
 | `apps/cms/scripts/` | `create-e2e-admin.ts`（e2e 管理员账号，幂等 + 原子写凭据文件） |
 | `apps/e2e/` | 新增 reminders / leads-assign / sites-clone 三个 spec 及其 helpers/setup 与 config 接线；`helpers/origins.ts` 收为 dev origin 唯一来源；`setup/global-setup.ts` 增跑测前路由预热（PROB-012） |
 | `scripts/backup.mjs` | 删内置 `DEFAULT_URI` 兜底（含明文口令），改为连接串必给其一；失败输出不回显口令（PROB-010） |
+| `reference/`（2026-09-20 出库） | owner 裁决删除 `reference/juecesass-marketing-20260825/` 旧 Vue 站快照（实测 `git rm -r` 删 **16 个已入库文件**、清 **7 个目录**，含 `SHA256SUMS.txt`；计数出自 `.aiws/tmp/cleanup-batch-20260919/64-refdrop-probe.txt`）；历史上该路径只被 `41a258c` 一个提交动过 ⇒ 取回命令 `git checkout 41a258c -- reference/`。删除理由：与本仓「juecesass 独立、不混用模块与字段」红线相邻，留在树里易被当现成组件抄用 |
+| `docs/07-design-theme.md` | §2.1 品牌色小节原标题把旧站写成在盘回溯路径，出库后会指空 ⇒ 改为版本化的 `git checkout` 取回命令（同上一行） |
 | `.aiws/goals/`、`.aiws/plan/`、`.aiws/changes/<id>/` | 本 change 的 goal / intake / plan / proposal / tasks / review / evidence 产物 |
 
-明确**不在**本批范围：`apps/astro/**`、`reference/**`、`AI_PROJECT.md`（托管块内，见 PROB-009）、`apps/cms/src/payload.config.ts`（`DATABASE_URI || ''` 留 PROB-008）、`collections/{LeadActivities,ReminderRules,ReminderNotices}.ts`、`infra/**` 与容器编排文件、`.aiws/memory-bank/**`（用户在先产物，本批不 stage）。
+明确**不在**本批范围：`apps/astro/**`、`AI_PROJECT.md`（托管块内，见 PROB-009）、`apps/cms/src/payload.config.ts`（`DATABASE_URI || ''` 留 PROB-008）、`collections/{LeadActivities,ReminderRules,ReminderNotices}.ts`、`infra/**` 与容器编排文件、`.aiws/memory-bank/**`（用户在先产物，本批不 stage）。
 
 ## Plan
 
@@ -71,7 +75,7 @@
 2. **T2 配置先行（#4 前半）**：`.env.example` 增 `PUBLIC_CORS_ORIGINS`（三站 + `http://localhost:4321` + `http://127.0.0.1:4321`）；`scripts/cms-run.sh` 增必需变量校验并写进 `cms.env`；`docs/08-deployment.md:99` 生产关键项补该变量说明。**本地 `.env` 同步补齐，否则 C5 与新增 e2e 会因缺变量而红**。
 3. **T3 去兜底（#4 后半）**：`envelope.ts` 删默认数组：`allowedOrigin()` 内读 `PUBLIC_CORS_ORIGINS`，解析后为空即 `throw`（不静默放行）；保持单一路径，无 dev 分支。实测失败时点=**首个 `/api/v2/*` 请求**（该函数在 handler 里被调用），不是进程启动期。
 4. **T4 死模型删除（#2）**：删 `Leads.ts` 的 `activity` 字段块；`payload generate:types` 再生成；以 dev 库生成 drop 迁移（`DROP TABLE "leads_activity" CASCADE` + `DROP TYPE enum_leads_activity_type`；无 `IF EXISTS`，非幂等）；修 `lib/leadActivity` 失效注释。
-5. **T5 结构清理（#5）**：删 6 个空目录；确认 Payload `components` 实际解析路径仍为 `apps/cms/components/*`（importMap 已验证），避免删 `src/components` 后 admin 组件断链。
+5. **T5 结构清理（#5 + #7）**：删 6 个空目录；确认 Payload `components` 实际解析路径仍为 `apps/cms/components/*`（importMap 已验证），避免删 `src/components` 后 admin 组件断链。**#7 于 2026-09-20 owner 裁决后并入本步**：`git rm -r reference/` 删旧 Vue 站快照的 16 个已入库文件、清 7 个目录（⇒ 本批累计净减 12 个目录），并连带把 `docs/07-design-theme.md` §2.1 的在盘回溯指针改成版本化取回命令。不另立 change 的理由：纯删除不参与构建/运行的已入库快照 + 一处文档指针，无代码、无 schema、无对外行为变更，单提交可 `git revert`；其"待决策"状态本就登记在本批 intake/plan，另立案会把同一决策拆成两处真值。
 6. **T6 e2e 补齐（#6）**：`apps/e2e/tests/reminders.spec.ts`（造 `createdAt` 30 天前的 new 线索与 `nextFollowUpAt` 已过的 contacted 线索 → 建 due/sla 规则 → admin 调 `/api/v2/reminders/run` → 断言 `created>0`、notice 落库、`LeadActivities` 出 `reminder`、重复调用 `created=0`、线索状态未被改）；`apps/e2e/tests/leads-assign.spec.ts`；`apps/e2e/tests/sites-clone.spec.ts`。造数以 admin 会话直调 Payload REST，测试自清理。
 7. **T6b e2e origin 收敛与路由预热（新增，PROB-012）**：`apps/e2e/helpers/origins.ts` 作为两个 dev origin（CMS `:3000` / Astro `:4321`）的唯一来源，`playwright.config.ts` 与三个 spec、`cmsRest.ts` 全部改为 import（HEAD 4 处 + 本批 `cmsRest.ts` 1 处共 5 处字面量 → 2 行）；`setup/global-setup.ts` 在注入管理员凭据前用 **TCP** 探测两个端口（冷编译会让 HTTP 探活自身超时），在监听则逐个 GET 把路由预编译。原因（实测根因）：Next 16 dev（Turbopack）按首次请求编译路由，单条冷编译 41.7–48.3s > Playwright 每例 `timeout: 30_000`，会在**功能正常**时产出假超时红灯；预热放进 `globalSetup` 使 `pnpm --filter e2e test` 保持零手填参数即可复现绿灯。**不**改用 playwright `webServer`（会接管生命周期并与本批既有的"服务由外部启动"约定冲突）。
 8. **T7 验证与审查**：本地跑全套验证 → `ws-quality-review` + `ws-spec-review` 双审查（schema 迁移属高风险）→ `aiws verify-bc` → commit → finish。
