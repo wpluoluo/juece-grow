@@ -741,7 +741,7 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 
 未验证项（诚实列出）：本机 `which pg_dump` 无输出 ⇒ **备份成功路径在本地无法实测**，只验证了「缺参数即失败」「失败不回显口令」两条负向路径。成功路径须在线上（装了 pg_dump 的服务器）首跑时人工确认。
 
-旧口令轮换问题不因本改动消失：`DEFAULT_URI` 里的 `juece` 口令已进入 git 历史（`4a7d807`），工作树删除不等于历史抹除 → 登记 PROB-010 并在 `evidence/release-prerequisites.md` 列为待 owner 拍板项。
+旧口令轮换问题不因本改动消失：`DEFAULT_URI` 里的 `juece` 口令已进入 git 历史（`4a7d807`），工作树删除不等于历史抹除 → 登记 PROB-010 并曾在 `evidence/release-prerequisites.md` 列为待 owner 拍板项。**2026-09-20 owner 裁决：不轮换**，该项闭环，后续会话不再重复追问。
 
 ## 步骤 8 · 机器可核验验证台账（追加）
 

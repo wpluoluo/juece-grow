@@ -46,4 +46,4 @@ node scripts/backup.mjs --uri "postgres://juece:<强密码>@127.0.0.1:5432/juece
 - [ ] 存在覆盖执行前状态的备份文件
 - [ ] `PUBLIC_CORS_ORIGINS` 已注入生产 env
 - [ ] 上述四项完成后，方可在维护窗口执行 `payload migrate` 并跑 §4 回归
-- [ ] `scripts/backup.mjs` 曾内置的默认连接串（口令字面量）自 `4a7d807` 起在 git 历史中：本批已删除该兜底并停止回显口令，但**是否轮换线上口令由 owner 决定**（PROB-010 残留项）
+- [x] `scripts/backup.mjs` 曾内置的默认连接串（口令字面量）自 `4a7d807` 起在 git 历史中：本批已删除该兜底并停止回显口令。**口令不轮换已由 owner 于 2026-09-20 裁决**（PROB-010 闭环，git 历史里的字面量不再处置、不再追问）。

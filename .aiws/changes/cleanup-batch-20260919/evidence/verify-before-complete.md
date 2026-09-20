@@ -82,7 +82,7 @@
 - [S8] `.qoder/better-loop/` 未纳管 → 属工具产物，非本批交付物。
 
 **驳回的审查结论（附反证）**
-- [S5] 「`scripts/deploy.sh` 的凭据入 git」——该文件**不存在**（`ls scripts/` 只有 `deploy-provision.sh`/`deploy-chatwoot.sh`/`cms-run.sh`/`backup.mjs` 等）。但它指向的**实质缺陷成立**：`scripts/backup.mjs` 原有 `DEFAULT_URI` 内置连接串含明文口令。⇒ 本批内已修（不再"不擅动"）：删掉 `DEFAULT_URI`，改为 `--uri`/`DATABASE_URI` 必给其一否则 `exit=1`；失败消息只回显 `user@host:port/db` 并标注「口令已隐去」。实测见 §A-11、§A-12，口径与未验证项见 `dev-log.md` 步骤 7.2。**留给 owner 的只剩一件事**：该口令自 `4a7d807` 起已在 git 历史里，工作树删除≠历史抹除 → 是否轮换线上/本机库口令（PROB-010，见 `evidence/release-prerequisites.md`）。
+- [S5] 「`scripts/deploy.sh` 的凭据入 git」——该文件**不存在**（`ls scripts/` 只有 `deploy-provision.sh`/`deploy-chatwoot.sh`/`cms-run.sh`/`backup.mjs` 等）。但它指向的**实质缺陷成立**：`scripts/backup.mjs` 原有 `DEFAULT_URI` 内置连接串含明文口令。⇒ 本批内已修（不再"不擅动"）：删掉 `DEFAULT_URI`，改为 `--uri`/`DATABASE_URI` 必给其一否则 `exit=1`；失败消息只回显 `user@host:port/db` 并标注「口令已隐去」。实测见 §A-11、§A-12，口径与未验证项见 `dev-log.md` 步骤 7.2。**留给 owner 的那一件事已裁决**：该口令自 `4a7d807` 起已在 git 历史里，工作树删除≠历史抹除 → **2026-09-20 owner 决定不轮换**，PROB-010 就此闭环（见 `evidence/release-prerequisites.md` §5 末条）。
 - [S7] 「`payload-types.d.ts` 未入库且残留旧 `activity?`」——`git ls-files src/payload-types.ts` 有输出（入库类型文件已再生成且无 `activity`）；未跟踪的 `*.d.ts` 是构建产物（`git ls-files --others` 才列出），非真值缺失。
 - [Q-H2 的延伸] 「全仓无 `payload migrate` 执行通道」属实，但不属"本批遗漏"：本批只做清理，生产迁移通道应作为独立部署 change 立项。
 - [S2] CHANGELOG 分隔符风格：与既有 `2026-08-26` 行一致（该表头本身即含 `/`），不改。

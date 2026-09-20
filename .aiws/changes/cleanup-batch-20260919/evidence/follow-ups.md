@@ -39,7 +39,7 @@
 ### PROB-010（P1, DONE 本批内）`scripts/backup.mjs` 内置默认连接串 + 失败回显口令
 
 已删默认并在缺连接串时 `exit=1`；失败分支改为回显去掉口令的 `protocol://user@host:port/db`。实测：无 uri → exit=1；带假口令触发失败分支，输出 grep 口令 0 次。
-残留（须 owner 拍板）：`4a7d807` 起该口令字面量已在 git 历史里；本机无 `pg_dump`，成功导出分支未在本机跑通（历史备份由装有 `pg_dump` 的机器产出）。
+残留（已闭环）：`4a7d807` 起该口令字面量在 git 历史里 ⇒ **owner 2026-09-20 裁决不轮换**，工作树不再改动，此项不再追问。仍然成立的只有一条未验证事实：本机无 `pg_dump`，成功导出分支未在本机跑通（历史备份由装有 `pg_dump` 的机器产出）。
 
 ### PROB-011（P2, OPEN）`aiws change validate --check-scope` 的四处机读约束
 

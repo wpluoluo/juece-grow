@@ -686,7 +686,21 @@
         "warnings": 0,
         "exit_code": 2
       }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T02:58:15Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
     }
   ],
-  "updated_at": "2026-09-19T17:03:15Z"
+  "updated_at": "2026-09-20T02:58:15Z"
 }
