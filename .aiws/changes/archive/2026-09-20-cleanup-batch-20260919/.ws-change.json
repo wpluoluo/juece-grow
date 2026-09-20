@@ -207,5 +207,21 @@
       "baseline_at": "2026-09-20T08:46:58Z",
       "changed": []
     }
-  ]
+  ],
+  "archived_at": "2026-09-20T09:09:17Z",
+  "archived_to": "F:\\juece-grow\\.aiws\\changes\\archive\\2026-09-20-cleanup-batch-20260919",
+  "archived_truth_files": {
+    "AI_PROJECT.md": {
+      "mtime": 1789819241,
+      "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1789821743,
+      "sha256": "6cf3bd87186910d7b52ba9b1c02699f9e8e7fa452c83dfcec9c74e5c15efbea2"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1789823578,
+      "sha256": "5d3db0a604dba09ffa3df71a84982391b73a65e0eb5d681e7e8c03cb7d7c9c46"
+    }
+  }
 }
