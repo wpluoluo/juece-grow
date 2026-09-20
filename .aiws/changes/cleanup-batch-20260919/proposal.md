@@ -100,6 +100,7 @@
 - `apps/cms/src/payload.config.ts` - 不动 `DATABASE_URI || ''`（另案）
 - `AI_PROJECT.md` - **不改**：第 20/21/33/58/101 行指向本仓不存在的 `requirements-issues.csv` / `issues/*.csv`（归因链断裂），但这些行全部落在 `AIWS_MANAGED_BEGIN:ai-project:core` 托管块（第 3–103 行）内，手改会触发 `block sha256 mismatch` 门禁 ⇒ 本批已回退改动，登记 PROB-009 走 `aiws update` 正途修正。
 - `infra/**`、`docker-compose*.yml`、`Dockerfile.cms` - 不改编排与镜像
+- `.aiws/memory-bank/**` - 本批不改其内容、不认领归属。2026-09-20 为解开 `aiws change finish` 的脏树拒绝，按 owner 裁决把你 8-31 未提交的两条（`.index.yaml` +11 行、`decision/analysis/chatwoot-offline.md`，逐字核实无凭据）以**独立提交 `dae7ae6`** 搭在本分支——这正是 `review/quality-review.md` §L3 的原建议。它既不进本批 `In Scope` 也不进 plan 的机读 allow-list（12 条上限已满），因此 `--check-scope` 恒把这两条报成越界。详见 `../../plan/2026-09-19-cleanup-batch.md` §Scope 与 evidence §A-23
 
 ### 外部影响
 

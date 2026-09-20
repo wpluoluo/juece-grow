@@ -917,3 +917,25 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 3. `PROB-020` 的三处死分支只在本轮删掉了 assign 端点自己用到的那一处判断，`access.ts` 内其余三处仍在（权限语义改动需独立门禁）。
 4. 审查是**提交后**才跑的（约定：commit 后默认追一轮独立审查）⇒ 本轮修复随第二个提交入库，`735bc09` 本身未被改写（不 `--amend`）。
 
+### 8.9 2026-09-20 · 推送轮与归档前解阻（`dae7ae6`）：一条命令的真实形状，和一个新的工具事实
+
+**推送前先过安全门**：owner 批准 push 后，按流程先跑 L3 深度安全审查（针对 `c9cbc2d..88c9a80` 的已提交改动）⇒ **0 findings**，无发现即无修复门，继续交付。
+
+**`git push origin main` 这条命令按字面执行会是什么结果**（三点都不显然，逐条实测）：
+1. 当时 `origin`（GitHub）**连不上**：`Failed to connect to github.com port 443 after 21s`、`push_exit=128`。稍后同一命令又通了 ⇒ 判定为间歇网络，不当成「没配密钥/要改 SSH」。
+2. 更要紧的是：`main` 当时停在 `c9cbc2d`，**本批 6 个提交全在 `change/cleanup-batch-20260919` 上** ⇒ 就算网络通，`git push origin main` 也是空推、什么都发不出去。这一点是 owner 选了「快进 main 后推」才暴露出来的。
+3. 快进**不 checkout `main`**：`git push . HEAD:refs/heads/main`。原因是工作树里有你在先的未提交产物（`.aiws/memory-bank/.index.yaml`），`git checkout main` 会在它上面撞车或把它带过分支；本地 push 默认拒绝非快进，安全性不减。实测 `c9cbc2d..88c9a80`、`ff_exit=0`，`git status --short` 前后一致（只剩你那两条）。
+
+**最终远端状态（逐个 `git ls-remote --heads <remote>` 核实，退出码单独取、不过管道）**：`gitee/main = 88c9a80`（`push_gitee_exit=0`）、`origin/main = 88c9a80`（网络恢复后照 owner 最初点名的命令补推，`push_origin_exit=0`）。本地 `main` 与之一致；`HEAD` 仍在 change 分支。
+
+**归档被一条不报错的拒绝挡住**：`aiws change finish cleanup-batch-20260919` → `Refusing to finish with a dirty working tree` + 列出那两条 memory-bank 文件，`finish_exit=2`。挡路的正是 §8.8 之前 `spec-review` L3 判定「不认领、不打包」的那两条——它们从 8-31 起一直没提交。owner 裁决照 L3 的原建议**拆成独立 chore 提交**（而非 stash、而非丢弃）⇒ `dae7ae6`（2 文件 / 21 insertion，内容逐字读过：Chatwoot 在线状态的运维结论 + 站点 URL + `Layout.astro#L285-L292` 位点，**无凭据**）。同时 `aiws change status` 暴露另一条归档门禁：`tasks.md still has unchecked required tasks (1 items)`，即 4.4 必须先勾 ⇒ 按 §8.2 同源限制处理：本条不回填 finish 自身的回显。
+
+**新的工具事实（会直接影响下次判断）**：把范围外文件**提交**到本分支，**不会**让它从 `--check-scope` 的越界清单里消失——只是把工作树脏改动换成分支 diff。实测 `86-scope-after-memorybank.log`：`plan-verify` / `validate . --stamp`（stamp `20260920-083551312Z`）/ `--strict` / `verify-bc` 四道全 `exit=0`，加强门禁仍 `exit=2` 且清单**逐字未变**。要真清掉只有两条路：进 allow-list（本批 `### In Scope` 已满 12 条机器上限，不为无关文件挤掉一条）或让它走别的分支。本批选择保留 `exit=2`，判据始终是「除这两条外无其它项」。追加台账第 51–52 条（`append-memorybank-records.mjs` 连跑两次 `appended=2 → appended=0`、`lines=52 唯一命令=51 状态异常=0`、`git diff --numstat` = `2 insertions / 0 deletions`）后整套再复跑一遍（`87`），结论不变。
+
+**本轮我自己抓到的一处测量缺陷（`87` 首版，与 §8.1 记的两条同源）**：我想在门禁日志里顺便统计「`verify-bc` 有没有回退到旧式证据」，就把 `grep -c "legacy evidence assumed"` 扫**正在写入的本工件**——而我的小标题里原样写了这三个词，于是 grep 匹配到自己的标题行，得到计数 `1`。这是**自指计数**错误（这回是假红，但性质和上一轮的假绿一样：测量对象与被测物混在同一工件里）。改法：让 `verify-bc` 的输出单独落到 `87b-verify-bc-memorybank.log`，再对 `87b` 计数 ⇒ `legacy_warn_count=0`。首版的错算说明不删除，保留在 `87` 首部作为错证记录。
+
+**诚实边界**：
+1. finish 的执行回显**不在**本文件与 4.4 里（§8.2 的自指限制）；归档是否成功以命令输出与 `.aiws/changes/archive/` 为准，不看我的转述。
+2. **线上仍未动**（owner 裁决）：本批全部改动只到「已提交 + 已推远端」这一层，生产库迁移、`PUBLIC_CORS_ORIGINS` 注入、部署后回归都在 `evidence/release-prerequisites.md` 那份人工清单里，一行都没执行。
+3. 推送后工作树只剩你自己的 `.aiws/memory-bank/**`（现在也进了 `dae7ae6`）——若 `aiws memory` 之后再写新条目，树会再次变脏并再次挡住 finish 类命令。
+

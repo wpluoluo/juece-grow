@@ -71,7 +71,9 @@
 | `docs/gates/GATE-005-assign-clone-error-and-audit-fix.md`（新增） | 2.15 审查轮补立的高风险门禁：`/assign`·`/clone` 的 404/500 错误分流与**审计写路径**变更（§8 要求独立门禁），含方案对比 A/B/C、7 项修复清单、显式的「为什么这几条不改」清单（映射 PROB-017..022）、影响范围与回滚 |
 | `.aiws/goals/`、`.aiws/plan/`、`.aiws/changes/<id>/` | 本 change 的 goal / intake / plan / proposal / tasks / review / evidence 产物 |
 
-明确**不在**本批范围：`apps/astro/**`、`AI_PROJECT.md`（托管块内，见 PROB-009）、`apps/cms/src/payload.config.ts`（`DATABASE_URI || ''` 留 PROB-008）、`collections/{LeadActivities,ReminderRules,ReminderNotices}.ts`、`infra/**` 与容器编排文件、`.aiws/memory-bank/**`（用户在先产物，本批不 stage）。
+明确**不在**本批范围：`apps/astro/**`、`AI_PROJECT.md`（托管块内，见 PROB-009）、`apps/cms/src/payload.config.ts`（`DATABASE_URI || ''` 留 PROB-008）、`collections/{LeadActivities,ReminderRules,ReminderNotices}.ts`、`infra/**` 与容器编排文件。
+
+`.aiws/memory-bank/**` 单列说明：它确属用户在先（8-31）的 `aiws memory` 产物、**不属本批**，因此不占 `### In Scope`（已满 12 条上限）。2026-09-20 为解开 `aiws change finish` 的脏树拒绝，owner 裁决把它作为**独立提交 `dae7ae6`** 搭在本分支入库（内容经核无凭据），这正是 `review/quality-review.md` §L3 当初建议的「拆成独立 chore 提交」。归属不变 ⇒ 它仍不在 allow-list 内，`--check-scope` 会继续把这两条报成越界；实测见 `.aiws/tmp/cleanup-batch-20260919/86-scope-after-memorybank.log`（判据仍是「除这两条外无其它项」，不是 `exit=0`）。
 
 ## Plan
 

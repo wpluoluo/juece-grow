@@ -180,7 +180,16 @@ In Scope 认领过的越界（`apps/cms/scripts/create-e2e-admin.ts`、`apps/e2e
 
 ### 6.4 仍未闭合的（诚实清单）
 
-1. `finish`/`push` 未做（owner 只批到「提交吧」）。
+1. ~~`finish`/`push` 未做~~ —— **2026-09-20 状态更新**：owner 补批 push；L3 深度安全审查 **0 findings**；`main` 以 `git push . HEAD:refs/heads/main` 快进（不 checkout，避开用户在先未提交产物）后推 `gitee` 与 `origin`，两远端 `refs/heads/main = 88c9a80`（逐个 `git ls-remote` 核实）。`finish` 先被 `Refusing to finish with a dirty working tree` 挡住，按 spec-review L3 原建议把 memory-bank 两条拆成独立提交 `dae7ae6` 后重跑。全过程与实测见 `dev-log.md` §8.9。
 2. 线上仍按裁决未动：`leads_activity` 是否存在于生产未核实，`payload migrate` 不单独开窗口。
 3. 「500 分支未死」的证据是**手工探针**（`61`），无自动化用例（注入真实库异常需破坏库）；已在 `quality-review §7.2 #10` 记为接受不做。
 4. PROB-007 仍在放大 dev 库线索数（`leads_total` 63 → 67，每轮 e2e +4，见 `83-db-after-reviewfix2.txt`），本批三个新 spec 自身零残留。
+
+## 7. 2026-09-20 归档前轮补记（推送 + memory-bank 独立入库）
+
+本轮**无产品代码改动**，审查对象换成「提交处置与真值口径是否一致」。四条核对，均按磁盘现状核，不采信转述：
+
+1. **§L3 的处置变了，四处口径同步了吗**：从「不认领、不 stage」改为「按本行原建议拆独立提交 `dae7ae6`」⇒ `plan §Scope`（新增单列段）、`tasks.md` 0.7/3.5/3.7 + 新增 2.17、`evidence/verify-before-complete.md` §A-23 与本文件 §6.4 第 1 条、`evidence/follow-ups.md` 的 PROB-011 残留条，五处均已改到同一口径，无残留旧说法。
+2. **`--check-scope` 的判据有没有被悄悄放宽**：没有。本轮实测仍 `exit=2`，越界清单**逐字未变**（`86-scope-after-memorybank.log`），文档里写的仍是「除这两条外无其它项」，且新增了一条对我原先判断的纠正：**提交范围外文件不会让它消失**（详 `follow-ups.md` PROB-011）。
+3. **`tasks.md` 4.4 的勾选有没有替 `finish` 回显背书**：没有。4.4 勾的是「verify-bc 绿 / 7 个提交 / L3 0 findings / 两远端已核实」，finish 自身回显明写不入本条（`aiws change status` 要求全部勾完才能归档，这是工具的既有约束，处理方式与 dev-log §8.2 的自指限制一致）。
+4. **两道归档门禁是工具报的、不是我绕的**：脏树拒绝（`Refusing to finish with a dirty working tree`，`exit=2`）与未勾项拒绝（`tasks.md still has unchecked required tasks (1 items)`）都保留其原始报错，我没有 `--force`、没有 stash 用户在先产物、没有改 FSM 状态字段；解开的方式只有「按审查建议拆提交」和「把已完成的事写清楚」。

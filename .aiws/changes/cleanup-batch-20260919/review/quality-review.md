@@ -203,3 +203,17 @@
 * 库侧（首版 `80`，定格后改为带列名单行探针 `83`）：`e2e_leads=e2e_sites=e2e_projects=e2e_users_nonadmin=memberships=reminder_notices=0`、`assigned_actor_null=0`（本轮修的审计留痕）、`leads_activity_table=0`；`leads_total` 63→67，增量全部来自仍 OPEN 的 PROB-007，本批三个新 spec 零残留。
 * 退出码一律由命令本身直接写入日志末行（`tsc_exit=` / `e2e_exit=` / `psql_exit=`），**不过管道**——上一轮的 `$?`-after-pipe 假绿教训（dev-log §8.7）已固化为本轮做法。
 * 收尾回收两个 dev 进程树，`netstat` 对 `:3000`/`:4321` 监听计数 0。
+
+## 8. 2026-09-20 归档前轮补记（memory-bank 独立入库 + 推送）
+
+**本轮改了什么**：产品代码 **0 处**、测试 **0 处**；实质动作只有两次 git 操作（快进 `main` 并推两远端、把用户在先的两条 memory-bank 产物拆成独立提交 `dae7ae6`）与文档口径同步。⇒ 回归面收敛到门禁链本身。
+
+**实测（逐道退出码由命令本身写入日志、不过管道）**：
+* `86-scope-after-memorybank.log`：`planverify_exit=0`、`validate_exit=0`（stamp `20260920-083551312Z`）、`strict_exit=0`、`verifybc_exit=0`、`scopegate_exit=2`（越界清单仍只有 memory-bank 两条，与提交前**逐字相同**）。
+* 台账追加 2 条后整套复跑（`87-gates-memorybank.log`），结论不变；`87` 自身输出按 dev-log §8.2 不再入台账。台账终态 52 行 / 51 唯一命令 / 状态异常 0，`git diff --numstat` = `2 insertions / 0 deletions`（幂等脚本 `append-memorybank-records.mjs` 连跑两次 `appended=2 → appended=0`）。
+* 推送侧：`ff_exit=0`、`push_gitee_exit=0`、`push_origin_exit=0`，远端读回 `origin/main = gitee/main = 88c9a80`。
+* 自纠错一处：`87` 首版把「统计旧式证据 warn」的 `grep -c` 扫在**正在写入的同一工件**上，而小标题原样含该 pattern ⇒ 得到 `1`（自指计数，假红）。改为 `verify-bc` 单独落 `87b` 再对其计数 ⇒ `legacy_warn_count=0`；错证说明保留在 `87` 首部，详 dev-log §8.9。
+
+**新增的工具事实（对本仓后续批直接影响）**：把范围外文件提交进本分支**不会**让它从 `--check-scope` 消失——工作树脏改动与分支 diff 被同等计为越界。所以下一批不要指望「先提交掉就干净了」，要么走独立分支，要么在 plan 的 12 条上限内留位置。
+
+**本轮唯一的实质风险与处置**：把别人（这里是 owner 8-31）的未提交产物写进本批分支，最坏情况是「替别人的改动背书」或「误带凭据」。处置依据两条：① 提交前逐字读过 `chatwoot-offline.md`（运维结论 + 站点 URL + 代码位点，**无口令/令牌**），② 不认领归属——不把它加进 allow-list、不在 proposal 的目标里提它，只在 §Scope 单列一段说明它为何搭在这条分支上。这也正是本文件 §L3 当初给的选项，本轮照它执行。

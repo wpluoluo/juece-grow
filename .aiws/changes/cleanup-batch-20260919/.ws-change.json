@@ -2,7 +2,7 @@
   "ws_change_version": 2,
   "id": "cleanup-batch-20260919",
   "title": "清理批次：真值漂移+死模型+兜底+空目录+e2e缺口",
-  "phase": "in-progress",
+  "phase": "finished",
   "created_at": "2026-09-19T09:11:18Z",
   "base_truth_files": {
     "AI_PROJECT.md": {
@@ -20,7 +20,7 @@
   },
   "base_branch": "main",
   "base_branch_set_at": "2026-09-19T09:11:18Z",
-  "synced_at": "2026-09-20T05:02:24Z",
+  "synced_at": "2026-09-20T08:47:36Z",
   "synced_truth_files": {
     "AI_PROJECT.md": {
       "mtime": 1789819241,
@@ -193,6 +193,18 @@
       "synced_at": "2026-09-20T05:02:24Z",
       "baseline_from": "last sync",
       "baseline_at": "2026-09-20T04:59:35Z",
+      "changed": []
+    },
+    {
+      "synced_at": "2026-09-20T08:46:58Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-20T05:02:24Z",
+      "changed": []
+    },
+    {
+      "synced_at": "2026-09-20T08:47:36Z",
+      "baseline_from": "last sync",
+      "baseline_at": "2026-09-20T08:46:58Z",
       "changed": []
     }
   ]
