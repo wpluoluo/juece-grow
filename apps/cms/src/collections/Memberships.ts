@@ -44,6 +44,8 @@ export const Memberships: CollectionConfig = {
           overrideAccess: true,
           where,
           data: { owner: null },
+          // 透传 req：Leads.afterChange 从 req.user 取发起人，不透传则本条清主动态 actor 为空。
+          req,
         })
         await payload.delete({
           collection: 'reminder-notices',

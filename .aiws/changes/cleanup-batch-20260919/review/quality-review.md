@@ -168,3 +168,38 @@
 ## 主 agent 处置（triage）
 
 本报告的逐条处置（含已修 / 另案 / 驳回及反证）见 `../evidence/verify-before-complete.md` §E；已核实的事实性更正：生产不会自动跑迁移（`connect.js:116` 要求 `prodMigrations`）已写入 design R1 与 tasks §5.5。
+
+---
+
+## 7. 2026-09-20 追加审查轮（GATE-005 修复轮：PROB-005/006 合并落地）
+
+> 本节由提交后独立审查（`735bc09`）产出，主 session 逐条自己回码核实后落盘。
+> **上一节的判定不覆盖本轮**：本文件与 `spec-review.md` 最后一次改动停在 `e14c684`，全文对 `PROB-015` / `PROB-016` / `2026-09-20` 零命中，而 `proposal.md` 一直把这两份 review 当本 change 的持久证据 ⇒ 「审计写路径变更（P1）需独立门禁 + 双审查」当时是空签。本轮补：门禁 `docs/gates/GATE-005-assign-clone-error-and-audit-fix.md` + 本节 + `spec-review.md` §6。
+> 方式：只读审查 + 主 session 自己复跑（`npx tsc --noEmit` `78-tsc-reviewfix.log` exit=0；全量 e2e `79-e2e-reviewfix.log`；库侧残留 `80-db-after-reviewfix.txt`）。未连线上、未改数据。
+
+### 7.1 判定
+
+**PASS（本轮必修项已收口）** — 本轮处置：**代码 3 处**（`Memberships.ts:42-49`、`Users.ts:41-49` 级联透传 `req`；`Leads.ts:183-189` 删恒真二次校验含其 import）、**测试/注释 3 处**（`leads-assign.spec.ts` 新增级联审计用例、actor 用例改自足、正向注释按实际钉法改写）、**工件 4 处**（`docs/gates/GATE-005-*`、本文件 §7、`spec-review.md` §6、`evidence/` 四件）、**文字级 1 处**（`dev-log.md §8.7` 计数笔误）；**登记另案 6 条**（PROB-017..022）；**驳回 0 条**（审查者每条主张都在码上找到落点，其中 2 条我核出更精确的边界，见 7.2 的 #4/#7）。
+
+### 7.2 逐条与处置
+
+| # | 发现（审查者提出 → 主 session 核实） | 处置 | 证据 |
+|---|---|---|---|
+| 1 | **HIGH：P1 审计写路径变更没有任何审查/门禁工件覆盖**（review 两份停在 `e14c684`；`docs/gates/` 只有 001..004；`verify-bc` 只查文件在盘 ⇒ 报 `ok` 属空签） | **本轮修**：立 GATE-005 + 补本节 + `spec-review.md` §6；PROB-005/006 台账 Notes 指向 GATE-005 并去掉重复归因 | 本文件、`docs/gates/GATE-005-*.md`、`.aiws/issues/problem-issues.jsonl` |
+| 2 | `access.ts:112/118/141-142/152` 三处 `findByID` 未关默认抛错却写 null 分支 ⇒ 恒不可达死兜底（§4），越权探测状态码失真为 500；fail-closed 未破（抛错即拒绝） | **另案 PROB-020**（权限语义改动需独立门禁，不与清理批混做）。核实补正：审查者列的 4 个定位中 `:118-119` 是 `users` 查询、`:141-142` 与 `:152` 同属一个函数，条数应为「三处调用、四行分支」 | `apps/cms/src/access.ts:112,118,141,152`、`payload/dist/collections/operations/findByID.js:105-109` |
+| 3 | 「本地 API 写未透传 `req` 丢审计」还有第三、四实例：`Memberships.ts:42`、`Users.ts:42` 级联清主 | **本轮修**：两处透传 `req`；新增 e2e 用例钉住「成员被移除 → 清主动态 actor=发起人」 | `79-e2e-reviewfix.log`（61 tests / 59 passed / 2 skipped / exit=0）、`80-db-after-reviewfix.txt`（`lead_activities` 中 `type=assigned AND actor_id IS NULL` = 0） |
+| 4 | 级联清主被记成 `type=assigned`、`detail=已分配跟进人` | **另案 PROB-018**：`LeadActivities.type` 无 `unassigned` 档（`LeadActivities.ts:50-56`），加档位＝改 Postgres enum ⇒ 按 §7 另批。本轮测试按 `meta.owner===null` 选行并注释写明不为该标记背书。**核实补正**：审查者称「误标 + 丢审计」是一体，实际可分开——审计本轮已修，标记需迁移 | `apps/cms/src/collections/Leads.ts:92-100`、`LeadActivities.ts:50-56` |
+| 5 | `Leads.ts:184` `!memberCanWriteProject(...) \|\| !isProjectMember(...)` 第二项恒真（写角色 ⊆ 成员）且多打一次 memberships 查询 | **本轮修**：删第二项与 `isProjectMember` import，留一行「写角色 ⊆ 成员」说明。语义核对：assignee 是否本成员由 `:206-225` 单独校验，未放宽；`leadScopedWrite` 走的是另一个函数 `isProjectMemberOf`，未受影响 | `apps/cms/src/access.ts:49-58`、`apps/cms/src/collections/Leads.ts:183-189,206-225` |
+| 6 | 超 int4 的 `leadId`（`2147483648`）仍回 500，却被本轮当作「500 分支未死」的证据 | **另案 PROB-017**（P3）。该探针作为「500 分支活着」的证据成立（确实进了 catch 且日志留痕），但作为语义它暴露的是缺上界校验——文档不再把它当正向证据引用 | `61-assign-500-branch-probe.log`、`Leads.ts:152` |
+| 7 | 「catch 不留痕」只在这两个端点治，`/api/v2/*` 另有 6 处静默 500 | **另案 PROB-021**：留半套口径比统一缺失更难查，须一次扫全。核实：`grep -rn logger.error apps/cms/src` 仅 `Leads.ts:248`、`Sites.ts:130` 两处命中，审查者列的 6 处行号逐条存在 | `apps/cms/src/app/api/v2/{content/articles/route.ts:124,reminders/run/route.ts:21,webhooks/chatwoot/route.ts:83,117,stats/leads/route.ts:213,leads/route.ts:122}` |
+| 8 | 两端口点手写信封约 22 处、未复用 `lib/envelope.ts` 的 `ok/err`（§4 双写），且这两条路径不在 `/api/v2/*` 下 | **另案 PROB-022**：复用 envelope 会同时改这两个端点的全部响应头与状态码语义，需独立验证；是否迁 v2 也要先定 | `apps/cms/src/lib/envelope.ts:39-49`、`Leads.ts:138-252`、`Sites.ts:34-134` |
+| 9 | `dev-log.md §8.7` 首行「4 处产品代码 + 3 个 spec」与 `git show --stat` 不符 | **本轮修**（文字级）：产品代码本轮实为 4 处 + 另 2 处级联（#3）、spec 2 个 | `git show --stat 735bc09`、`evidence/dev-log.md §8.7/§8.8` |
+| 10 | 「钉不住」的三个口子：`depth: 0` 的键集断言其实钉不住（只有 `typeof owner` 钉得住）、actor 用例复用前一个用例的副作用、500 分支无自动化用例 | **本轮修前两项**：注释按实际钉法改写；actor 用例改为自足（自己建线索、自己调端点）。第三项**接受不做**——注入真实库异常需要破坏库，改由 `61` 手工探针 + PROB-017/019 台账守住，并在 `verify-before-complete.md` 明说这是人工证据 | `apps/e2e/tests/leads-assign.spec.ts`（正向注释 + 「审计：端点分配写出的动态带发起人 actor」用例）、`evidence/verify-before-complete.md §A-20/§A-22` |
+
+### 7.3 回归保护实测（本轮复跑，不采信自述）
+
+* `npx tsc --noEmit -p tsconfig.json` → `exit=0`（`78`），覆盖 `Memberships.ts`/`Users.ts`/`Leads.ts` 三处改动。编辑定格后复跑 `81-tsc-reviewfix2.log` 同 `exit=0`。
+* 全量 `pnpm --filter e2e test` → `Running 61 tests using 1 worker` → **`59 passed (1.1m)` / `2 skipped`、`exit=0`**（`79`）。较上轮 +1 用例（级联审计），两条 skip 仍是 C7 缺 `CHATWOOT_WEBHOOK_SECRET`。定格后复跑 `82-e2e-reviewfix2.log`：`59 passed (20.1s) / 2 skipped / e2e_exit=0`（同结论）。
+* 库侧（首版 `80`，定格后改为带列名单行探针 `83`）：`e2e_leads=e2e_sites=e2e_projects=e2e_users_nonadmin=memberships=reminder_notices=0`、`assigned_actor_null=0`（本轮修的审计留痕）、`leads_activity_table=0`；`leads_total` 63→67，增量全部来自仍 OPEN 的 PROB-007，本批三个新 spec 零残留。
+* 退出码一律由命令本身直接写入日志末行（`tsc_exit=` / `e2e_exit=` / `psql_exit=`），**不过管道**——上一轮的 `$?`-after-pipe 假绿教训（dev-log §8.7）已固化为本轮做法。
+* 收尾回收两个 dev 进程树，`netstat` 对 `:3000`/`:4321` 监听计数 0。

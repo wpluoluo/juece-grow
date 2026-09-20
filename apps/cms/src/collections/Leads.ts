@@ -2,7 +2,6 @@ import { addDataAndFileToRequest, type CollectionConfig } from 'payload'
 
 import {
   isGlobalAdmin,
-  isProjectMember,
   leadScopedWrite,
   memberCanWriteProject,
   projectScopedRead,
@@ -181,7 +180,9 @@ export const Leads: CollectionConfig = {
           }
 
           const projectId = Number(lead.project)
-          if (!(await memberCanWriteProject(req, projectId)) || !(await isProjectMember(req, projectId))) {
+          // 写权限已蕴含项目成员身份（memberCanWriteProject 命中该项目的写角色 ⇒ 成员映射必含该项目），
+          // 不再叠一遍 isProjectMember（恒真，且多打一次 memberships 查询）。
+          if (!(await memberCanWriteProject(req, projectId))) {
             return Response.json(
               { success: false, error: { code: 'FORBIDDEN', message: '无权操作该线索' } },
               { status: 403 },

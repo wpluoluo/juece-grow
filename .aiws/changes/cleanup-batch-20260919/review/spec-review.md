@@ -143,3 +143,44 @@ In Scope 认领过的越界（`apps/cms/scripts/create-e2e-admin.ts`、`apps/e2e
 7. **迁移 `down` 的真实可回滚性**：只做了与基线 `up` 的逐对象文本镜像核对，未在任何库执行过（`evidence §F-3` 亦自陈）。
 8. **PROB-005/006 两条 expected-fail 在「人为修好后」是否会转红**：与 quality-review L7 同——语义（`test.fail(true,…)` + runner 含 "Expected to fail, but passed"）与源码形态一致，但我未做正向对照实验。
 9. **`aiws` 工具内部行为**（`--strict` 为何不带 evidence/scope 校验、`truth_sync` 的 changed 判定粒度）：未读工具源码，仅以 `metrics.json`/`.ws-change.json` 的记录为准。
+
+---
+
+## 6. 2026-09-20 追加规范审查（GATE-005 修复轮的流程与真值归因）
+
+> 轴：Spec（范围 / 归因 / 门禁）。评审对象：`735bc09` 与其后的审查轮工作树。方式：只读核对（`git show --stat`、`grep`、读工件），未跑 build/e2e（其实测在 `quality-review.md §7.3`）。
+
+### 6.1 本轮真实存在的流程缺口（不是文档措辞问题）
+
+**HIGH**：PROB-006 是 P1 审计写路径变更，台账 Notes 自述「需独立门禁 + 双审查」，但落地时 `docs/gates/` 只有 GATE-001..004，`review/quality-review.md` 与 `review/spec-review.md`（即本文件）最后一次改动停在 `e14c684`，两份对 `PROB-015/016`、`2026-09-20` 零命中 ⇒ 「双审查」指向的是不覆盖本轮的旧工件。`aiws verify-bc` 只校验 Evidence_Path 里的文件**是否存在**，不校验内容是否覆盖当轮 ⇒ 它连续报 `ok: all gates passed (tier=strict)` 属结构上空签，不是本轮改坏了什么。
+
+**处置（已落地）**：补 `docs/gates/GATE-005-assign-clone-error-and-audit-fix.md`（含方案对比 A/B/C、7 项修复清单、5 项「为什么不改」、风险回滚、自检项）+ `quality-review.md §7`（逐条发现与处置）+ 本节；PROB-005/006 台账 Notes 增指 GATE-005。
+**根因级结论（写给下一批）**：审查工件的「在盘」不等于「覆盖本轮」。凡在本 change 内追加改动，必须同轮改写 review 两份，否则 finish 时的证据链是断的——建议把这条并入 ws-finish 自检（不在本批改工具，PROB-011/013 已代表工具侧缺陷）。
+
+### 6.2 真值与归因同步核对（本轮 7 处）
+
+| 工件 | 本轮是否改齐 | 核对方式 |
+|---|---|---|
+| `.aiws/issues/problem-issues.jsonl` | 是：005/006→DONE（指 GATE-005）、新增 017..022 共 22 行、去掉 005/006 的重复归因与时态矛盾 | 脚本回读打印 `rows=22 重复ID=0 归因次数=1`，连跑两次 `appended=6 → 0` |
+| `docs/gates/GATE-005-*.md` | 新增（owner 裁决原文照抄进状态行） | 与裁决文本逐字比对 |
+| `.aiws/plan/2026-09-19-cleanup-batch.md` | 是：Scope 前言的 `apps/cms/` 改动枚举由七处改**九处**（补 `Memberships.ts`/`Users.ts`）、范围说明表补 `Memberships`/`Users`/`GATE-005` 三行、`docs/` 括注补 GATE-005、Plan 第 8 步改写为「两轮审查」；台账范围 `PROB-001..022` | `plan-verify` exit=0；`## Plan` 仍 ≤8 步（未新增第 9 步）、In Scope 仍 ≤12 条 |
+| `proposal.md` | 是：目标 / 方案概述 / In Scope 行 / 协同 review 段 / 验证计划 / 真值清单六处 | `change validate --strict` exit=0 |
+| `tasks.md` | 是：新增 2.15/2.16、3.2/3.3/3.7 按实测改写、1.2/1.4/5.2 的台账范围与 OPEN 归集刷新到 PROB-001..022 | `change tasks validate` 绿 |
+| `evidence/*`（verification.jsonl、verify-before-complete、follow-ups、dev-log） | 是：台账追加至 50 条、§A-20/21/22、005/006 段落改 DONE、§8.7 计数笔误改正 + 新增 §8.8 | 每条记录指向 `.aiws/tmp/.../{67..85}` 工件 |
+| `.aiws/requirements/CHANGELOG.md` | 是：本轮共两行——错误码与响应面契约变更一行（2.14）、审计留痕外延 + 死权限判断精简一行（2.15） | 与代码实际返回逐字对照（`SOURCE_NOT_FOUND`/`ASSIGNEE_NOT_FOUND`/`LEAD_NOT_FOUND`、`{id,owner}`；`assigned_actor_null=0`） |
+
+`REQUIREMENTS.md` 本轮**不需**改：无新增需求，REQ-0001/0002 状态未变（真值收敛已在 §1 完成）。
+
+### 6.3 范围裁决
+
+* 改动文件全部落在 plan 的机读 allow-list 内（`apps/cms/`、`apps/e2e/`、`docs/`、`.aiws/**` 对应条目）⇒ 加强门禁 `--strict --check-evidence --check-scope` 的越界清单仍只有用户在先的两条 `.aiws/memory-bank/` 产物（`exit=2` 是设计预期，不是失败）。
+* owner 裁决「不用各立一个项目」被忠实执行：一个提交、一个门禁、一份回滚单位。
+* 审查带出的 6 项新缺陷**没有**被静默塞进本批：`PROB-017/018/019/020/021/022` 单独立行、各自写明「为何不随批」（schema 迁移 / 权限语义 / 跨文件重构 / 并发量级），只有「同一根因的级联审计」（#3）与「恒真死兜底」（#5）属同批改范围而当场修。
+* 上一节 §5 未证实项 8（`test.fail` 修好后是否转红）随本轮失效：两条 `test.fail` 已摘除、`grep -rn "test.fail" apps/e2e/tests/` 无命中，该项不再需要对照实验。
+
+### 6.4 仍未闭合的（诚实清单）
+
+1. `finish`/`push` 未做（owner 只批到「提交吧」）。
+2. 线上仍按裁决未动：`leads_activity` 是否存在于生产未核实，`payload migrate` 不单独开窗口。
+3. 「500 分支未死」的证据是**手工探针**（`61`），无自动化用例（注入真实库异常需破坏库）；已在 `quality-review §7.2 #10` 记为接受不做。
+4. PROB-007 仍在放大 dev 库线索数（`leads_total` 63 → 67，每轮 e2e +4，见 `83-db-after-reviewfix2.txt`），本批三个新 spec 自身零残留。

@@ -852,7 +852,7 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 
 ### 8.7 2026-09-20 · PROB-005/006 合并修复轮（裁决 5 的落地）与两处当场带出的新问题
 
-改动（4 处产品代码 + 3 个 spec）：
+改动（4 处产品代码 + 2 个 spec；「3 个 spec」是首版笔误，2026-09-20 审查轮按 `git show --stat 735bc09` 改正）：
 
 | 位置 | 改动 | 治的是 |
 |------|------|--------|
@@ -877,7 +877,43 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 **为什么这两条不是「顺手扩大范围」**：PROB-016 与已批准修复的 PROB-005 是同一行代码模式的另一个实例（扫同类时命中）；PROB-015 是修复 PROB-006 时必须看响应体才看到的——它是那次审查的直接产物，不是新需求。两条都在台账单独立行（含「当时为何没被测试拦住」），没有混进 005/006 的叙述里。
 
 **诚实边界**：
-1. `/assign` 与 `/clone` 的「读后删」竞态仍回 500（不是逻辑死分支，是并发窗口）；改事务属另一量级，未做，记在 `follow-ups.md` PROB-016 段末。
-2. `leads` 计数 51 → 55 → 59：本批新增的三个 spec 自清零残留，增量全部来自 PROB-007（`lead.spec.ts` 提交类用例每轮净增 4），该问题仍 OPEN，未被本轮修掉。
+1. `/assign` 与 `/clone` 的「读后删」竞态仍回 500（不是逻辑死分支，是并发窗口）；改事务属另一量级，未做，已单独立项为 **PROB-019**（首版写成「记在 PROB-016 段末」，审查轮后改为独立行，见 `follow-ups.md`）。
+2. `leads` 计数 51 → 55 → 59 → 63 → 67：本批新增的三个 spec 自清零残留，增量全部来自 PROB-007（`lead.spec.ts` 提交类用例每轮净增 4），该问题仍 OPEN，未被本轮修掉（`83-db-after-reviewfix2.txt` 为最近一次实测）。
 3. 未连接、未改动任何线上资源；生产侧仍只有 `release-prerequisites.md` 那份人工清单。
+
+### 8.8 2026-09-20 · `735bc09` 提交后的独立审查轮：一处 HIGH 流程缺口 + 代码 3 处 / 测试注释 3 处修复
+
+**方式**：只读审查子代理（不采信其自述）→ 主 session 逐条回码核实 → 能当场修的修、不该在本批修的立台账。审查者报出 10 条主张，**驳回 0 条**（每条都在码上找到落点），其中 2 条我核出更精确的边界：
+
+- 它把 `access.ts` 的死分支列成 4 个定位，实测 `:118` 是 `users` 查询、`:141` 与 `:152` 同属一个函数 ⇒ 应为「三处调用、四行分支」，登记为 PROB-020 时按核实后的口径写。
+- 它把「级联清主误标 `assigned`」与「丢审计发起人」当一体缺陷，实际可分：审计发起人本轮已修（透传 `req`），标记语义要改 `LeadActivities.type` 枚举 ⇒ 按 §7「改枚举必须走迁移」另案 PROB-018。
+
+**HIGH（流程，不是代码）**：§8.7 那轮改的是**审计写路径**＝AGENTS.md §8 的高风险类，但 `review/quality-review.md`、`review/spec-review.md` 的最后一次改动停在 `e14c684`，全文对 `PROB-015/016`、`2026-09-20` 零命中，而 `proposal.md` 一直把这两份文件当本 change 的持久证据；`aiws verify-bc` 只检查 Evidence_Path 里的文件**是否存在**、不检查是否覆盖本轮 ⇒ 它报 `ok: all gates passed` 是空签。教训固化成一句：**审查工件的「在盘」不等于「覆盖本轮」**。处置不是辩解措辞，而是补立 `docs/gates/GATE-005-assign-clone-error-and-audit-fix.md`（含方案对比 A/B/C、7 项修复清单、显式的「为什么这几条不改」清单）+ 两份 review 的日期化小节（quality §7、spec §6）。
+
+**当场修的（代码 3 处 + 测试/注释 3 处 + 工件 4 件 + 文字级 1 处；口径与 `quality-review.md §7.1` 一致）**
+
+| 位置 | 改动 | 治的是 |
+|------|------|--------|
+| `Memberships.ts:42-49` | 级联清主 `payload.update` 透传 `req` | PROB-006 同类第 3 实例（清主动态 `actor` 落空） |
+| `Users.ts:41-49` | 同上透传 `req`；下方 `lead-activities` 的 update **故意不改**（它不写受审计事件，透传只会多带一个无意义 user 上下文） | PROB-006 同类第 4 实例 |
+| `Leads.ts:183-189` | 删恒真的 `!isProjectMember(...)` 第二项与 `../access` 里的该 import | §4 死兜底 + 每次分配多打一次 memberships 查询 |
+| `leads-assign.spec.ts` 正向用例注释 | 按实际钉法改写：键集白名单钉不住 `depth: 0`，`typeof owner === 'number'` 才钉得住 | 我自己上一轮写下的空签断言 |
+| `leads-assign.spec.ts` actor 用例 | 改为自建线索、自调端点（不再复用前一用例的副作用） | 用例间耦合 |
+| `leads-assign.spec.ts` 末条（新增） | 删成员 → 断言 `owner` 置空、动态数 +1、按 `meta.owner===null` 选行、`actor` 为发起人 | 钉住本轮 #3/#4 的修复 |
+
+**另案登记 6 条**（PROB-017 int4 上界缺失 / 018 清主误标 `assigned` 需 enum 迁移 / 019 读后写竞态回 500 / 020 `access.ts` 三处死 null 分支 / 021 `/api/v2/*` 另 6 处静默 500 / 022 22 处手写信封绕过 `lib/envelope.ts`）：逐条含「为何不在本批做」，登记脚本 `append-review-probs.mjs` 连跑两次得 `appended=6 rows=22` → `appended=0`，重复 ID `0`。
+
+**实测（全部由主 session 自己跑，退出码写入日志末行、不过管道）**
+
+- `npx tsc --noEmit -p tsconfig.json` → `tsc_exit=0`（`78`，改前基线；`81-tsc-reviewfix2.log` 为编辑定格后复跑，同样 `exit=0`）。
+- `pnpm --filter e2e test` → `Running 61 tests using 1 worker` / `59 passed` / `2 skipped` / `e2e_exit=0`（`79` 与定格后复跑 `82`，两次同结论；+1 用例即上表末行）。
+- 库侧带列名探针 `83-db-after-reviewfix2.txt` → `leads_activity_table=0 e2e_leads=0 e2e_sites=0 e2e_projects=0 e2e_users_nonadmin=0 memberships=0 reminder_notices=0 assigned_actor_null=0 leads_total=67`，`psql_exit=0`。首版 `80` 是不带列名的 9 字段拼接，可读性差 ⇒ 定格后换成带列名版本，两者结论一致（`leads_total` 63→67 的 +4 仍是 PROB-007）。
+- 门禁链 `84-gates-reviewfix.log`（跑时台账 47 条：第 45–47 条已追加、本轮的门禁记录 48–50 尚未）：`plan-verify` / `change sync`（`No changes detected vs baseline.`）/ `validate . --stamp`（stamp `20260920-045712798Z`）/ `--strict` / `tasks validate` / `verify-bc` 全 `exit=0`，加强门禁 `--check-evidence --check-scope` `exit=2` 且越界项仍只有 `.aiws/memory-bank/` 两条；`verify-bc` 工件内 `legacy evidence assumed` 计数 `0`。**七道退出码逐道由命令本身写入日志**（`planverify_exit=` … `scopegate_exit=`），不经管道（上一轮假绿的教训按此固化）。追加第 48–50 条后再整套复跑一遍（`85-gates-reviewfix-after-ledger.log`）⇒ 逐条结论不变；按 §8.2 的自指限制，`85` 自身输出不再入台账。
+- 收尾：两个 dev 进程树（`:3000` PID 9484 / `:4321` PID 55912）用 `MSYS_NO_PATHCONV=1 taskkill /T /F /PID` 回收，`netstat` 对两端口监听计数 `0`。
+
+**诚实边界**：
+1. 本轮修的是「审计发起人缺失」，**没有**修「动态类型标错」（PROB-018）：新用例只按 `meta.owner===null` 选行并断言 `actor`，注释里明写不为 `assigned` 这个标记背书 ⇒ 若后续有人把它读成「测试认可了标记语义」，那是误读。
+2. 500 分支仍**没有**自动化用例：注入真实库异常需要破坏库，本轮不做，改由 `61` 手工探针 + PROB-017/019 台账守；这属人工证据，已在 `verify-before-complete.md` §A-22 明说。
+3. `PROB-020` 的三处死分支只在本轮删掉了 assign 端点自己用到的那一处判断，`access.ts` 内其余三处仍在（权限语义改动需独立门禁）。
+4. 审查是**提交后**才跑的（约定：commit 后默认追一轮独立审查）⇒ 本轮修复随第二个提交入库，`735bc09` 本身未被改写（不 `--amend`）。
 

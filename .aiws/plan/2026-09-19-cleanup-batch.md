@@ -30,8 +30,8 @@
 
 ## Scope
 
-> 机读口径：`### In Scope` 下每条 bullet **只写一个路径**（`aiws change validate --check-scope` 的解析器把整条 bullet 当作一个路径前缀/glob，句后附带说明会让该条匹配失效——本批曾因此把已声明的文件报成越界），且**条目数上限 12**（超过即判 `scope is too broad`）。两条规则合起来迫使 allow-list 只能到目录粒度，因此下表 `apps/cms/` 是本批实际改动文件的**上界**而非许可证：本批在 `apps/cms/` 内只改了 `src/collections/Leads.ts`、`src/collections/Sites.ts`、`src/lib/envelope.ts`、`src/migrations/`（新增迁移 + `index.ts` 登记）、`src/payload-types.ts`、`scripts/create-e2e-admin.ts`、`.env.example` 七处，`src/payload.config.ts` 与三个提醒集合**未动**（反证：`git status --porcelain` 不含这些路径，spec-review 的 Out-of-Scope 表逐条核实过）。人类说明见下方表格。
-> 2026-09-20 追加 `reference/` 出库时，为守住 12 条上限把 `scripts/cms-run.sh`+`scripts/backup.mjs` 折叠为 `scripts/`、`docs/08-deployment.md`+`docs/07-design-theme.md` 折叠为 `docs/`。allow-list 精度因此再降一档（`scripts/` 下本批只动 `backup.mjs`、`cms-run.sh`，`docs/` 下只动 07/08 两篇），精确性仍由 `git status --porcelain` + spec-review 的 Out-of-Scope 表承担（PROB-011）。
+> 机读口径：`### In Scope` 下每条 bullet **只写一个路径**（`aiws change validate --check-scope` 的解析器把整条 bullet 当作一个路径前缀/glob，句后附带说明会让该条匹配失效——本批曾因此把已声明的文件报成越界），且**条目数上限 12**（超过即判 `scope is too broad`）。两条规则合起来迫使 allow-list 只能到目录粒度，因此下表 `apps/cms/` 是本批实际改动文件的**上界**而非许可证：本批在 `apps/cms/` 内只改了 `src/collections/Leads.ts`、`src/collections/Sites.ts`、`src/collections/Memberships.ts`、`src/collections/Users.ts`（后两处为 2.15 审查轮的级联 `req` 透传）、`src/lib/envelope.ts`、`src/migrations/`（新增迁移 + `index.ts` 登记）、`src/payload-types.ts`、`scripts/create-e2e-admin.ts`、`.env.example` 九处，`src/payload.config.ts` 与 `collections/{LeadActivities,ReminderRules,ReminderNotices}.ts` **未动**（反证：`git status --porcelain` 不含这些路径，spec-review 的 Out-of-Scope 表逐条核实过）。人类说明见下方表格。
+> 2026-09-20 追加 `reference/` 出库时，为守住 12 条上限把 `scripts/cms-run.sh`+`scripts/backup.mjs` 折叠为 `scripts/`、`docs/08-deployment.md`+`docs/07-design-theme.md` 折叠为 `docs/`。allow-list 精度因此再降一档（`scripts/` 下本批只动 `backup.mjs`、`cms-run.sh`，`docs/` 下只动 07/08 两篇与新增的 `docs/gates/GATE-005-*.md`），精确性仍由 `git status --porcelain` + spec-review 的 Out-of-Scope 表承担（PROB-011）。
 
 ### In Scope
 
@@ -54,10 +54,12 @@
 |---|---|
 | `REQUIREMENTS.md` | 合并重复 `## Backlog`；REQ-0001/0002 连同验收条目移入「已完成」，并按证据类型标注（真跑 / 代码核实 / 沿用 8-26 归档） |
 | `.aiws/requirements/CHANGELOG.md` | 删 `| YYYY-MM-DD |` 模板行 + 追加本轮真值同步记录 |
-| 两份 jsonl 台账 | 问题台账 PROB-001..016（删 `PROB-000` 模板种子行）；需求合同行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At` |
+| 两份 jsonl 台账 | 问题台账 PROB-001..022（起点 001..004 → 首轮审查 005..014 → 2.14 修复轮 015/016 → 2.15 审查轮 017..022；删 `PROB-000` 模板种子行）；需求合同行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At` |
 | `AI_WORKSPACE.md` | 补齐本仓可复现的验证入口（build / e2e / gate / 前置），并点名 `PUBLIC_CORS_ORIGINS` |
 | `apps/cms/src/collections/Leads.ts` | 删 `activity` array 字段块；修正指向不存在的 `lib/leadActivity` 的注释；2026-09-20 随裁决修 `/api/leads/assign`：两条 `findByID` 加 `disableErrors` → 404、`update` 透传 `req`（actor 落库）+ `depth: 0`（响应不回他人 `sessions[]`）、`catch` 记日志（PROB-005/006/015） |
 | `apps/cms/src/collections/Sites.ts` | 2026-09-20 与上条同一轮：`/api/sites/clone` 的 `findByID` 加 `disableErrors` → `404 SOURCE_NOT_FOUND`（原被 `catch` 混成 500），`catch` 改记 `logger.error`（PROB-016） |
+| `apps/cms/src/collections/Memberships.ts` | 2.15 提交后审查轮：`beforeDelete` 级联清主的 `payload.update` 透传 `req` ⇒ `Leads.afterChange` 能取到发起人，清主动态不再落空 `actor`（与 PROB-006 同一类的第 3 实例） |
+| `apps/cms/src/collections/Users.ts` | 同上第 4 实例：用户删除时的级联清主透传 `req`；同函数里 `lead-activities` 的 update **故意不改**（它不写受审计事件，透传只会多带一个无意义的 user 上下文） |
 | `apps/cms/src/migrations/` + `payload-types.ts` | 新增 `20260919_093340_drop_lead_activity` 迁移并登记；类型再生成 |
 | `apps/cms/src/lib/envelope.ts` | 删 `DEFAULT_CORS_ORIGINS`；未配置时**首个 `/api/v2/*` 请求**抛错（500，无堆栈外泄），无 dev 分支 |
 | `apps/cms/.env.example`、`scripts/cms-run.sh`、`docs/08-deployment.md` | CORS 配置先行；`cms-run.sh` 用 `${VAR:?}` 把漏配前移到 `docker run` 之前终止；部署文档补生产迁移不自动执行的前置说明 |
@@ -66,6 +68,7 @@
 | `scripts/backup.mjs` | 删内置 `DEFAULT_URI` 兜底（含明文口令），改为连接串必给其一；失败输出不回显口令（PROB-010） |
 | `reference/`（2026-09-20 出库） | owner 裁决删除 `reference/juecesass-marketing-20260825/` 旧 Vue 站快照（实测 `git rm -r` 删 **16 个已入库文件**、清 **7 个目录**，含 `SHA256SUMS.txt`；计数出自 `.aiws/tmp/cleanup-batch-20260919/64-refdrop-probe.txt`）；历史上该路径只被 `41a258c` 一个提交动过 ⇒ 取回命令 `git checkout 41a258c -- reference/`。删除理由：与本仓「juecesass 独立、不混用模块与字段」红线相邻，留在树里易被当现成组件抄用 |
 | `docs/07-design-theme.md` | §2.1 品牌色小节原标题把旧站写成在盘回溯路径，出库后会指空 ⇒ 改为版本化的 `git checkout` 取回命令（同上一行） |
+| `docs/gates/GATE-005-assign-clone-error-and-audit-fix.md`（新增） | 2.15 审查轮补立的高风险门禁：`/assign`·`/clone` 的 404/500 错误分流与**审计写路径**变更（§8 要求独立门禁），含方案对比 A/B/C、7 项修复清单、显式的「为什么这几条不改」清单（映射 PROB-017..022）、影响范围与回滚 |
 | `.aiws/goals/`、`.aiws/plan/`、`.aiws/changes/<id>/` | 本 change 的 goal / intake / plan / proposal / tasks / review / evidence 产物 |
 
 明确**不在**本批范围：`apps/astro/**`、`AI_PROJECT.md`（托管块内，见 PROB-009）、`apps/cms/src/payload.config.ts`（`DATABASE_URI || ''` 留 PROB-008）、`collections/{LeadActivities,ReminderRules,ReminderNotices}.ts`、`infra/**` 与容器编排文件、`.aiws/memory-bank/**`（用户在先产物，本批不 stage）。
@@ -79,7 +82,7 @@
 5. **T5 结构清理（#5 + #7）**：删 6 个空目录；确认 Payload `components` 实际解析路径仍为 `apps/cms/components/*`（importMap 已验证），避免删 `src/components` 后 admin 组件断链。**#7 于 2026-09-20 owner 裁决后并入本步**：`git rm -r reference/` 删旧 Vue 站快照的 16 个已入库文件、清 7 个目录（⇒ 本批累计净减 12 个目录），并连带把 `docs/07-design-theme.md` §2.1 的在盘回溯指针改成版本化取回命令。不另立 change 的理由：纯删除不参与构建/运行的已入库快照 + 一处文档指针，无代码、无 schema、无对外行为变更，单提交可 `git revert`；其"待决策"状态本就登记在本批 intake/plan，另立案会把同一决策拆成两处真值。
 6. **T6 e2e 补齐（#6）**：`apps/e2e/tests/reminders.spec.ts`（造 `createdAt` 30 天前的 new 线索与 `nextFollowUpAt` 已过的 contacted 线索 → 建 due/sla 规则 → admin 调 `/api/v2/reminders/run` → 断言 `created>0`、notice 落库、`LeadActivities` 出 `reminder`、重复调用 `created=0`、线索状态未被改）；`apps/e2e/tests/leads-assign.spec.ts`；`apps/e2e/tests/sites-clone.spec.ts`。造数以 admin 会话直调 Payload REST，测试自清理。
 7. **T6b e2e origin 收敛与路由预热（新增，PROB-012）**：`apps/e2e/helpers/origins.ts` 作为两个 dev origin（CMS `:3000` / Astro `:4321`）的唯一来源，`playwright.config.ts` 与三个 spec、`cmsRest.ts` 全部改为 import（HEAD 4 处 + 本批 `cmsRest.ts` 1 处共 5 处字面量 → 2 行）；`setup/global-setup.ts` 在注入管理员凭据前用 **TCP** 探测两个端口（冷编译会让 HTTP 探活自身超时），在监听则逐个 GET 把路由预编译。原因（实测根因）：Next 16 dev（Turbopack）按首次请求编译路由，单条冷编译 41.7–48.3s > Playwright 每例 `timeout: 30_000`，会在**功能正常**时产出假超时红灯；预热放进 `globalSetup` 使 `pnpm --filter e2e test` 保持零手填参数即可复现绿灯。**不**改用 playwright `webServer`（会接管生命周期并与本批既有的"服务由外部启动"约定冲突）。
-8. **T7 验证与审查**：本地跑全套验证 → `ws-quality-review` + `ws-spec-review` 双审查（schema 迁移属高风险）→ `aiws verify-bc` → commit → finish。
+8. **T7 验证与审查（两轮）**：本地跑全套验证 → `ws-quality-review` + `ws-spec-review` 双审查（schema 迁移属高风险）→ `aiws verify-bc` → commit。**提交后默认再追一轮独立审查**（2026-09-20 对 `735bc09` 执行）：该轮把「本地 API 写未透传 `req` ⇒ 审计丢发起人」外延到第 3/4 实例（`Memberships.ts`、`Users.ts`）当场修掉、删掉 `/assign` 恒真的 `isProjectMember(...)` 死权限项，并补立本批缺失的高风险门禁 `docs/gates/GATE-005-*.md`（该轮核出的流程缺口：两份 review 停在上一提交、`verify-bc` 只查工件在盘不查覆盖本轮 ⇒ 当时的「双审查」是空签），另案登记 PROB-017..022。发现与处置逐条落 `review/quality-review.md` §7、`review/spec-review.md` §6、`evidence/dev-log.md` §8.8。
 
 ## Risks & Rollback
 

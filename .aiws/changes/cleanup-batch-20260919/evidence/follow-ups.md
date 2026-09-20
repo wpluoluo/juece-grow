@@ -1,7 +1,7 @@
 # 本批发现的后续问题与处置 · cleanup-batch-20260919
 
-> 真值：`.aiws/issues/problem-issues.jsonl`（PROB-005..016 逐条含定位与证据）。本文件只补「为什么当时不在本批修」与「修的时候要注意什么」，从 `tasks.md §6` 移交至此。
-> 日期：2026-09-19（2026-09-20 更新：PROB-005/006 已随批修毕，PROB-015/016 登记并随批修毕）
+> 真值：`.aiws/issues/problem-issues.jsonl`（PROB-005..022 逐条含定位与证据）。本文件只补「为什么当时不在本批修」与「修的时候要注意什么」，从 `tasks.md §6` 移交至此。
+> 日期：2026-09-19（2026-09-20 两次更新：① PROB-005/006 随批修毕 + 登记并修毕 PROB-015/016；② 提交后独立审查轮登记 PROB-017..022，其中级联审计与恒真死兜底当场修掉）
 
 ## 一、当初为什么不随本批静默修，后来又为什么修了
 
@@ -90,7 +90,7 @@
 
 发现方式：修 PROB-006 时看 `/assign` 的成功响应体，`data.owner` 是填充后的用户对象，带出被分配人的 `sessions[{id(uuid), createdAt, expiresAt}]`。当时**没有**被测试拦住，因为仓库的响应泄漏白名单只查 `hash/salt/token/password` 四个键（`leads-assign.spec.ts` 正向用例），漏了 `sessions`。
 性质核对：`sessions` 关系字段只序列化 id/时间戳，不含 `token`（`apps/cms/src/payload-types.ts:267-273`），所以不是直接可用凭据；但任意有项目写权限的调用方可枚举他人的会话标识与有效期，属不该有的响应面。根因是 `req.payload.update` 未传 `depth`，默认深度做了关联填充。
-处置：`update` 加 `depth: 0`，成功响应收敛为 `{id, owner:<裸 id>}`。断言从「不含某几个敏感键」（黑名单，会漏）改成「键集恰为 `['id','owner']` 且 `typeof owner==='number'`」（白名单 + 类型），一旦端点漏掉 `depth: 0` 立即红。`sites-clone.spec.ts` 正向用例同口径补断言克隆响应键集恰为 `['id','name']`。
+处置：`update` 加 `depth: 0`，成功响应收敛为 `{id, owner:<裸 id>}`。断言从「不含某几个敏感键」（黑名单，会漏）改成白名单 + 类型；两条断言的钉法不同，别说成一样：`typeof owner === 'number'` 才是钉住 `depth: 0` 的那条（漏掉 `depth: 0` 时键集仍是 `['id','owner']`，但 `owner` 变回用户对象），键集断言 `['id','owner']` 钉的是「端点改为直出整条线索」这类回归。`sites-clone.spec.ts` 正向用例同口径补克隆响应键集恰为 `['id','name']` 的断言（该端点回的是自己构造的对象，故此条只防直出整份站点文档，不防深度问题）。
 实测：`71-response-shape-probe.log` → `assign_body={"success":true,"data":{"id":200,"owner":8}}`、`body_has_sessions=false`、`owner_type=number`。
 
 ### PROB-016（P2, DONE 2026-09-20 随批）`/api/sites/clone` 对不存在的 `sourceId` 落 500，且 `catch` 无日志
@@ -100,7 +100,44 @@
 测试：新增用例「负向：sourceId 指向不存在的站点 → 404 SOURCE_NOT_FOUND」，并用「调用前后本文件 TAG 命中站点数不变」断言没落下副本（源站名本身含 TAG，绝对值断言会被前面用例的留观记录干扰）。
 实测：`71-response-shape-probe.log` `clone_nonexistent_http=404`；`72-e2e-final.log` 全量 60 用例 58 passed / 2 skipped。
 
-**同轮未修的边界**：`/assign` 与 `/clone` 都是「先查后写」，若在两次调用之间记录被删，仍会落到 500 而不是 404。这是并发窗口不是逻辑死分支，两条路径都无数据破坏，改成事务属于另一量级的改动，未随批扩大（登记于本段，不另立 PROB；真要修请先立门禁）。
+**同轮未修的边界**：`/assign` 与 `/clone` 都是「先查后写」，若在两次调用之间记录被删，仍会落到 500 而不是 404。这是并发窗口不是逻辑死分支，两条路径都无数据破坏，改成条件更新/同事务重读属于另一量级 ⇒ 已登记 **PROB-019**（见下），修之前先立门禁。
+
+### 以下六条由 2026-09-20「提交后独立审查轮」提出（逐条经主 session 回码核实），全部 OPEN
+
+### PROB-017（P3, OPEN）`/assign` 的 `leadId` 只校验正整数、不校验上界
+
+`apps/cms/src/collections/Leads.ts:152`。传 `2147483648`（越出 Postgres int4）时 `findByID` 抛的是校验错而不是 `NotFound`，`disableErrors` 管不到 ⇒ 仍回 `500 LEAD_ASSIGN_FAILED`。当时没被测试拦住的原因：404 用例用的是库内绝不会出现的正常位 id。
+为什么不在本批修：要修就得给 `/assign`、`/clone`（以及后续端点）共用一套含上界的 id 校验，属输入契约设计而非清理，做一半会留下两种口径。
+修的时候注意：先决定语义——「越界的 id」应当是 400（参数非法）还是 404（必然不存在），别顺手两者都写；`61-assign-500-branch-probe.log` 目前只被当作「500 分支未死」的证据，修完后该探针要改成断言 400/404。
+
+### PROB-018（P2, OPEN）负责人被清空记成 `type=assigned` / `detail=已分配跟进人`
+
+`apps/cms/src/collections/Leads.ts` 的 `afterChange` 只按 `prev.owner !== lead.owner` 分流，owner 由有变无也进 assigned 分支 ⇒ 成员被移除、用户被删除这类「清主」在线上看板上写着「已分配跟进人」，只有 `meta.owner=null` 能区分。
+为什么不在本批修：`LeadActivities.ts:50-56` 的 `type` 无 `unassigned` 档，加档位＝改 Postgres enum ⇒ 按 AGENTS.md §7 属 schema 演进，要单独迁移与双审查，不混进清理批。
+修的时候注意：本批已把这类写入的**审计发起人**补上（`Memberships.ts`/`Users.ts` 透传 `req`），所以修标记时不必再动 req 传参；`leads-assign.spec.ts` 的清主用例目前按 `meta.owner===null` 选行并注释声明不为 `assigned` 标记背书，加档后要改成按类型选行。
+
+### PROB-019（P2, OPEN）`/assign` 与 `/clone` 的读后写竞态仍回 500
+
+见上一段。修的时候注意：条件更新（`where` 带 id 且判 0 行）或同事务重读都改变事务边界，需要先确认 Payload 本地 API 的事务透传行为，别用「捕获异常再判类型」的方式假装修好。
+
+### PROB-020（P2, OPEN）`access.ts` 三处 `findByID` 未关默认抛错却写了 null 分支
+
+`apps/cms/src/access.ts:112-113`（`membershipScopedManage` 的 `m?.project`）、`:118-119`（`isProjectMemberOf` 的 `if (!user) return false`）、`:141-142` 与 `:152`（`leadScopedWrite` 的 `lead?.project` / `String(lead?.owner)`）：`findByID` 不传 `disableErrors` 时对不存在的 id 必抛 `NotFound` ⇒ 这些可选链/null 分支恒不可达，是 AGENTS.md §4 禁止的死兜底。安全性未削弱（抛错即拒绝，fail-closed 成立），失真的是状态码（越权探测不存在的 id 得到 500 而非 403/404）。
+为什么不在本批修：改的是权限判定路径，任何行为变化都要独立门禁 + C6 那类越权用例重跑，清理批不承担。
+修的时候注意：这三处应统一为「查不到即拒绝（返回 false）」而不是照搬端点里的 404 口径——access 函数返回 false 已是拒绝语义，抛错只会把拒绝伪装成服务器故障；同时别把 `isProjectMemberOf` 里对 `users` 的查询与对 `memberships` 的 `find` 混为一谈（后者本来就不抛）。
+
+### PROB-021（P3, OPEN）六处 `/api/v2/*` 的 `catch` 静默回 500 不留日志
+
+`apps/cms/src/app/api/v2/content/articles/route.ts:124`、`api/v2/reminders/run/route.ts:21`、`api/v2/webhooks/chatwoot/route.ts:83` 与 `:117`、`api/v2/stats/leads/route.ts:213`、`api/v2/leads/route.ts:122`。本批给 `Leads.ts:248`、`Sites.ts:130` 补了 `logger.error`，于是仓库变成「两处留痕、六处不留」的半套口径。
+为什么不在本批修：一次扫全才有意义，逐点补会让口径漂移；且 `webhooks/chatwoot` 的 catch 承担「不向外部回调方暴露内部细节」的职责，补日志时要确认不把对方 payload 整体打进日志。
+修的时候注意：统一走 `req.payload.logger.error({ err }, '[tag] ...')`，别引入 `console.error`（`Leads.ts` 的 `afterChange` 里就还有一处 `console.error`，顺手一起收）。
+
+### PROB-022（P2, OPEN）两个自定义端点手写信封，未复用 `lib/envelope.ts` 的 `ok/err`
+
+`apps/cms/src/collections/Leads.ts:138-252` 与 `Sites.ts:34-134` 约 22 处 `Response.json({success…})` 直写，绕开了 `apps/cms/src/lib/envelope.ts:39-49` 的 `ok/err`（那里同时承载 CORS 白名单与本批做的 fail-fast）⇒ 信封字段、错误码风格、响应头三条路径两份实现，属 §4 禁止的双写。
+为什么不在本批修：复用 `ok/err` 会一次性改变这两个端点全部响应的头与状态码语义（包括 `Allow-Origin` 是否出现），需独立验证与双审查；另外这两条路径本身不在 `/api/v2/*` 前缀下（AGENTS.md §6 的对外统一前缀只约束公开接口），立项时要先决定是「留在后台命名空间但复用信封」还是「迁 v2」。
+修的时候注意：`/api/leads/assign` 的失败分支目前带自定义 code（`LEAD_NOT_FOUND` 等），迁到 `err()` 时保持 code 不变，否则本轮刚加的 404 断言会以「code 变了」而非「行为变了」的方式红。
+
 
 ## 三、库侧遗留事实（R5）
 

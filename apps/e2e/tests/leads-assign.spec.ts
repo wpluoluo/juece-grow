@@ -30,6 +30,9 @@ import {
  *     leadId/assigneeId 指向不存在的记录 404 LEAD_NOT_FOUND / ASSIGNEE_NOT_FOUND（按真实原因回，
  *     不得被 findByID 抛的 NotFound 混成 500，PROB-005）；发起人对该项目无写权限 403 FORBIDDEN。
  *
+ *  3. 审计（PROB-006 同因的两条写入路径）：端点分配与「成员被移除 → 级联清主」都必须把发起人落成
+ *     lead-activities.actor；两条用例各自自足（自己调用端点 / 自己删成员关系），不依赖前面用例的副作用。
+ *
  * 造数边界：专属测试项目 + 一次性测试账号，afterAll 删项目（级联）与账号；不触碰 12 条真实线索。
  * 前置：CMS dev @3000；管理员凭据由 setup/global-setup.ts 注入，缺失时整块 skip。
  */
@@ -111,8 +114,9 @@ test.describe('线索分配 POST /api/leads/assign', () => {
       await rawRequest('POST', '/api/leads/assign', adminToken, { leadId: lead, assigneeId: memberUser }),
     )
     expect(Number(data.id)).toBe(lead)
-    // 响应面收敛到 {id, owner}，且 owner 必须是裸 id：Payload 默认深度会把 owner 填成整份用户文档
-    // （含鉴权用的 sessions[]），一旦端点漏掉 depth: 0 这两条断言即红。
+    // 响应面收敛到 {id, owner}。钉住 depth: 0 的是下面那条 typeof 断言：漏掉 depth: 0 时
+    // 键集仍是 ['id','owner']（端点本就只构造这两个键），但 owner 会变成整份用户文档
+    // （含鉴权用的 sessions[]），typeof 即红。键集断言防的是另一类回归：端点改为直出整条线索。
     expect(Object.keys(data).sort(), `分配响应字段面异常：${JSON.stringify(data)}`).toEqual(['id', 'owner'])
     expect(typeof data.owner, '分配响应不得回用户对象').toBe('number')
     expect(Number(data.owner)).toBe(memberUser)
@@ -204,12 +208,59 @@ test.describe('线索分配 POST /api/leads/assign', () => {
     expect(relId((await getDoc(adminToken, `/api/leads/${lead}?depth=0`)).body.owner)).toBe(memberUser)
   })
 
-  test('审计：经 /assign 端点分配写出的动态带发起人 actor', async () => {
-    const activities = await assignedActivities()
-    expect(activities.length).toBeGreaterThan(0)
+  test('审计：端点分配写出的动态带发起人 actor（本用例自己调用端点，不依赖前面用例的副作用）', async () => {
+    const ownLead = await createRequired(adminToken, '/api/leads', {
+      project: projectA,
+      name: `${RUN_TAG}审计线索`,
+      phone: `159${String(TS).slice(-8)}`,
+      status: 'new',
+    })
+    expectOk(
+      await rawRequest('POST', '/api/leads/assign', adminToken, { leadId: ownLead, assigneeId: memberUser }),
+    )
+    const activities = await listDocs(adminToken, 'lead-activities', {
+      where: [
+        ['lead', 'equals', ownLead],
+        ['type', 'equals', 'assigned'],
+      ],
+    })
+    expect(activities).toHaveLength(1)
     // 端点里的 payload.update 必须透传 req，afterChange 才拿得到 req.user；
     // 与 REST 写入路径同一结果（对照上方正向用例断言的 created 动态 actor）。
     expect(relId(activities[0].actor), '端点分配丢失审计操作人').toBe(adminId)
+  })
+
+  test('审计：成员被移除时清主动态也带发起人（级联写不透传 req 即丢审计）', async () => {
+    const membership = await listDocs(adminToken, 'memberships', {
+      where: [
+        ['project', 'equals', projectA],
+        ['user', 'equals', memberUser],
+      ],
+    })
+    expect(membership).toHaveLength(1)
+    const before = await listDocs(adminToken, 'lead-activities', {
+      where: [
+        ['lead', 'equals', lead],
+        ['type', 'equals', 'assigned'],
+      ],
+    })
+
+    await deleteQuietly(adminToken, `/api/memberships/${String(membership[0].id)}`)
+
+    // 清主确实发生：owner 变 null（本文件唯一依赖成员关系的前置）。
+    expect(relId((await getDoc(adminToken, `/api/leads/${lead}?depth=0`)).body.owner), '成员移除后 owner 未置空').toBeNull()
+    const after = await listDocs(adminToken, 'lead-activities', {
+      where: [
+        ['lead', 'equals', lead],
+        ['type', 'equals', 'assigned'],
+      ],
+    })
+    expect(after.length, '成员移除未写出清主动态').toBe(before.length + 1)
+    // 清主动态按 meta.owner=null 选（不是按语义：当前集合的 options 无 unassigned，
+    // 「负责人置空」被记成 type=assigned 是真缺陷，已另登 PROB-018，本用例不为其背书）。
+    const cleared = after.find((a) => (a.meta as { owner?: unknown } | undefined)?.owner === null)
+    expect(cleared, '清主动态缺失 meta.owner=null').toBeTruthy()
+    expect(relId(cleared!.actor), '清主动态丢失审计操作人').toBe(adminId)
   })
 })
 

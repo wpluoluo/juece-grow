@@ -44,6 +44,8 @@ export const Users: CollectionConfig = {
             overrideAccess: true,
             where: { owner: { equals: userId } },
             data: { owner: null },
+            // 透传 req：清主会在 Leads.afterChange 写一条动态，不透传则 actor 为空、查不到发起人。
+            req,
           }),
           // 线索动态操作人已失效：置空，保留事件记录。
           payload.update({
