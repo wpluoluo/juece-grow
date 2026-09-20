@@ -1112,7 +1112,17 @@
         "warnings": 0,
         "exit_code": 2
       }
+    },
+    {
+      "type": "finish_local",
+      "timestamp": "2026-09-20T09:07:45Z",
+      "payload": {
+        "into": "main",
+        "from": "change/cleanup-batch-20260919",
+        "push": false,
+        "gateTier": "strict"
+      }
     }
   ],
-  "updated_at": "2026-09-20T08:47:43Z"
+  "updated_at": "2026-09-20T09:07:45Z"
 }
