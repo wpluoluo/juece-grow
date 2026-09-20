@@ -74,7 +74,16 @@ export const Sites: CollectionConfig = {
             overrideAccess: true,
             id: data.sourceId as number,
             depth: 0,
+            // 与 /api/leads/assign 同口径：Payload 默认对查不到抛 NotFound，会被下面的 catch 混成 500。
+            // 关掉抛错改判 null，让「源站不存在」按真实原因回 404，库异常仍归 500。
+            disableErrors: true,
           })
+          if (!source) {
+            return Response.json(
+              { success: false, error: { code: 'SOURCE_NOT_FOUND', message: '源站点不存在' } },
+              { status: 404 },
+            )
+          }
 
           // 防跨项目：来源站点与落盘项目都须是当前用户可写，避免克隆他人站点/写入他项目。
           const projectId = data.projectId ?? Number(source.project)
@@ -116,7 +125,9 @@ export const Sites: CollectionConfig = {
           })
 
           return Response.json({ success: true, data: { id: clone.id, name: clone.name } })
-        } catch {
+        } catch (err) {
+          // 「源站不存在」已在上面按 null 分流，走到这里只剩数据库/系统异常：细节进日志，前端不露堆栈。
+          req.payload.logger.error({ err }, '[site-clone] 复制失败')
           return Response.json(
             { success: false, error: { code: 'SITE_CLONE_FAILED', message: '站点复制失败，请稍后再试' } },
             { status: 500 },

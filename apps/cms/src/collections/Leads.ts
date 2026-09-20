@@ -168,6 +168,10 @@ export const Leads: CollectionConfig = {
             overrideAccess: true,
             id: data.leadId as number,
             depth: 0,
+            // 「记录不存在」在 findByID 里是抛 NotFound（payload/dist/collections/operations/findByID.js:106-111），
+            // 会被下面的外层 catch 混成 500。disableErrors: true 让本地 API 对查不到返回 null，
+            // 由本函数按真实原因分流：不存在 → 404，数据库/系统异常照常抛出 → 500。
+            disableErrors: true,
           })
           if (!lead) {
             return Response.json(
@@ -189,6 +193,8 @@ export const Leads: CollectionConfig = {
             overrideAccess: true,
             id: data.assigneeId as number,
             depth: 0,
+            // 同上：跟进人不存在也要按真实原因回 404，而不是抛 NotFound 混进外层 500。
+            disableErrors: true,
           })
           if (!assignee) {
             return Response.json(
@@ -223,10 +229,21 @@ export const Leads: CollectionConfig = {
             overrideAccess: true,
             id: lead.id,
             data: { owner: data.assigneeId as number },
+            // depth: 0：默认深度会把 owner 填成整份用户文档（含鉴权用的 sessions[]），
+            // 对外只回裸 id；调用方要展示名字另走 REST 查询。
+            depth: 0,
+            // 透传 req：本地 API 的 createLocalReq 以 `req.user = user || req?.user || null` 取发起人
+            // （payload/dist/utilities/createLocalReq.js:91），afterChange 才拿得到 req.user 写 actor；
+            // Payload 自己的 REST 更新 handler 也是这样传 req 的（payload/dist/collections/endpoints/updateByID.js:20），
+            // 两条写入路径由此产生同一审计结果。
+            req,
           })
 
           return Response.json({ success: true, data: { id: updated.id, owner: updated.owner } })
-        } catch {
+        } catch (err) {
+          // 走到这里只剩数据库/系统异常（「记录不存在」已在上面按 null 分流）：
+          // 细节进服务端日志，前端仍只拿统一 500 信封，不外泄底层异常（AGENTS.md §6）。
+          req.payload.logger.error({ err }, '[lead-assign] 分配失败')
           return Response.json(
             { success: false, error: { code: 'LEAD_ASSIGN_FAILED', message: '分配失败，请稍后再试' } },
             { status: 500 },

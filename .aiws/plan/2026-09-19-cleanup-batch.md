@@ -30,7 +30,7 @@
 
 ## Scope
 
-> 机读口径：`### In Scope` 下每条 bullet **只写一个路径**（`aiws change validate --check-scope` 的解析器把整条 bullet 当作一个路径前缀/glob，句后附带说明会让该条匹配失效——本批曾因此把已声明的文件报成越界），且**条目数上限 12**（超过即判 `scope is too broad`）。两条规则合起来迫使 allow-list 只能到目录粒度，因此下表 `apps/cms/` 是本批实际改动文件的**上界**而非许可证：本批在 `apps/cms/` 内只改了 `src/collections/Leads.ts`、`src/lib/envelope.ts`、`src/migrations/`（新增迁移 + `index.ts` 登记）、`src/payload-types.ts`、`scripts/create-e2e-admin.ts`、`.env.example` 六处，`src/payload.config.ts` 与三个提醒集合**未动**（反证：`git status --porcelain` 不含这些路径，spec-review 的 Out-of-Scope 表逐条核实过）。人类说明见下方表格。
+> 机读口径：`### In Scope` 下每条 bullet **只写一个路径**（`aiws change validate --check-scope` 的解析器把整条 bullet 当作一个路径前缀/glob，句后附带说明会让该条匹配失效——本批曾因此把已声明的文件报成越界），且**条目数上限 12**（超过即判 `scope is too broad`）。两条规则合起来迫使 allow-list 只能到目录粒度，因此下表 `apps/cms/` 是本批实际改动文件的**上界**而非许可证：本批在 `apps/cms/` 内只改了 `src/collections/Leads.ts`、`src/collections/Sites.ts`、`src/lib/envelope.ts`、`src/migrations/`（新增迁移 + `index.ts` 登记）、`src/payload-types.ts`、`scripts/create-e2e-admin.ts`、`.env.example` 七处，`src/payload.config.ts` 与三个提醒集合**未动**（反证：`git status --porcelain` 不含这些路径，spec-review 的 Out-of-Scope 表逐条核实过）。人类说明见下方表格。
 > 2026-09-20 追加 `reference/` 出库时，为守住 12 条上限把 `scripts/cms-run.sh`+`scripts/backup.mjs` 折叠为 `scripts/`、`docs/08-deployment.md`+`docs/07-design-theme.md` 折叠为 `docs/`。allow-list 精度因此再降一档（`scripts/` 下本批只动 `backup.mjs`、`cms-run.sh`，`docs/` 下只动 07/08 两篇），精确性仍由 `git status --porcelain` + spec-review 的 Out-of-Scope 表承担（PROB-011）。
 
 ### In Scope
@@ -54,9 +54,10 @@
 |---|---|
 | `REQUIREMENTS.md` | 合并重复 `## Backlog`；REQ-0001/0002 连同验收条目移入「已完成」，并按证据类型标注（真跑 / 代码核实 / 沿用 8-26 归档） |
 | `.aiws/requirements/CHANGELOG.md` | 删 `| YYYY-MM-DD |` 模板行 + 追加本轮真值同步记录 |
-| 两份 jsonl 台账 | 问题台账 PROB-001..014（删 `PROB-000` 模板种子行）；需求合同行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At` |
+| 两份 jsonl 台账 | 问题台账 PROB-001..016（删 `PROB-000` 模板种子行）；需求合同行刷新 `Tests`/`Evidence`/`Notes`/`Updated_At` |
 | `AI_WORKSPACE.md` | 补齐本仓可复现的验证入口（build / e2e / gate / 前置），并点名 `PUBLIC_CORS_ORIGINS` |
-| `apps/cms/src/collections/Leads.ts` | 删 `activity` array 字段块；修正指向不存在的 `lib/leadActivity` 的注释 |
+| `apps/cms/src/collections/Leads.ts` | 删 `activity` array 字段块；修正指向不存在的 `lib/leadActivity` 的注释；2026-09-20 随裁决修 `/api/leads/assign`：两条 `findByID` 加 `disableErrors` → 404、`update` 透传 `req`（actor 落库）+ `depth: 0`（响应不回他人 `sessions[]`）、`catch` 记日志（PROB-005/006/015） |
+| `apps/cms/src/collections/Sites.ts` | 2026-09-20 与上条同一轮：`/api/sites/clone` 的 `findByID` 加 `disableErrors` → `404 SOURCE_NOT_FOUND`（原被 `catch` 混成 500），`catch` 改记 `logger.error`（PROB-016） |
 | `apps/cms/src/migrations/` + `payload-types.ts` | 新增 `20260919_093340_drop_lead_activity` 迁移并登记；类型再生成 |
 | `apps/cms/src/lib/envelope.ts` | 删 `DEFAULT_CORS_ORIGINS`；未配置时**首个 `/api/v2/*` 请求**抛错（500，无堆栈外泄），无 dev 分支 |
 | `apps/cms/.env.example`、`scripts/cms-run.sh`、`docs/08-deployment.md` | CORS 配置先行；`cms-run.sh` 用 `${VAR:?}` 把漏配前移到 `docker run` 之前终止；部署文档补生产迁移不自动执行的前置说明 |

@@ -21,10 +21,14 @@ import {
  * 覆盖点（此前零覆盖）：
  *  1. 正向：管理员把线索分配给同项目成员 → 统一成功信封 data{id,owner}，owner 真正落库，
  *     并写出一条 `lead-activities(type=assigned)`（actor=发起人，meta.owner=被分配人）。
+ *     响应面须收敞：data 只有 {id,owner} 且 owner 是裸 id（端点 payload.update 用 depth: 0；默认深度会把
+ *     被分配人整份用户文档连鉴权用的 sessions[] 一起回出）。
+ *     actor 必须有值：端点内的 payload.update 要透传 req，否则 afterChange 拿不到发起人（PROB-006）。
  *  2. 负向（统一失败信封 {success:false,error:{code,message}}）：
  *     未登录 401 UNAUTHORIZED；非 JSON 体 400 INVALID_JSON；缺/非法 leadId 400 MISSING_LEAD；
  *     缺/非法 assigneeId 400 INVALID_ASSIGNEE；被分配人非本项目成员 400 ASSIGNEE_NOT_IN_PROJECT；
- *     发起人对该项目无写权限 403 FORBIDDEN。
+ *     leadId/assigneeId 指向不存在的记录 404 LEAD_NOT_FOUND / ASSIGNEE_NOT_FOUND（按真实原因回，
+ *     不得被 findByID 抛的 NotFound 混成 500，PROB-005）；发起人对该项目无写权限 403 FORBIDDEN。
  *
  * 造数边界：专属测试项目 + 一次性测试账号，afterAll 删项目（级联）与账号；不触碰 12 条真实线索。
  * 前置：CMS dev @3000；管理员凭据由 setup/global-setup.ts 注入，缺失时整块 skip。
@@ -107,12 +111,11 @@ test.describe('线索分配 POST /api/leads/assign', () => {
       await rawRequest('POST', '/api/leads/assign', adminToken, { leadId: lead, assigneeId: memberUser }),
     )
     expect(Number(data.id)).toBe(lead)
-    // 端点回的是 payload.update 的结果：owner 是填充后的用户对象，故按 id 断言，并核其不含鉴权材料。
-    const owner = data.owner as Record<string, unknown>
-    expect(relId(owner), `分配响应 owner 异常：${JSON.stringify(data.owner)}`).toBe(memberUser)
-    for (const leaked of ['hash', 'salt', 'token', 'password']) {
-      expect(Object.keys(owner), `owner 泄露了 ${leaked}`).not.toContain(leaked)
-    }
+    // 响应面收敛到 {id, owner}，且 owner 必须是裸 id：Payload 默认深度会把 owner 填成整份用户文档
+    // （含鉴权用的 sessions[]），一旦端点漏掉 depth: 0 这两条断言即红。
+    expect(Object.keys(data).sort(), `分配响应字段面异常：${JSON.stringify(data)}`).toEqual(['id', 'owner'])
+    expect(typeof data.owner, '分配响应不得回用户对象').toBe('number')
+    expect(Number(data.owner)).toBe(memberUser)
 
     const stored = await getDoc(adminToken, `/api/leads/${lead}?depth=0`)
     expect(stored.status).toBe(200)
@@ -123,8 +126,8 @@ test.describe('线索分配 POST /api/leads/assign', () => {
     expect(relId(activities[0].project)).toBe(projectA)
     expect((activities[0].meta as { owner?: number }).owner).toBe(memberUser)
 
-    // 正向对照：走原生 REST 建线索时 afterChange 拿得到 req.user ⇒ actor 有值；
-    // 端点里那次 actor=null 单独记为已知缺陷（见下方 expected-fail 用例）。
+    // 两条写入路径的审计结果必须一致：REST 建线索（本用例）与 /assign 端点分配（文件末尾的 actor 用例）
+    // 都要把发起人落成 actor。
     const created = await listDocs(adminToken, 'lead-activities', {
       where: [
         ['lead', 'equals', lead],
@@ -182,26 +185,31 @@ test.describe('线索分配 POST /api/leads/assign', () => {
     expect(relId((await getDoc(adminToken, `/api/leads/${lead}?depth=0`)).body.owner)).toBe(memberUser)
   })
 
-  test('已知缺陷：不存在的 leadId 应返回 404 LEAD_NOT_FOUND（当前落到 500）', async () => {
-    test.fail(
-      true,
-      'apps/cms/src/collections/Leads.ts:166 findByID 对不存在 id 抛 APIError，被 229 行外层 catch 成 500 LEAD_ASSIGN_FAILED ⇒ 172 行 if (!lead) 分支不可达（assignee 同理）',
-    )
+  test('负向：leadId 指向不存在的记录 → 404 LEAD_NOT_FOUND', async () => {
     expectErr(
       await rawRequest('POST', '/api/leads/assign', adminToken, { leadId: 999_999_999, assigneeId: memberUser }),
       404,
       'LEAD_NOT_FOUND',
     )
+    // 404 也得按真实原因回，而不是被外层 catch 混成 500；同一次调用不得留下副作用。
+    expect(relId((await getDoc(adminToken, `/api/leads/${lead}?depth=0`)).body.owner)).toBe(memberUser)
   })
 
-  test('已知缺陷：经 /assign 端点的分配丢失审计操作人（actor 应为发起人）', async () => {
-    test.fail(
-      true,
-      'apps/cms/src/collections/Leads.ts:221 `req.payload.update(...)` 未透传 `req` ⇒ afterChange 里 req.user 为空 ⇒ lead_activities.actor=null（对照：REST 写入路径 actor 正常）',
+  test('负向：assigneeId 指向不存在的记录 → 404 ASSIGNEE_NOT_FOUND', async () => {
+    expectErr(
+      await rawRequest('POST', '/api/leads/assign', adminToken, { leadId: lead, assigneeId: 999_999_999 }),
+      404,
+      'ASSIGNEE_NOT_FOUND',
     )
+    expect(relId((await getDoc(adminToken, `/api/leads/${lead}?depth=0`)).body.owner)).toBe(memberUser)
+  })
+
+  test('审计：经 /assign 端点分配写出的动态带发起人 actor', async () => {
     const activities = await assignedActivities()
     expect(activities.length).toBeGreaterThan(0)
-    expect(relId(activities[0].actor)).toBe(adminId)
+    // 端点里的 payload.update 必须透传 req，afterChange 才拿得到 req.user；
+    // 与 REST 写入路径同一结果（对照上方正向用例断言的 created 动态 actor）。
+    expect(relId(activities[0].actor), '端点分配丢失审计操作人').toBe(adminId)
   })
 })
 

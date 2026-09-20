@@ -780,7 +780,121 @@
         "warnings": 0,
         "exit_code": 2
       }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-20T03:59:44Z",
+      "payload": {
+        "synced_at": "2026-09-20T03:59:44Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-20T03:15:32Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T03:59:50Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T04:03:00Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-20T04:06:01Z",
+      "payload": {
+        "synced_at": "2026-09-20T04:06:01Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-20T03:59:44Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T04:06:04Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T04:06:07Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-20T04:06:25Z",
+      "payload": {
+        "synced_at": "2026-09-20T04:06:25Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-20T04:06:01Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T04:06:28Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-20T04:06:31Z",
+      "payload": {
+        "ok": false,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 1,
+        "warnings": 0,
+        "exit_code": 2
+      }
     }
   ],
-  "updated_at": "2026-09-20T03:22:01Z"
+  "updated_at": "2026-09-20T04:06:31Z"
 }

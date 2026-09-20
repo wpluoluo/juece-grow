@@ -1,25 +1,30 @@
-# 本批发现但未随批修的问题 · cleanup-batch-20260919
+# 本批发现的后续问题与处置 · cleanup-batch-20260919
 
-> 真值：`.aiws/issues/problem-issues.jsonl`（PROB-005..014 逐条含定位与证据）。本文件只补「为什么不在本批修」与「修的时候要注意什么」，从 `tasks.md §6` 移交至此。
-> 日期：2026-09-19
+> 真值：`.aiws/issues/problem-issues.jsonl`（PROB-005..016 逐条含定位与证据）。本文件只补「为什么当时不在本批修」与「修的时候要注意什么」，从 `tasks.md §6` 移交至此。
+> 日期：2026-09-19（2026-09-20 更新：PROB-005/006 已随批修毕，PROB-015/016 登记并随批修毕）
 
-## 一、为什么不随本批静默修
+## 一、当初为什么不随本批静默修，后来又为什么修了
 
-本批范围是「清理」（死模型、兜底、空目录、真值漂移、测试缺口）。以下三项会**改变对外行为或写入语义**（错误码映射、审计字段），按 `AI_PROJECT.md` §3.1 与 `agents.md` §8 属独立门禁 + 双审查对象，混进清理批会让回滚边界失真。已用 `test.fail` 用例固化，跑测即持续暴露，不会烂在账上。
+本批范围是「清理」（死模型、兜底、空目录、真值漂移、测试缺口）。PROB-005/006 会**改变对外行为或写入语义**（错误码映射、审计字段），按 `AI_PROJECT.md` §3.1 与 `agents.md` §8 属独立门禁 + 双审查对象，故 2026-09-19 收口时只登记 + 用 `test.fail` 用例固化，不擅自扩大批次。
+
+2026-09-20 owner 裁决「PROB-005 / 006 要不要各立一个项目 → 不用」，两条并为一个改动随本批落地，同时带出并修掉同轮的 PROB-015/016（见 §二）。修复后 `test.fail` 标记全部摘除，仓库内不再有 expected-fail 用例。
 
 ## 二、逐条
 
-### PROB-005（P2, OPEN）`/api/leads/assign` 对不存在 id 落 500，404 分支不可达
+### PROB-005（P2, DONE 2026-09-20 随批）`/api/leads/assign` 对不存在 id 落 500，404 分支不可达
 
 `apps/cms/src/collections/Leads.ts` 的 `findByID` 对不存在 id 抛 `APIError`，被端点外层 `catch` 统一转成 `500 LEAD_ASSIGN_FAILED` ⇒ 前面 `if (!lead)` 的 404 分支是死代码，同时违反「不把数据库异常原样抛前端」。
-修的时候：按 `code`/`name` 区分 `APIError` 与真实库异常，别把 `catch` 拓宽成万能兜底。
-暴露证据：`apps/e2e/tests/leads-assign.spec.ts` 用例「已知缺陷：不存在的 leadId 应返回 404 LEAD_NOT_FOUND（当前落到 500）」。
+当时预判的修法：按 `code`/`name` 区分 `APIError` 与真实库异常，别把 `catch` 拓宽成万能兜底。
+**实际处置**：改用 Payload 官方的 `disableErrors: true`（`findByID` 查不到返回 `null`，`payload/dist/collections/operations/findByID.js:105-109`），两条 `findByID`（线索 / 跟进人）都走 null 分流回 404；`catch` 只接数据库/系统异常并记 `req.payload.logger.error`。未引入按异常文本猜类型的分支。
+实测：`57-assign-probe-after-fix.log` 分别回 `404 LEAD_NOT_FOUND` 与 `404 ASSIGNEE_NOT_FOUND`；`61-assign-500-branch-probe.log` 用超 int4 的 `leadId=2147483648` 仍回 500 且 CMS 日志出现 `[lead-assign] 分配失败` ⇒ 500 分支是活的，不是被 404 抢走。
+测试：`leads-assign.spec.ts` 两条原 `test.fail` 用例转为真实断言，并新增 `ASSIGNEE_NOT_FOUND` 用例。
 
-### PROB-006（P1, OPEN）端点分配丢失审计操作人
+### PROB-006（P1, DONE 2026-09-20 随批）端点分配丢失审计操作人
 
 同文件里 `req.payload.update(...)` 未透传 `req` ⇒ `afterChange` 中 `req.user` 为空 ⇒ `lead_activities.actor=null`，分配动作查不到发起人（对照：REST 写入路径 `actor` 正常落 admin id）。
-修的时候：透传 `req`（或显式 `user`），并确认不会把会话 token 带进响应；改完该 expected-fail 用例会转为「unexpectedly passed」而报错——那是预期的红，需同批把 `test.fail(true, …)` 摘掉。
-暴露证据：`leads-assign.spec.ts` 用例「已知缺陷：经 /assign 端点的分配丢失审计操作人（actor 应为发起人）」。
+**实际处置**：`update` 透传 `req`，与 Payload 自带 REST 更新 handler 同一传法（`payload/dist/collections/endpoints/updateByID.js:20` ⇒ `createLocalReq.js:91` 的 `req.user = user || req?.user || null`）；同时把响应面收敛为裸 id（PROB-015），确保不会把会话材料带进响应。
+实测：修复前 `53-assign-probe-before-fix.log` `ACTOR_ROW id=197 actor_id=NULL`；修复后 `57-assign-probe-after-fix.log` `ACTOR_ROW id=201 actor_id=8`，与同线索 REST 写入路径的 actor 一致；`71-response-shape-probe.log` `assigned_rows=id=219 actor=8`。
+测试：原 `test.fail` 标记摘除，改为用例「审计：经 /assign 端点分配写出的动态带发起人 actor」。
 
 ### PROB-007（P3, OPEN）`lead.spec.ts` 提交类用例无自清
 
@@ -80,6 +85,22 @@
 触发点：提交后独立审查轮清掉 `cmsRest.ts` 的两条死兜底（`relId(...) ?? 0`、`res.body.doc ?? res.body`）时做的类型收窄，只由全量 e2e 绿灯证明，**未经编译器证明**（同 §F-8）。
 
 正解（独立 change）：给 `apps/e2e` 建 tsconfig（`module: ESNext` + `types: ["node"]`），把 `pnpm --filter e2e exec tsc --noEmit` 并入 `AI_WORKSPACE.md` 的 `gate_cmd`。不在本批做的原因：会新增 devDependency 与第二条验证入口，属"新增能力"而非"清理"，且要与本批既定的零参数验收口径对齐。
+
+### PROB-015（P2, DONE 2026-09-20 随批）`/api/leads/assign` 成功响应直出整份用户文档（含他人 `sessions[]`）
+
+发现方式：修 PROB-006 时看 `/assign` 的成功响应体，`data.owner` 是填充后的用户对象，带出被分配人的 `sessions[{id(uuid), createdAt, expiresAt}]`。当时**没有**被测试拦住，因为仓库的响应泄漏白名单只查 `hash/salt/token/password` 四个键（`leads-assign.spec.ts` 正向用例），漏了 `sessions`。
+性质核对：`sessions` 关系字段只序列化 id/时间戳，不含 `token`（`apps/cms/src/payload-types.ts:267-273`），所以不是直接可用凭据；但任意有项目写权限的调用方可枚举他人的会话标识与有效期，属不该有的响应面。根因是 `req.payload.update` 未传 `depth`，默认深度做了关联填充。
+处置：`update` 加 `depth: 0`，成功响应收敛为 `{id, owner:<裸 id>}`。断言从「不含某几个敏感键」（黑名单，会漏）改成「键集恰为 `['id','owner']` 且 `typeof owner==='number'`」（白名单 + 类型），一旦端点漏掉 `depth: 0` 立即红。`sites-clone.spec.ts` 正向用例同口径补断言克隆响应键集恰为 `['id','name']`。
+实测：`71-response-shape-probe.log` → `assign_body={"success":true,"data":{"id":200,"owner":8}}`、`body_has_sessions=false`、`owner_type=number`。
+
+### PROB-016（P2, DONE 2026-09-20 随批）`/api/sites/clone` 对不存在的 `sourceId` 落 500，且 `catch` 无日志
+
+与 PROB-005 同一类缺陷（`Sites.ts` 的 `findByID` 未关默认抛错 ⇒ `NotFound` 被外层 `catch` 混成 `500 SITE_CLONE_FAILED`），差别是这里的 `catch` 连日志都不记，库异常在服务端不可查。发现方式：修完 assign 后按同类模式扫其余自定义端点。
+处置：`disableErrors: true` + null → `404 SOURCE_NOT_FOUND`；`catch (err)` 记 `req.payload.logger.error({ err }, '[site-clone] 复制失败')` 后仍回统一 500 信封。Sites 集合没有审计 afterChange 钩子，故 PROB-006 那类 actor 问题在此不适用（已核实）。
+测试：新增用例「负向：sourceId 指向不存在的站点 → 404 SOURCE_NOT_FOUND」，并用「调用前后本文件 TAG 命中站点数不变」断言没落下副本（源站名本身含 TAG，绝对值断言会被前面用例的留观记录干扰）。
+实测：`71-response-shape-probe.log` `clone_nonexistent_http=404`；`72-e2e-final.log` 全量 60 用例 58 passed / 2 skipped。
+
+**同轮未修的边界**：`/assign` 与 `/clone` 都是「先查后写」，若在两次调用之间记录被删，仍会落到 500 而不是 404。这是并发窗口不是逻辑死分支，两条路径都无数据破坏，改成事务属于另一量级的改动，未随批扩大（登记于本段，不另立 PROB；真要修请先立门禁）。
 
 ## 三、库侧遗留事实（R5）
 

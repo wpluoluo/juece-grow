@@ -23,6 +23,7 @@ import {
  *  2. 与原站点不串：克隆不改源站任何字段；未显式命名时副本名为「<源站名> 副本」；两个副本互不影响。
  *  3. 跨项目落盘：显式 projectId 时克隆进目标项目，源站仍在原项目。
  *  4. 负向信封：未登录 401 UNAUTHORIZED；缺/非法 sourceId 400 MISSING_SOURCE；
+ *     sourceId 指向不存在的记录 404 SOURCE_NOT_FOUND（不得被 findByID 抛的 NotFound 混成 500，同 PROB-005 口径）；
  *     projectId 非法 400 INVALID_PROJECT；仅有查看权限的项目成员 403 FORBIDDEN（memberCanWrite=false）。
  *  5. 测后删除克隆体并确认 404。
  *
@@ -102,6 +103,8 @@ test.describe('站点复制 POST /api/sites/clone', () => {
     expect(Number.isInteger(cloneId) && cloneId > 0, `克隆未返回合法 id：${JSON.stringify(data)}`).toBe(true)
     expect(cloneId, '克隆必须是一条新记录').not.toBe(sourceSite)
     expect(String(data.name)).toBe(`${TAG}副本一`)
+    // 响应面只允许 {id, name}：端点一旦直出整份站点文档（关系字段会带出项目/成员等内部对象）即红。
+    expect(Object.keys(data).sort(), `克隆响应字段面异常：${JSON.stringify(data)}`).toEqual(['id', 'name'])
 
     const clone = await readSite(cloneId)
     expect(clone.name).toBe(`${TAG}副本一`)
@@ -179,6 +182,19 @@ test.describe('站点复制 POST /api/sites/clone', () => {
     for (const body of [{}, { sourceId: 0 }, { sourceId: 'x' }, { sourceId: -1 }]) {
       expectErr(await rawRequest('POST', '/api/sites/clone', adminToken, body), 400, 'MISSING_SOURCE')
     }
+  })
+
+  test('负向：sourceId 指向不存在的站点 → 404 SOURCE_NOT_FOUND', async () => {
+    // 源站名本身含 TAG，故用「调用前后计数不变」而不是绝对值，避免与前面用例的记录相互干扰。
+    const countTagged = async () =>
+      (await listDocs(adminToken, 'sites', { where: [['name', 'like', TAG]] })).length
+    const before = await countTagged()
+    expectErr(
+      await rawRequest('POST', '/api/sites/clone', adminToken, { sourceId: 999_999_999 }),
+      404,
+      'SOURCE_NOT_FOUND',
+    )
+    expect(await countTagged(), '不存在的源站不得留下任何副本').toBe(before)
   })
 
   test('负向：projectId 非法 → 400 INVALID_PROJECT', async () => {

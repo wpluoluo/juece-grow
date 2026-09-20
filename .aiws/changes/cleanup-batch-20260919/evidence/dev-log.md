@@ -850,3 +850,34 @@ grep -c SECRETpw999 backup-failclosed.log → 0
 - **自撞的门禁（值得记）**：我把 #7 写成 Plan 的第 9 步，`aiws validate . --stamp` 与 `aiws change validate --strict` 同时 `exit=2`：`Plan section is too long (9 steps > 8)`（`61-sync-after-refdrop.log`）。处置不是删内容而是按语义归位——#7 与 T5「删不参与构建/运行的死内容」同类 ⇒ 并入 T5，Plan 回到 8 步，两扇门禁复跑 `exit=0`（`62-gates-refdrop.log`）。
 - **allow-list 上限的连带代价**：In Scope 原本正好 12 条（= 上限），要加 `reference/` 就必须把 `scripts/cms-run.sh`+`scripts/backup.mjs` 折成 `scripts/`、`docs/08`+`docs/07` 折成 `docs/` ⇒ 精度再降一档（PROB-011 第 (2) 条在这里第二次应验）。折叠后 `--strict --check-evidence --check-scope` 的越界清单**仍只剩用户在先的两条 memory-bank 文件**（`63-scope-gate-refdrop.log`，`exit=2` 即预期），证明 `reference/` 的删除确实被 Scope 覆盖而不是靠运气。
 
+### 8.7 2026-09-20 · PROB-005/006 合并修复轮（裁决 5 的落地）与两处当场带出的新问题
+
+改动（4 处产品代码 + 3 个 spec）：
+
+| 位置 | 改动 | 治的是 |
+|------|------|--------|
+| `Leads.ts` 两条 `findByID` | `disableErrors: true` + null 分流回 404 | PROB-005 |
+| `Leads.ts` 端点 `catch` | `catch {` → `catch (err)` + `logger.error({ err }, '[lead-assign] 分配失败')` | 「异常既不外泄也不留痕」 |
+| `Leads.ts` 端点 `payload.update` | 透传 `req`；补 `depth: 0` | PROB-006；PROB-015 |
+| `Sites.ts` `/clone` | `disableErrors` + null → `404 SOURCE_NOT_FOUND`；`catch` 记日志 | PROB-016（同 PROB-005 类） |
+| `leads-assign.spec.ts` | 摘掉两条 `test.fail`，改为真实断言；新增 `ASSIGNEE_NOT_FOUND` 与 actor 用例；正向响应面断言由「不含 hash/salt/token/password」改为「键集恰为 `['id','owner']` 且 `typeof owner==='number'`」 | 固化 + 把黑名单换成白名单 |
+| `sites-clone.spec.ts` | 新增 404 用例（前后计数不变断言无副本）；正向补 `['id','name']` 键集断言 | PROB-016/015 |
+
+**主 session 独立复核（子代理自述不作数）**：编辑由子代理完成第一轮，复核与 PROB-015/016 由主 session 动手。逐条自己跑：
+
+- `cd apps/cms && npx tsc --noEmit -p tsconfig.json` → `exit=0`（`67-tsc-verify-main.log`、`70-tsc-after-depth.log` 各一次，后者含 `depth: 0` 与 Sites 改动）。
+- 直连本地 CMS 探针（`probe-response-shape.mjs` → `71-response-shape-probe.log`）：`assign_body={"success":true,"data":{"id":200,"owner":8}}`、`body_has_sessions=false`、`assigned_rows=id=219 actor=8`、`clone_nonexistent_http=404`、`clone_data_keys=["id","name"]`；探针自清 `residual_leads=0`。
+- 全量 e2e `pnpm --filter e2e test` → `Running 60 tests`、`58 passed / 2 skipped`、`exit=0`（`72-e2e-final.log`；两条 skip 是 Chatwoot 未配的 C7 用例，与本批既有口径一致）。
+- 库侧 `73-db-after-final-fix.txt`：`assigned_null_actor=0`、`assigned_total=0`、`e2e_sites_left=0`、`e2e_projects_left=0`、`e2e_users_left=0`、`leads_activity_table=0`。
+
+**收口门禁（台账第 42–44 条，`74-gates-fixround.log`）**：`plan-verify` → `change sync`（`No changes detected vs baseline.`）→ `validate . --stamp` → `--strict` → `tasks validate` 全 `exit=0`，`verify-bc` → `ok: all gates passed (tier=strict)` 且 `legacy evidence assumed` 计数 `0`，加强门禁 `--check-evidence --check-scope` `exit=2` 且越界项仍只有你在先的两条 memory-bank 文件。追加这 3 条台账后再整套复跑一遍（`75-gates-after-ledger.log`）⇒ 结论逐条不变；按 §8.2 的自指限制，最后这一遍自身的输出不再写进台账。两个 dev 进程树（`:3000`/`:4321`）用 `taskkill /T /F` 回收后 `netstat` 监听计数 `0`。
+
+**本轮的一次测量自纠错（不藏）**：`75` 首版把 `$?` 取在 `aiws … | grep -v "LF will be replaced"` 之后，拿到的是 grep 的退出码，于是把加强门禁真实的 `exit=2` 记成 `scopegate_exit=0`——一个假绿。处置是删掉首版、改为不过管道直接取 `aiws` 退出码后重跑（得 `exit=2`），而不是在错日志上打补丁。教训与前一轮的「仓库根少一层」同类：**证据生成方式本身也要被核**，尤其当命令过了管道。
+
+**为什么这两条不是「顺手扩大范围」**：PROB-016 与已批准修复的 PROB-005 是同一行代码模式的另一个实例（扫同类时命中）；PROB-015 是修复 PROB-006 时必须看响应体才看到的——它是那次审查的直接产物，不是新需求。两条都在台账单独立行（含「当时为何没被测试拦住」），没有混进 005/006 的叙述里。
+
+**诚实边界**：
+1. `/assign` 与 `/clone` 的「读后删」竞态仍回 500（不是逻辑死分支，是并发窗口）；改事务属另一量级，未做，记在 `follow-ups.md` PROB-016 段末。
+2. `leads` 计数 51 → 55 → 59：本批新增的三个 spec 自清零残留，增量全部来自 PROB-007（`lead.spec.ts` 提交类用例每轮净增 4），该问题仍 OPEN，未被本轮修掉。
+3. 未连接、未改动任何线上资源；生产侧仍只有 `release-prerequisites.md` 那份人工清单。
+
