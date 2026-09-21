@@ -1,0 +1,17 @@
+[负向] 注入桩串后 退出码=1
+  | dist: client_js=1 禁止串命中=1 CMS地址已内联=true Layout脚本chunk=有 判定=FAIL
+  |   - Layout.astro_astro_type_script_index_0_lang.CZV5M-z2.js 含「缺少 SITE_ID」
+  | dist-erp: client_js=1 禁止串命中=1 CMS地址已内联=true Layout脚本chunk=有 判定=FAIL
+  |   - Layout.astro_astro_type_script_index_0_lang.CZV5M-z2.js 含「缺少 SITE_ID」
+  | dist-yunque: client_js=1 禁止串命中=1 CMS地址已内联=true Layout脚本chunk=有 判定=FAIL
+  |   - Layout.astro_astro_type_script_index_0_lang.CZV5M-z2.js 含「缺少 SITE_ID」
+  | 判定=FAIL：服务端模块被客户端脚本传递引到，浏览器运行时会抛错（见 PROB-026）
+[负向] 非零退出且三站逐一报 FAIL = PASS
+[还原] 门禁退出码=0
+  | dist: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+  | dist-erp: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+  | dist-yunque: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+  | 判定=OK：三站客户端 bundle 均不含服务端站点解析，CMS 地址已内联
+[还原] 归零且判定 OK（注入已完全撤销）= PASS
+client_bundle_negative_exit=0
+runner_exit=0

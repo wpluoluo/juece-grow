@@ -1,0 +1,29 @@
+== pg_indexes（page_home, page_features, page_solutions, page_pricing）共 16 条 ==
+page_features | page_features_created_at_idx | CREATE INDEX page_features_created_at_idx ON public.page_features USING btree (created_at)
+page_features | page_features_pkey | CREATE UNIQUE INDEX page_features_pkey ON public.page_features USING btree (id)
+page_features | page_features_project_idx | CREATE INDEX page_features_project_idx ON public.page_features USING btree (project_id)
+page_features | page_features_updated_at_idx | CREATE INDEX page_features_updated_at_idx ON public.page_features USING btree (updated_at)
+page_home | page_home_created_at_idx | CREATE INDEX page_home_created_at_idx ON public.page_home USING btree (created_at)
+page_home | page_home_pkey | CREATE UNIQUE INDEX page_home_pkey ON public.page_home USING btree (id)
+page_home | page_home_project_idx | CREATE INDEX page_home_project_idx ON public.page_home USING btree (project_id)
+page_home | page_home_updated_at_idx | CREATE INDEX page_home_updated_at_idx ON public.page_home USING btree (updated_at)
+page_pricing | page_pricing_created_at_idx | CREATE INDEX page_pricing_created_at_idx ON public.page_pricing USING btree (created_at)
+page_pricing | page_pricing_pkey | CREATE UNIQUE INDEX page_pricing_pkey ON public.page_pricing USING btree (id)
+page_pricing | page_pricing_project_idx | CREATE INDEX page_pricing_project_idx ON public.page_pricing USING btree (project_id)
+page_pricing | page_pricing_updated_at_idx | CREATE INDEX page_pricing_updated_at_idx ON public.page_pricing USING btree (updated_at)
+page_solutions | page_solutions_created_at_idx | CREATE INDEX page_solutions_created_at_idx ON public.page_solutions USING btree (created_at)
+page_solutions | page_solutions_pkey | CREATE UNIQUE INDEX page_solutions_pkey ON public.page_solutions USING btree (id)
+page_solutions | page_solutions_project_idx | CREATE INDEX page_solutions_project_idx ON public.page_solutions USING btree (project_id)
+page_solutions | page_solutions_updated_at_idx | CREATE INDEX page_solutions_updated_at_idx ON public.page_solutions USING btree (updated_at)
+
+唯一索引命中 4 条：page_features_pkey, page_home_pkey, page_pricing_pkey, page_solutions_pkey
+page_home: project_id 唯一索引 命中 0 条
+page_features: project_id 唯一索引 命中 0 条
+page_solutions: project_id 唯一索引 命中 0 条
+page_pricing: project_id 唯一索引 命中 0 条
+
+行数 page_home=3 page_features=3 page_solutions=3 page_pricing=3
+重复 (表, project_id) 组：0 组
+
+账本 2 行：20260825_131753(batch=1), dev(batch=-1)
+inspect_exit=0

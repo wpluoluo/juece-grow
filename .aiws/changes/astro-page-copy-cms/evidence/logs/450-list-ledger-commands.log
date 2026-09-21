@@ -1,0 +1,108 @@
+### audit_coverage (14 种)
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # 修复后复核
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P5 入账后
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P8 入账后
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P8b 首跑后
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P8b final 入账后
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P8c 入账后
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P9 入账后
+### uncovered (9 种)
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # p8c 入账后复算反向覆盖
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # P9 入账后复算反向覆盖
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # P11 入账后复算反向覆盖
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # P11b 入账后反向覆盖
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # P11c 入账后反向复算
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # P11d 入账后反向复算
+   node .aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs  # P12 入账后反向复算（真缺陷）
+### recount (0 种)
+### archive (10 种)
+   node scripts/astro-copy-evidence-archive.mjs  # H-1 首跑
+   node scripts/astro-copy-evidence-archive.mjs  # 复跑 + 归档目录摘要前后对比
+   node scripts/astro-copy-evidence-archive.mjs  # P11 收尾门禁链 7/7
+   node scripts/astro-copy-evidence-archive.mjs  # P11 入账后复算归档面
+   node scripts/astro-copy-evidence-archive.mjs  # P11b 入账后复算归档面
+   node scripts/astro-copy-evidence-archive.mjs  # P11c 入账后复算归档面
+   node scripts/astro-copy-evidence-archive.mjs  # §7 修复后复算归档面
+   node scripts/astro-copy-evidence-archive.mjs  # P11d 入账后复算归档面
+### validate (13 种)
+   aiws validate .  # 改了 REQUIREMENTS.md 验收措辞之后、未 sync 前（负向用例）
+   aiws validate .  # 重新盖章后
+   aiws validate .  # 改了 REQUIREMENTS.md 验收 1 之后、未 sync 前（负向用例）
+   aiws validate .  # P5 轮 REQ_SYNC 之后
+   aiws validate .  # P6/P7 轮 REQ_SYNC 之后
+   aiws validate .  # 工件全部改完之后复校
+   aiws validate .  # P8 轮 REQ_SYNC 之后
+   aiws validate .  # P8 全部工件改完后复校
+### change_validate (11 种)
+   aiws change validate astro-page-copy-cms --strict
+   aiws change validate astro-page-copy-cms --strict  # 工件同步后复校
+   aiws change validate astro-page-copy-cms --strict  # P8 全部工件改完后复校
+   aiws change validate astro-page-copy-cms --strict  # P9 全部工件改完后复校
+   aiws change validate astro-page-copy-cms --strict  # P11d 收尾
+   aiws change validate astro-page-copy-cms --strict --check-evidence --check-scope  # 3.8 首跑（真缺陷）
+   aiws change validate astro-page-copy-cms --strict  # tasks 3.8 收口链 ③
+   aiws change validate astro-page-copy-cms --strict --check-evidence --check-scope  # tasks 3.8 收口链 ④
+### change_sync (4 种)
+   aiws change sync astro-page-copy-cms
+   aiws change sync astro-page-copy-cms  # P11d 收尾
+   aiws change sync astro-page-copy-cms  # tasks 3.8 收口链 ①
+   aiws change sync astro-page-copy-cms  # tasks 4.2 收尾链 ①
+### verify_bc (1 种)
+   aiws verify-bc astro-page-copy-cms  # tasks 4.2 收尾链 ⑥
+### memory (0 种)
+### plan_verify (0 种)
+### e2e (16 种)
+   pnpm --filter e2e test -- tests/page-copy.spec.ts
+   pnpm --filter e2e exec playwright test tests/lead.spec.ts
+   pnpm --filter e2e exec playwright test  # 修复后全量复跑
+   pnpm --filter e2e exec playwright test  # 修复前全量（红绿对照的红侧）
+   pnpm --filter e2e exec playwright test  # 收窄到 page-copy.spec.ts:185「后台自助改稿」
+   pnpm --filter e2e exec playwright test  # P9 全量
+   pnpm --filter e2e exec playwright test tests/page-copy.spec.ts  # B-1 修前：常驻套件缺增删换序用例
+   pnpm --filter e2e exec playwright test tests/page-copy.spec.ts  # 新增「首页 hero 与 CTA 增删换序」首跑
+### tsc_astro (6 种)
+   pnpm astro:typecheck
+   pnpm astro:typecheck  # worker 轮
+   pnpm astro:typecheck  # 带退出码复跑
+   pnpm astro:typecheck  # 客户端脚本修复后
+   pnpm astro:typecheck  # PROB-028 报错可读性修复后
+   pnpm astro:typecheck  # P11 收尾
+### tsc_cms (17 种)
+   cd apps/cms && npx tsc --noEmit -p tsconfig.json  # 四集合首版
+   cd apps/cms && npx tsc --noEmit -p tsconfig.json  # 类型再生后
+   cd apps/cms && npx tsc --noEmit -p tsconfig.json  # 删除 seoTitle/seoDescription 后（design D8①）
+   cd apps/cms && npx tsc --noEmit -p tsconfig.json  # seo* 再生后
+   cd apps/cms && npx tsc --noEmit -p tsconfig.json  # hero.stats 补 minRows:1 后
+   pnpm --filter cms exec payload migrate:create page_copy_collections
+   npx --prefix apps/cms tsc --noEmit -p apps/cms/tsconfig.json  # 端点 + 合同表 + 导入脚本落盘后
+   pnpm --filter cms exec payload run scripts/import-astro-copy.ts
+### build (28 种)
+   pnpm astro:build
+   pnpm astro:build:erp
+   pnpm astro:build:yunque
+   pnpm astro:build  # P2 类型收敛后复跑
+   pnpm astro:build  # worker 轮
+   pnpm astro:build:erp  # worker 轮
+   pnpm astro:build:yunque  # worker 轮
+   cd apps/astro && env -u SITE_ID npx astro build  # 负向用例
+### render_diff (16 种)
+   node scripts/astro-copy-render-text.mjs apps/astro/dist{,-erp,-yunque} <site> <…>/render
+   node scripts/astro-copy-render-text.mjs apps/astro/dist-<写错的目录名> <site> <…>/snapshot-pre-import
+   node scripts/astro-copy-render-text.mjs … ×3  # 抽取器去掉两处不可达兜底后重放
+   node scripts/astro-copy-render-text.mjs apps/astro/dist juece .aiws/tmp/astro-page-copy-cms/render-after-p2
+   node scripts/astro-copy-render-diff.mjs  # tasks 3.4 正式门禁
+   node scripts/astro-copy-render-diff.mjs  # 带退出码复跑
+   node scripts/astro-copy-render-diff.mjs  # 客户端脚本修复后
+   node scripts/astro-copy-render-diff.mjs  # 3.3 重建 dist 后复跑
+### coverage_check (23 种)
+   node .aiws/tmp/astro-page-copy-cms/63-coverage-check.mjs  # D8 之前
+   node .aiws/tmp/astro-page-copy-cms/63-coverage-check.mjs  # A 侧先过 toSchemaShape 投影，且脚本升级为门禁
+   node .aiws/tmp/astro-page-copy-cms/63-coverage-check.mjs  # 补 minRows 后复跑（门禁）
+   node .aiws/tmp/astro-page-copy-cms/63-coverage-check.mjs  # 投影模块迁入 apps/cms/src/lib 后
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # 修复后复核
+   node .aiws/tmp/astro-page-copy-cms/63-coverage-check.mjs  # 带退出码复跑
+   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P5 入账后
+listcmds_exit=0

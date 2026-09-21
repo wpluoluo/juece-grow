@@ -1,0 +1,19 @@
+编号日志总数=442 台账有行=395 归档有字节=441
+声明式排除=35 其中已入账（应 0，排除表过期信号）=0
+归档缺字节（提交即永久丢，门禁项）=1
+  464-audit-logs-missing-v3.log
+有字节但台账无行（下一轮补登的尾日志）=12
+  453-selfcheck-p14-rows.log
+  454-append-verification-p14.log
+  455-p14-idempotent-recheck.log
+  456-audit-after-p14.log
+  457-recount-after-p14.log
+  458-archive-after-p14.log
+  459-doc-claims-stale-before-p14sync.log
+  460-tasks-sync-p14.log
+  461-tasks-sync-p14-idempotent.log
+  462-doc-claims-after-p14sync.log
+  463-mirror-tail-3.log
+  464-audit-logs-missing-v3.log
+判定=NEEDS-BACKFILL 问题类合计=1
+audit_v3_exit=1

@@ -34,10 +34,22 @@
 
 # 验证入口（本仓实测可复现，均在仓库根执行，零手填参数）
 - build_cmd: "pnpm --filter cms build"             # Next 构建 + 全量 TypeScript 检查（红线：必须 exit=0）
-- astro_build_cmd: "pnpm astro:build"              # 公开站 SSG（可加 :erp / :yunque 跑另两站）
-- server_test_cmd: "pnpm --filter e2e test"        # Playwright：lead / security / reminders / leads-assign / sites-clone
+- astro_build_cmd: "pnpm astro:build"              # 公开站 SSG（可加 :erp / :yunque 跑另两站）；前置：CMS 必须在 :3000 可达——页面文案自 REQ-0003 起只在 CMS，拉不到即构建硬失败（退出码非零、零 HTML 产物，不回退代码内旧文案）
+- server_test_cmd: "pnpm --filter e2e test"        # Playwright：lead / security / reminders / leads-assign / sites-clone / page-copy
 - e2e_prerequisites: "pnpm db:up && apps/cms/.env 含 PUBLIC_CORS_ORIGINS && pnpm --filter cms dev（:3000）&& pnpm astro:dev（:4321）；CMS_ADMIN_* 由 apps/e2e/setup/global-setup.ts 从 gitignored .aiws/secrets/test-accounts.json 注入，账号重建：pnpm --filter cms exec payload run scripts/create-e2e-admin.ts"
 - gate_cmd: "aiws validate . && aiws change validate <change-id> --strict"   # aiws 为全局 CLI（实测 v0.0.96 在 PATH）
+
+# Astro 文案入 CMS（REQ-0003）的常驻门禁：均在仓库根零手填参数执行，断言细节见
+# .aiws/changes/astro-page-copy-cms/design.md 的 Test Seams；「红侧已证」登记在同目录 evidence/verification.jsonl
+- page_copy_gates:
+  - "node scripts/astro-copy-coverage.mjs"          # 12 份快照经唯一投影后的路径集合 ⊆ 四集合 schema，A\\B 必须为 0（离线可跑，不需 CMS）
+  - "node scripts/astro-copy-agents9.mjs"           # AGENTS.md §9 自检清单的可机检版：单文件行数、兜底/双写、camelCase（离线可跑）
+  - "node scripts/astro-copy-parity.mjs"            # 端点 data.copy 与「快照→toSchemaShape→toReaderShape」逐字一致 12/12（前置：CMS 在 :3000 且 12 条已发布）
+  - "node scripts/astro-copy-render-diff.mjs"       # 三站产物可见文本 vs 切换前基线逐字节 + dist 新鲜度 + cap-tag 配色类（前置：先跑完三站 astro:build）
+  - "node scripts/astro-copy-hero-diff.mjs"         # 12 条 <h1 class="hero-title"> 内部 HTML sha256 vs 基线（前置同上；render-diff 只看文本，看不见 span/<br/> 差别）
+  - "node scripts/astro-copy-client-bundle.mjs"     # 三站 _astro/*.js 不得含站点解析报错文案、Layout chunk 的 CMS 地址须是已内联字面量（前置同上；PROB-026）
+  - "node scripts/astro-copy-cms-unreachable.mjs"   # 把 PUBLIC_CMS_ORIGIN 指向死端口跑真实 astro:build ⇒ 退出码非零 + 可读报错 + dist 内零 HTML（自带死端口探测，跑完勿沿用其产物）
+  - "node scripts/astro-copy-evidence-archive.mjs"  # 台账 artifact 均已镜像进 evidence/logs/ 且 sha256 与原件一致（change 治理面，可跨 clone 复核）
 
 - test_db_url: "postgres://juece:juece@127.0.0.1:5434/juece_grow"  # Docker postgres（5434 映射，禁止 H2 等嵌入式/内存库）
 - test_db_cmd: "docker exec juece-grow-postgres pg_isready -U juece"      # 测试库连通性检查

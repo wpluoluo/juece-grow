@@ -1,0 +1,18 @@
+--- 模块级 rows（假仓） ---
+[dist-fresh] juece   apps/astro/dist        dist最大mtime=2026-09-20T18:27:03.630Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] erp     apps/astro/dist-erp    dist最大mtime=2026-09-20T18:13:36.765Z src最大mtime=2026-09-20T18:13:36.765Z 判定=陈旧
+[dist-fresh] yunque apps/astro/dist-yunque = 不存在
+--- 模块级 problems（假仓） ---
+  ! erp：产物不新于源码（apps/astro/dist-erp 最大 mtime 2026-09-20T18:13:36.765Z ≤ apps/astro/src 最大 mtime 2026-09-20T18:13:36.765Z）⇒ 该站须重建：pnpm astro:build:erp
+  ! yunque：缺构建产物 apps/astro/dist-yunque ⇒ 先跑 pnpm astro:build:yunque
+--- 真门禁 astro-copy-client-bundle.mjs 在假仓的退出码 ---
+[dist-fresh] juece   apps/astro/dist        dist最大mtime=2026-09-20T18:27:03.630Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] erp     apps/astro/dist-erp    dist最大mtime=2026-09-20T18:13:36.765Z src最大mtime=2026-09-20T18:13:36.765Z 判定=陈旧
+[dist-fresh] yunque apps/astro/dist-yunque = 不存在
+[client-bundle] dist 新鲜度断言未过（2 站）：
+  erp：产物不新于源码（apps/astro/dist-erp 最大 mtime 2026-09-20T18:13:36.765Z ≤ apps/astro/src 最大 mtime 2026-09-20T18:13:36.765Z）⇒ 该站须重建：pnpm astro:build:erp
+  yunque：缺构建产物 apps/astro/dist-yunque ⇒ 先跑 pnpm astro:build:yunque
+判定=FAIL：产物不比 apps/astro/src 新 ⇒ 扫旧 bundle 证明不了任何事，先跑上面指明的构建入口
+gate_exit=1
+断言：problems=2(true) 点名 astro:build:erp(true) 点名 astro:build:yunque/缺产物(true) 新鲜站不报(true) 门禁退出码=1(true) ⇒ 负向探针=PASS
+negative_probe_exit=0

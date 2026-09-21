@@ -1,0 +1,41 @@
+{
+  "timestamp": 1789943240,
+  "ws_root": "F:/juece-grow",
+  "change_id": "astro-page-copy-cms",
+  "change_dir": "F:\\juece-grow\\.aiws\\changes\\astro-page-copy-cms",
+  "synced_at": "2026-09-20T22:27:20Z",
+  "previous_baseline": {
+    "label": "last sync",
+    "at": "2026-09-20T22:12:36Z",
+    "truth_files": {
+      "AI_PROJECT.md": {
+        "mtime": 1789819241,
+        "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+      },
+      "AI_WORKSPACE.md": {
+        "mtime": 1789939548,
+        "sha256": "81f0b828c5cdf9eb52ea20bf814896ee68399f212287ce105f1db97b4f47e014"
+      },
+      "REQUIREMENTS.md": {
+        "mtime": 1789908915,
+        "sha256": "b53cc9d7d6241890c933284918d6d0d49a0f729d552492ff9cbe62e6633d8f6e"
+      }
+    }
+  },
+  "new_baseline": {
+    "AI_PROJECT.md": {
+      "mtime": 1789819241,
+      "sha256": "41ef47fd022e766e9c0d88b64da67a152d4ef4e18ec668ceb889a817a39467a0"
+    },
+    "AI_WORKSPACE.md": {
+      "mtime": 1789939548,
+      "sha256": "81f0b828c5cdf9eb52ea20bf814896ee68399f212287ce105f1db97b4f47e014"
+    },
+    "REQUIREMENTS.md": {
+      "mtime": 1789908915,
+      "sha256": "b53cc9d7d6241890c933284918d6d0d49a0f729d552492ff9cbe62e6633d8f6e"
+    }
+  },
+  "changed": [],
+  "note": "aiws change sync stamp; does not contain secrets."
+}

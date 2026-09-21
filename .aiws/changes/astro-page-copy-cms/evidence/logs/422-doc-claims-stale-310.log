@@ -1,0 +1,10 @@
+  page_copy_gates 列出=8
+  tasks.md:32 len=1144
+  tasks 3.10 台账真实=349 行 / appender=20 只
+[doc-claims] 废弃串=11 表体行=13 工件点名的门禁=8（存在 8） PROB-029+ 17 行（DONE 7 / OPEN 10） 问题=4
+  B4 ✗ tasks 3.10 写「台账 318 行」，真实 349 行
+  B4 ✗ tasks 3.10 写 ledger_rows=318，真实 349 行
+  B4 ✗ tasks 3.10 写 ledger=318，真实 349 行
+  B4 ✗ tasks 3.10 写 19 只 appender，盘上 20 只
+[doc-claims] 判定=FAIL：工件与实物漂移
+docclaims_exit=1

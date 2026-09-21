@@ -1,0 +1,24 @@
+[e2e] 预热 http://127.0.0.1:4321/ -> 200 (89ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/health -> 200 (29ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/articles?site=juece -> 200 (27ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/leads -> 405 (448ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/reminders/run -> 405 (480ms)
+[e2e] 预热 http://127.0.0.1:3000/api/leads -> 403 (537ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/pages?site=juece&page=pricing -> 200 (34ms)
+[e2e] 预热 http://127.0.0.1:4321/pricing -> 200 (31ms)
+[e2e] 已注入管理员凭据 CMS_ADMIN_USERNAME=e2e-admin（口令值不外泄）
+
+Running 9 tests using 1 worker
+
+  ok 1 [chromium] › tests\page-copy.spec.ts:82:1 › juece 与 erp 的 pricing 各自独立（meta.description 与页头标题都不相等，无串台） (89ms)
+  ok 2 [chromium] › tests\page-copy.spec.ts:93:1 › /pricing 页头标题逐段等于端点 copy.hero.titleLines，强调行落在 <em> 内 (6.5s)
+  ok 3 [chromium] › tests\page-copy.spec.ts:122:3 › 缺 site → 400 INVALID_SITE（匿名请求，fail-closed 不回退主站） (22ms)
+  ok 4 [chromium] › tests\page-copy.spec.ts:122:3 › 未知 site → 400 INVALID_SITE（匿名请求，fail-closed 不回退主站） (13ms)
+  ok 5 [chromium] › tests\page-copy.spec.ts:122:3 › 缺 page → 400 INVALID_PAGE（匿名请求，fail-closed 不回退主站） (19ms)
+  ok 6 [chromium] › tests\page-copy.spec.ts:122:3 › 未知 page → 400 INVALID_PAGE（匿名请求，fail-closed 不回退主站） (19ms)
+  ok 7 [chromium] › tests\page-copy.spec.ts:128:1 › 原生 REST /api/page-pricing 匿名不可枚举（403） (19ms)
+  ok 8 [chromium] › tests\page-copy.spec.ts:145:3 › 草稿不可见 › yunque 的 pricing 置 draft → 端点 404 PAGE_COPY_NOT_FOUND；复原 published → 端点 200 (521ms)
+  ok 9 [chromium] › tests\page-copy.spec.ts:185:3 › 后台自助改稿 › juece 的 pricing hero.description 改成新串 → 端点与 /pricing 都是新串、旧串消失；finally 原样复原 (2.4s)
+
+  9 passed (13.8s)
+e2e_exit=0

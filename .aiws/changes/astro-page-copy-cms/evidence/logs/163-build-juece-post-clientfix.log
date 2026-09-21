@@ -1,0 +1,6 @@
+ÎÄ¼şÃû¡¢Ä¿Â¼Ãû»ò¾í±êÓï·¨²»ÕıÈ·¡£
+undefined
+â€‰ERR_PNPM_RECURSIVE_EXEC_FIRST_FAILâ€‰ Command "astro:build:juece" not found
+
+Did you mean "pnpm astro:build:yunque"?
+build_juece_exit=1

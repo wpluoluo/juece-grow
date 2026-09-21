@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-09-20T22:42:22Z",
+  "ws_root": "F:/juece-grow",
+  "change_id": "astro-page-copy-cms",
+  "branch": "change/astro-page-copy-cms",
+  "phase": "in-progress",
+  "tasks": {
+    "total": 53,
+    "done": 43,
+    "unchecked": 10,
+    "hasCheckboxes": true,
+    "totalAll": 53,
+    "doneAll": 43,
+    "uncheckedAll": 10,
+    "optionalTotal": 0,
+    "optionalUnchecked": 0,
+    "naCount": 0
+  },
+  "bindings": {
+    "contractRow": "Req_ID=REQ-0003,Problem_ID=PROB-024",
+    "planFile": ".aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md",
+    "evidencePaths": [
+      ".aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md",
+      ".aiws/changes/astro-page-copy-cms/evidence/snapshot-pre-import.md",
+      ".aiws/changes/astro-page-copy-cms/design.md",
+      ".aiws/changes/astro-page-copy-cms/review/spec-review.md",
+      ".aiws/changes/astro-page-copy-cms/review/quality-review.md"
+    ]
+  },
+  "truth": {
+    "baseline": {
+      "label": "sync",
+      "at": "2026-09-20T22:27:20Z"
+    },
+    "drift_files": []
+  },
+  "evidence": {
+    "total": 5,
+    "exists": 5,
+    "missing": 0,
+    "tmp": 0,
+    "persistent": 5,
+    "other": 0,
+    "absolute": 0
+  },
+  "collaboration": {
+    "analysis": 0,
+    "patches": 0,
+    "review": 2,
+    "evidence": 200,
+    "total": 202
+  },
+  "note": "aiws change evidence status snapshot; does not contain secrets."
+}

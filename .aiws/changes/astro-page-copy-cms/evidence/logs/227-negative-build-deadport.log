@@ -1,0 +1,31 @@
+
+> juece-grow@0.1.0 astro:build F:\juece-grow
+> pnpm --filter astro build
+
+
+> astro@0.1.0 build F:\juece-grow\apps\astro
+> cross-env SITE_ID=juece astro build && pagefind --site dist
+
+[2m02:09:37[22m [34m[types][39m Generated [2m158ms[22m
+[2m02:09:37[22m [34m[build][39m output: [34m"static"[39m
+[2m02:09:37[22m [34m[build][39m mode: [34m"static"[39m
+[2m02:09:37[22m [34m[build][39m directory: [34mF:\juece-grow\apps\astro\dist\[39m
+[2m02:09:37[22m [34m[build][39m Collecting build info...
+[2m02:09:37[22m [34m[build][39m [32m✓ Completed in 271ms.[39m
+[2m02:09:37[22m [34m[build][39m Building static entrypoints...
+[2m02:09:43[22m [34m[vite][39m [32m✓ built in 5.57s[39m
+[2m02:09:43[22m [34m[vite][39m [32m✓ built in 130ms[39m
+[2m02:09:43[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+fetch failed
+  [1mStack trace:[22m
+[2m[22m
+  [1mCaused by:[22m
+[2m  connect ECONNREFUSED 127.0.0.1:59999
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1645:16)[22m
+F:\juece-grow\apps\astro:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  astro@0.1.0 build: `cross-env SITE_ID=juece astro build && pagefind --site dist`
+Exit status 1
+ ELIFECYCLE  Command failed with exit code 1.
+negative_build_exit=1

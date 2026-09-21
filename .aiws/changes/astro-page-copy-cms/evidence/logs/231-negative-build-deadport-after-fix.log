@@ -1,0 +1,38 @@
+
+> juece-grow@0.1.0 astro:build F:\juece-grow
+> pnpm --filter astro build
+
+
+> astro@0.1.0 build F:\juece-grow\apps\astro
+> cross-env SITE_ID=juece astro build && pagefind --site dist
+
+[2m02:15:16[22m [34m[types][39m Generated [2m83ms[22m
+[2m02:15:16[22m [34m[build][39m output: [34m"static"[39m
+[2m02:15:16[22m [34m[build][39m mode: [34m"static"[39m
+[2m02:15:16[22m [34m[build][39m directory: [34mF:\juece-grow\apps\astro\dist\[39m
+[2m02:15:16[22m [34m[build][39m Collecting build info...
+[2m02:15:16[22m [34m[build][39m [32m✓ Completed in 144ms.[39m
+[2m02:15:16[22m [34m[build][39m Building static entrypoints...
+[2m02:15:20[22m [34m[vite][39m [32m✓ built in 3.89s[39m
+[2m02:15:20[22m [34m[vite][39m [32m✓ built in 68ms[39m
+[2m02:15:20[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+站点 juece 的文章列表 拉取失败：请求 http://127.0.0.1:59999/api/v2/content/articles?site=juece 未建立连接（connect ECONNREFUSED 127.0.0.1:59999）——构建期硬失败，不回退代码内旧文案。请确认 CMS 已启动，且 apps/astro/.env 的 PUBLIC_CMS_ORIGIN 指向该地址。
+  [1mLocation:[22m
+    [4mF:\juece-grow\node_modules\.pnpm\astro@6.4.8_@types+node@26._c4a2d19c602a66525ecc4eb469c3cc81\node_modules\astro\dist\core\render\route-cache.js:29:17[24m
+  [1mStack trace:[22m
+[2m    at connectFailure (file:///F:/juece-grow/apps/astro/dist/.prerender/chunks/payload_dRX6HsRA.mjs:181:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getStaticPaths (file:///F:/juece-grow/apps/astro/dist/.prerender/chunks/_slug__B4KgrTVH.mjs:8:20)
+    at async #getPathsForRoute (file:///F:/juece-grow/node_modules/.pnpm/astro@6.4.8_@types+node@26._c4a2d19c602a66525ecc4eb469c3cc81/node_modules/astro/dist/runtime/prerender/static-paths.js:54:25)
+    at async generatePages (file:///F:/juece-grow/node_modules/.pnpm/astro@6.4.8_@types+node@26._c4a2d19c602a66525ecc4eb469c3cc81/node_modules/astro/dist/core/build/generate.js:68:29)[22m
+  [1mCaused by:[22m
+[2m  fetch failed
+[22m
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+F:\juece-grow\apps\astro:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  astro@0.1.0 build: `cross-env SITE_ID=juece astro build && pagefind --site dist`
+Exit status 3221226505
+ ELIFECYCLE  Command failed with exit code 3221226505.
+negative_build_exit=127

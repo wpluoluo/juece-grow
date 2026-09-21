@@ -1,0 +1,12 @@
+=== 修后：cap-tag 带 tone 的渲染结果（三站） ===
+      1 apps/astro/dist-erp/features/index.html:class="cap-tag yb"
+      4 apps/astro/dist-erp/features/index.html:class="cap-tag"
+      1 apps/astro/dist-yunque/features/index.html:class="cap-tag yb"
+      4 apps/astro/dist-yunque/features/index.html:class="cap-tag"
+      1 apps/astro/dist/features/index.html:class="cap-tag yb"
+      4 apps/astro/dist/features/index.html:class="cap-tag"
+=== 残留缺陷串 cap-tagyb 计数（期望 0） ===
+apps/astro/dist-erp/features/index.html:0
+apps/astro/dist-yunque/features/index.html:0
+apps/astro/dist/features/index.html:0
+=== CSS 选择器仍在产物里 ===

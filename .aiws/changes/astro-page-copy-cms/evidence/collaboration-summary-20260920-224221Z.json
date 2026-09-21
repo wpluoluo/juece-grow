@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-09-20T22:42:22Z",
+  "ws_root": "F:/juece-grow",
+  "change_id": "astro-page-copy-cms",
+  "counts": {
+    "analysis": 0,
+    "patches": 0,
+    "review": 2,
+    "evidence": 200,
+    "total": 202
+  },
+  "dirs": {
+    "analysis": {
+      "label": "analysis",
+      "dir": ".aiws/changes/astro-page-copy-cms/analysis",
+      "exists": true,
+      "count": 0,
+      "files": [],
+      "truncated": false
+    },
+    "patches": {
+      "label": "patches",
+      "dir": ".aiws/changes/astro-page-copy-cms/patches",
+      "exists": true,
+      "count": 0,
+      "files": [],
+      "truncated": false
+    },
+    "review": {
+      "label": "review",
+      "dir": ".aiws/changes/astro-page-copy-cms/review",
+      "exists": true,
+      "count": 2,
+      "files": [
+        ".aiws/changes/astro-page-copy-cms/review/quality-review.md",
+        ".aiws/changes/astro-page-copy-cms/review/spec-review.md"
+      ],
+      "truncated": false
+    },
+    "evidence": {
+      "label": "evidence",
+      "dir": ".aiws/changes/astro-page-copy-cms/evidence",
+      "exists": true,
+      "count": 200,
+      "files": [
+        ".aiws/changes/astro-page-copy-cms/evidence/aiws-validate-stamp-20260920-224221Z.json",
+        ".aiws/changes/astro-page-copy-cms/evidence/astro-read-path-switch.md",
+        ".aiws/changes/astro-page-copy-cms/evidence/change-status-20260920-224221Z.json",
+        ".aiws/changes/astro-page-copy-cms/evidence/change-sync-stamp-20260920-224221Z.json",
+        ".aiws/changes/astro-page-copy-cms/evidence/change-validate-strict-20260920-224221Z.json",
+        ".aiws/changes/astro-page-copy-cms/evidence/client-bundle-regression-fix.md",
+        ".aiws/changes/astro-page-copy-cms/evidence/delivery-build-gates-p8.md",
+        ".aiws/changes/astro-page-copy-cms/evidence/follow-ups.md"
+      ],
+      "truncated": true
+    }
+  },
+  "note": "aiws collaboration summary; patch files are drafts and must be reviewed before apply."
+}

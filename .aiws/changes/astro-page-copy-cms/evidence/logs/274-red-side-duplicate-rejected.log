@@ -1,0 +1,10 @@
+探针：把 page_home id=1（project_id=6）整行复制成第二条，仅新 id 由序列分配
+SQL 前 120 字符：INSERT INTO page_home ("project_id", "status", "meta_title", "meta_description", "hero_kicker", "hero_desc", "hero_prima…（共 1823 字符）
+事务已 ROLLBACK（红侧不提交）
+被拒：SQLSTATE=23505 | duplicate key value violates unique constraint "project_idx" | constraint=project_idx
+SQLSTATE 23505 = unique_violation ⇒ 数据库层唯一性生效（不是应用钩子挡的，本探针绕过了 Payload）
+
+ROLLBACK 后复核：project_id 唯一索引 4 条 -> page_features:project_1_idx, page_home:project_idx, page_pricing:project_3_idx, page_solutions:project_2_idx
+行数：page_home=3 page_features=3 page_solutions=3 page_pricing=3（期望各 3）
+page_home max(id) 前=3 后=3（相等 ⇒ 探针没有推进可见行）
+redside_exit=0

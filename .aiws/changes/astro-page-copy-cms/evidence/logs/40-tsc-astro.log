@@ -1,0 +1,10 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+npm warn Unknown user config "devdir". This will stop working in the next major version of npm.
+tsconfig.json(6,5): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
+  Use '"paths": {"*": ["./*"]}' instead.
+tsconfig.json(8,15): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?
+exit=1
+--- attempt1: npx tsc (workspace-hoisted typescript@7.0.2, TS5102/TS5090 = tsconfig baseUrl parse error, pre-existing, unrelated to this change) ---
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+npm warn Unknown user config "devdir". This will stop working in the next major version of npm.
+exit=0

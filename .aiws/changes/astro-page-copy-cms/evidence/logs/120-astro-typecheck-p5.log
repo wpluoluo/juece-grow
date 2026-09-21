@@ -1,0 +1,9 @@
+
+> juece-grow@0.1.0 astro:typecheck F:\juece-grow
+> pnpm --filter astro typecheck
+
+
+> astro@0.1.0 typecheck F:\juece-grow\apps\astro
+> tsc --noEmit -p tsconfig.json
+
+typecheck_exit=0  # recorded-after-run：值取自本次实跑的命令自身退出码（未过管道）

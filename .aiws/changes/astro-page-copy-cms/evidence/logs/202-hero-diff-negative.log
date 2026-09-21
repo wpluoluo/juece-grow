@@ -1,0 +1,12 @@
+[hero-diff] 差异 1 条：
+  ✗ juece/home：hero <h1> 内部 DOM 被改动
+    切换前: <span class="line">开店有人帮，</span><span class="line"><em>接单有人管，AI 有人配</em></span>
+    本轮:   <span class="line">开店有人帮，</span><span class="line"><em>接单有人管，AI 有人配</em></span> <span class="probe-injected"></span>
+注入后退出码=1
+  [hero-diff] 差异 1 条：
+    ✗ juece/home：hero <h1> 内部 DOM 被改动
+      切换前: <span class="line">开店有人帮，</span><span class="line"><em>接单有人管，AI 有人配</em></span>
+      本轮:   <span class="line">开店有人帮，</span><span class="line"><em>接单有人管，AI 有人配</em></span> <span class="probe-injected"></span>
+还原后退出码=0
+  [hero-diff] 12/12 三站四页 hero <h1> 内部 DOM 与切换前基线逐字节一致（基线 12 条，本轮产物 → .aiws\tmp\astro-page-copy-cms\hero-dom-post.json）
+hero_diff_negative_exit=0

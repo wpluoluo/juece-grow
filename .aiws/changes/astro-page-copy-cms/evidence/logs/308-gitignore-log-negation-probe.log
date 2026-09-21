@@ -1,0 +1,12 @@
+=== 加例外之前（本仓 .gitignore 原样复制过来）===
+.gitignore:18:*.log	.aiws/changes/astro-page-copy-cms/evidence/logs/a.log
+--- git add -n 会 add 几条 ---
+add '.aiws/changes/astro-page-copy-cms/evidence/logs/b.json'
+add '.gitignore'
+=== 把例外追加到同一个 .gitignore 末尾之后 ===
+.gitignore:44:!/.aiws/changes/**/evidence/logs/*.log	.aiws/changes/astro-page-copy-cms/evidence/logs/a.log
+add '.aiws/changes/astro-page-copy-cms/evidence/logs/a.log'
+add '.aiws/changes/astro-page-copy-cms/evidence/logs/b.json'
+add '.gitignore'
+临时仓已删除，本仓 .gitignore 未被改动
+gitignore_probe_exit=0

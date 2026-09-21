@@ -1,0 +1,16 @@
+server_version = 16.15
+
+== payload_migrations 账本 ==
+  20260825_131753  batch=1
+  dev  batch=-1
+
+== 已存在的 page_* 表 ==
+page_features, page_features_base_items, page_features_blocks_agent, page_features_blocks_agent_pegs, page_features_blocks_bars, page_features_blocks_bars_kpis, page_features_blocks_blocks, page_features_blocks_blocks_blocks, page_features_blocks_chips, page_features_blocks_chips_rows, page_features_blocks_journey, page_features_caps, page_features_hero_stats, page_features_hero_title_lines, page_features_numbers, page_features_texts, page_home, page_home_cases_feature_metrics, page_home_cases_minis, page_home_cta_rows, page_home_hero_diagram_nodes, page_home_hero_stats, page_home_hero_title_lines, page_home_products_side, page_home_resource_links, page_home_solutions_rows, page_home_texts, page_pricing, page_pricing_eco_links, page_pricing_faqs, page_pricing_hero_title_lines, page_pricing_plans, page_pricing_texts, page_solutions, page_solutions_hero_stats, page_solutions_hero_title_lines, page_solutions_industries, page_solutions_industries_scenarios, page_solutions_texts
+
+== 既有业务表（对照，只读）==
+共 60 张：articles, articles_tags, categories, forms, lead_activities, leads, media, memberships, page_features, page_features_base_items, page_features_blocks_agent, page_features_blocks_agent_pegs, page_features_blocks_bars, page_features_blocks_bars_kpis, page_features_blocks_blocks, page_features_blocks_blocks_blocks, page_features_blocks_chips, page_features_blocks_chips_rows, page_features_blocks_journey, page_features_caps, page_features_hero_stats, page_features_hero_title_lines, page_features_numbers, page_features_texts, page_home, page_home_cases_feature_metrics, page_home_cases_minis, page_home_cta_rows, page_home_hero_diagram_nodes, page_home_hero_stats, page_home_hero_title_lines, page_home_products_side, page_home_resource_links, page_home_solutions_rows, page_home_texts, page_pricing, page_pricing_eco_links, page_pricing_faqs, page_pricing_hero_title_lines, page_pricing_plans, page_pricing_texts, page_solutions, page_solutions_hero_stats, page_solutions_hero_title_lines, page_solutions_industries, page_solutions_industries_scenarios, page_solutions_texts, payload_kv, payload_locked_documents, payload_locked_documents_rels, payload_migrations, payload_preferences, payload_preferences_rels, projects, reminder_notices, reminder_rules, reminder_rules_apply_statuses, sites, users, users_sessions
+
+== 四个页面集合将挂靠的 projects 现状 ==
+  id=4 slug=juece-erp name=觉策ERP
+  id=5 slug=yunque name=云雀Yunque
+  id=6 slug=juece-grow name=觉策增长

@@ -1,0 +1,15 @@
+up DDL 提取成功：187 条语句 / 32542 字符
+单事务 COMMIT 成功
+
+information_schema 复核：page_* 表 39 张（迁移文件里 CREATE TABLE 也是 39 条）
+四张根表齐全：yes
+枚举类型 15 个：enum_page_features_blocks_agent_pegs_icon, enum_page_features_blocks_agent_pegs_pos, enum_page_features_caps_tag_tone, enum_page_features_status, enum_page_home_cases_minis_tone, enum_page_home_cta_rows_action, enum_page_home_cta_rows_icon, enum_page_home_hero_diagram_nodes_tone, enum_page_home_hero_primary_action, enum_page_home_products_side_icon, enum_page_home_products_spotlight_icon, enum_page_home_status, enum_page_pricing_status, enum_page_solutions_industries_tone, enum_page_solutions_status
+payload_locked_documents_rels 新增列：page_features_id, page_home_id, page_pricing_id, page_solutions_id
+根表外键：
+  page_features.project_id → projects
+  page_home.project_id → projects
+  page_pricing.project_id → projects
+  page_solutions.project_id → projects
+
+账本未改动（本次手工执行不入账，与 20260919 删表同处置）：20260825_131753(batch=1), dev(batch=-1)
+exit=0

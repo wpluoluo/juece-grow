@@ -1,0 +1,15 @@
+[20:40:28] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+[20:40:28] [33mWARN[39m: [36mImage resizing is enabled for one or more collections, but sharp not installed. Please install 'sharp' and pass into the config.[39m
+[import] created page-home/1 site=juece
+[import] created page-home/2 site=erp
+[import] created page-home/3 site=yunque
+[import] created page-features/2 site=juece
+[import] created page-features/3 site=erp
+[import] created page-features/4 site=yunque
+[import] created page-solutions/1 site=juece
+[import] created page-solutions/2 site=erp
+[import] created page-solutions/3 site=yunque
+[import] created page-pricing/1 site=juece
+[import] created page-pricing/2 site=erp
+[import] created page-pricing/3 site=yunque
+[import] 完成：created=12 updated=0 合计 12 条（期望 12）；读回 page-home 已发布 3 条（期望 3）

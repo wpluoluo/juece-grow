@@ -26,9 +26,7 @@
 
 ## Backlog
 
-（当前无待办需求）
-
-> 工程治理项（死模型清理、兜底收敛、e2e 缺口、部署契约变更等）不作为需求条目登记，统一走 `.aiws/issues/problem-issues.jsonl`（PROB-001..011），按 `AI_PROJECT.md` §3.1「问题修复」路径归因。
+> 工程治理项（死模型清理、兜底收敛、e2e 缺口、部署契约变更等）不作为需求条目登记，统一走 `.aiws/issues/problem-issues.jsonl`（PROB 编号以该台账当前内容为准，逐轮追加，不在本文重复声明区间），按 `AI_PROJECT.md` §3.1「问题修复」路径归因。
 
 ## 已完成
 
@@ -91,3 +89,34 @@
 - [x] CMS 生产构建通过 TS 校验；调度在构建期不启动定时器
 
 复验证据：见 `.aiws/changes/cleanup-batch-20260919/evidence/verify-before-complete.md`（本批次 2026-09-19 重跑 `pnpm --filter cms build` + Playwright e2e；此处仅声明证据路径，结论由主 session 在 `aiws verify-bc` 时收口，不代表复验已完成）
+
+### ✓ REQ-0003：公开站页面文案入 CMS（每页一个结构化集合 + 首页 hero/CTA 可排序）
+
+- 状态：已完成（change `astro-page-copy-cms`，交付于 2026-09-21；归档由 `aiws change finish` 在提交后执行，故暂无 `.aiws/changes/archive/...` 路径）
+- 验收：8/8 已勾。**成色分两档**：第 1、6 格按括号内标注的口径勾（机器对面未覆盖的部分已点名并各自登记 PROB），其余 6 格为机器逐字/产物级对面。逐格对面与判定见 `.aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md` §2
+
+**背景 / 问题**
+- 三站（觉策 / ERP / 云雀）四页（首页 / 功能 / 方案 / 价格）的营销文案硬编码在 `apps/astro/src/content/{home,features,solutions,pricing}.ts`（1933 行）与 `apps/astro/src/site.ts`（179 行）里，改一个字都要走代码评审 + 重新构建发版，运营无法自助改稿。
+- 文章类内容早已在 Payload 后台管理，页面文案是最后一块仍在代码里的内容。
+
+**目标**
+- 运营在 Payload 后台即可修改三站四页的文案，并对首页 hero 与 CTA 区块做增删与排序；改完重新构建公开站即生效，不需要改代码。
+- 建模形态（owner 2026-09-20 裁决）：**每页一个结构化集合**，字段与现有 TypeScript 类型一比一，保留编译期字段校验；**不**建通用 `PageBlocks` 区块表。
+
+**非目标**
+- 不做整页拖拽可视化搭建、不做页面模板市场。
+- 不做多语言（i18n）文案版本——三站即三套文案，不额外做语言切换。
+- 不改公开站视觉与 DOM 结构（迁移前后渲染结果逐字一致）。
+- 不做发布审批流与定时发布。
+
+**验收标准**
+- [x] 后台存在首页/功能/方案/价格四类页面内容集合，字段与页面文案 TS 类型一比一对应（类型真值在 `apps/astro/src/types/pages/*.ts`，2026-09-20 由 `content/*.ts` 抽出），且字段均有中英双语 label。一比一允许三处受控形变（见 change 的 design D4 / D8③，唯一实现处 `apps/cms/src/lib/pageCopyProjection.ts`）：① `hero.titleA`+`titleEm` 折成与首页同形的 `titleLines[]{text, emphasis}` 可重复组；② `FeaturePanel.kind` 由 Payload `blocks` 的 `blockType` 承载，不另存判别键；③ 公开端点出响应前做读侧归一——剥掉 Payload 的框架记账键（行/块的 `id`/`blockName`/`_order`，记录根的 `project`/`status`/`createdAt`/`updatedAt`）并把未填可选字段的 `null` 折回「键不存在」，使响应体逐字等于 Astro 类型形态（12 份导入前快照的 `null` 与空串叶子数为 0，故该归一不会擦除任何真实文案）。**成色**：「一比一」＝机器对（`node scripts/astro-copy-coverage.mjs` 的路径差集 `A\B=0`，日志 `370`）；「双语 label」目前只有 grep 计数（四集合 `en:` 出现 115/94/33/41 次）而无逐字段断言 ⇒ 缺口登记为 **PROB-045**，本格按此成色勾
+- [x] 首页 hero 与 CTA 可在后台增删条目并调整顺序，公开站按后台顺序渲染（常驻 e2e `apps/e2e/tests/page-copy.spec.ts` 第 7 组：一次写入「追加一行 + 删一行 + 全部倒序」，`h1.hero-title > span.line` 与 `.cta-rows .cta-row h3` 逐位等于后台数组序，`finally` 整份复原并深比；日志 `383`）
+- [x] 一次性导入脚本把三站 × 四页现有文案导入并发布；导入前后公开站渲染文本逐字比对无差异（差异清单为空）（`scripts/import-astro-copy.ts` 幂等复跑 `created=0 updated=12`；`node scripts/astro-copy-render-diff.mjs` → `12/12 三站四页可见文本逐字一致`，日志 `379`）
+- [x] 后台修改一条已发布文案 → 重新构建 → e2e 断言该字符串在对应公开页出现（原字符串消失）（dev 层常驻用例日志 `383`；产物层因 `output: 'static'` 只能一次性回环，日志 `238`）
+- [x] 构建期 CMS 不可达时 `astro:build` 以非零码失败并给出可读错误；不产出空白区块，也不回退到代码内的旧文案（负向用例覆盖）（`node scripts/astro-copy-cms-unreachable.mjs` 四条判定，日志 `374`；红侧自证：PROB-028 修复前该门禁即报「可读错误命中=false」）
+- [x] 三站四页的 SEO 三件套构建后逐页齐全：标题 / 描述在后台可配（一比一镜像出来的 `meta.{title,description}` 即唯一载体，**不另设 `seoTitle`/`seoDescription` 覆写字段**——那会是零消费者的第二套载体，AGENTS.md §4 禁双写）；canonical 由构建期页面 URL 派生（存库会与实际部署域名产生第二真值），过 AGENTS.md §9 自检。**成色**：源码级机器对（`node scripts/astro-copy-agents9.mjs` 断言 Layout 落 `<title>`+`meta description`+`link canonical` 且四页 `meta` 取自 CMS 4/4，日志 `371`）；**产物级未固化**——渲染文本抽取器在提取前删 `<head>`，构建产物里 12 页的 title/description 落地值不在任何门禁内 ⇒ 登记为 **PROB-039**（与 PROB-041 配成「基线退役」P2 对），本格按此成色勾
+- [x] `apps/astro/src/content/*.ts` 与 `site.ts` 中已被 CMS 接管的文案字段删除，不留代码内兜底副本（AGENTS.md §4 禁双写）。边界：本需求只搬「页面文案」；站点级品牌 / 导航 / 备案号（`site.ts` 的 Site 记录）不在范围内，`site.ts` 侧只要求去掉 `SITE_ID` 缺失时静默按主站构建的兜底（实际删除 1937 行；`|| 'juece'` 全仓命中 0、`apps/astro/src/content/` 目录已消失、缺 `SITE_ID` 即抛，日志 `371`）
+- [x] `pnpm --filter cms build`、三站 `pnpm astro:build`、`pnpm --filter e2e test` 全部 exit=0（最终态日志 `375`/`376`/`377`/`378`/`383`/`384`；`build.mjs` 的 libuv 白名单未命中，即真 0 退出）
+
+复验证据：见 `.aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md`（九道门禁 P-V1..P-V9 的实测日志编号、八格验收的逐条对面、以及「未验证/未执行」清单都在该文）；命令级证据在 `evidence/verification.jsonl`（318 行，每行的 artifact 已按字节镜像进 `evidence/logs/`）。线上发布动作**未执行**（本 change 全程只连本地容器库），前置清单见 `evidence/release-prerequisites.md`

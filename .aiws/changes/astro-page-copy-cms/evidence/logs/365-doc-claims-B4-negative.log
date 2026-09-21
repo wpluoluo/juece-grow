@@ -1,0 +1,10 @@
+注入过期口径后：exit=1
+  OK   点名「tasks 3.10 写「台账 271 行」，真实 285 行」
+  OK   点名「tasks 3.10 写 ledger_rows=271，真实 285 行」
+  OK   点名「tasks 3.10 写 ledger=271，真实 285 行」
+  OK   点名「tasks 3.10 写 16 只 appender，盘上 18 只」
+反向自洽判据：改一条 covered 使 covered+uncovered≠ledger 也应红
+  OK   自洽分支 exit=1 点名=true
+还原：sha256 改前=8b52c7207da801b8 改后=8b52c7207da801b8 相同=true
+还原后复跑：exit=0 [doc-claims] 判定=OK：工件口径与盘上实物一致
+判定=PASS：B4 能点名每一处过期台账口径，且改回即绿

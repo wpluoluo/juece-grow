@@ -1,0 +1,3 @@
+[cms-unreachable] dead_origin=http://127.0.0.1:59999 可连接=false build_exit=1 ECONNREFUSED+端口命中=true 可读错误命中=true dist_html=0
+判定=OK：拉不到 CMS 即非零退出、错误可读、无产物
+neg_gate_r1_exit=0

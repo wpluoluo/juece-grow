@@ -1,0 +1,3 @@
+no-op：REQ-0003 合同行已与 P6 实现真值一致，台账仍 3 行
+no-op：CHANGELOG 已有该行
+recheck_exit=0

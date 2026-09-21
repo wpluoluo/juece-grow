@@ -1,0 +1,5 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+npm warn Unknown user config "devdir". This will stop working in the next major version of npm.
+helpers/cmsRest.ts(42,20): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+helpers/cmsRest.ts(43,20): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tsc_exit=2

@@ -1,0 +1,8 @@
+== 复核：被置过 draft 的记录（yunque / page-pricing）当前公开可读性 ==
+2026-09-20T14:21:26Z
+site=juece pricing -> HTTP 200
+site=erp pricing -> HTTP 200
+site=yunque pricing -> HTTP 200
+== yunque 文案首段（证明非草稿态、内容与发布版一致） ==
+success=true site=yunque meta.title=价格方案 · 云雀 Yunque
+recheck_exit=0

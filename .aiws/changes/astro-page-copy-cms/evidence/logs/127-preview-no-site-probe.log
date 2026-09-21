@@ -1,0 +1,12 @@
+[1m[31m[astro][39m[22m Unable to load your Astro config
+
+缺少 SITE_ID：域名与站点配置都按 SITE_ID 选择，不给默认站点，缺标识即构建失败（禁兜底）。请通过 apps/astro/package.json 的脚本入口运行（它们用 cross-env SITE_ID=<juece|erp|yunque> 显式赋值）：pnpm astro:dev / astro:build / astro:build:erp / astro:build:yunque；直接调用 astro 时写作 cross-env SITE_ID=juece astro build。
+  [1mLocation:[22m
+    [4mF:\juece-grow\node_modules\.pnpm\vite@7.3.6_@types+node@26.3.0_sass@1.77.4_tsx@4.22.4\node_modules\vite\dist\node\module-runner.js:913:3[24m
+  [1mStack trace:[22m
+[2m    at eval (F:/juece-grow/apps/astro/astro.config.mjs:10:9)
+    at async ModuleRunner.directRequest (file:///F:/juece-grow/node_modules/.pnpm/vite@7.3.6_@types+node@26.3.0_sass@1.77.4_tsx@4.22.4/node_modules/vite/dist/node/module-runner.js:1146:59)
+    at async ModuleRunner.import (file:///F:/juece-grow/node_modules/.pnpm/vite@7.3.6_@types+node@26.3.0_sass@1.77.4_tsx@4.22.4/node_modules/vite/dist/node/module-runner.js:1014:10)
+    at async loadConfig (file:///F:/juece-grow/node_modules/.pnpm/astro@6.4.8_@types+node@26._c4a2d19c602a66525ecc4eb469c3cc81/node_modules/astro/dist/core/config/config.js:57:12)
+    at async preview (file:///F:/juece-grow/node_modules/.pnpm/astro@6.4.8_@types+node@26._c4a2d19c602a66525ecc4eb469c3cc81/node_modules/astro/dist/core/preview/index.js:18:39)[22m
+preview_no_site_exit=1

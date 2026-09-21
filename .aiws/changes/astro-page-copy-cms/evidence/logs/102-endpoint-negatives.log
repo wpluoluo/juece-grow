@@ -1,0 +1,9 @@
+PASS 缺 site → 400 INVALID_SITE :: HTTP 400 code=INVALID_SITE
+PASS 未知 site → 400 INVALID_SITE（不回退主站） :: HTTP 400 code=INVALID_SITE
+PASS 缺 page → 400 INVALID_PAGE :: HTTP 400 code=INVALID_PAGE
+PASS 未知 page → 400 INVALID_PAGE :: HTTP 400 code=INVALID_PAGE
+PASS juece 与 erp 的 pricing 各自独立 :: juece="觉策智云按年付费，ERP 与云雀计费…" erp="觉策ERP 按项目授权并收取年度服务…"
+PASS 草稿不可见 → 404 PAGE_COPY_NOT_FOUND :: 库内 status=draft HTTP 404 code=PAGE_COPY_NOT_FOUND
+PASS 探针复原：改回 published 后端点恢复 200 :: status=published HTTP 200
+PASS 原生 /api/page-pricing 匿名不可枚举 :: HTTP 403（公开面匿名 200 已由上面各条证明）
+契约负向全部命中：8/8

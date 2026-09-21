@@ -1,0 +1,9 @@
+
+> juece-grow@0.1.0 astro:typecheck F:\juece-grow
+> pnpm --filter astro typecheck
+
+
+> astro@0.1.0 typecheck F:\juece-grow\apps\astro
+> tsc --noEmit -p tsconfig.json
+
+typecheck_exit=0

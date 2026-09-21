@@ -1,0 +1,60 @@
+创建成功 id=1 status=draft project=6
+
+=== 读回的 caps[0].panel 原始形状 ===
+[
+  {
+    "id": "6aafd048944c77efd0527c65",
+    "badge": "3 端同步",
+    "title": "一个商城的组成",
+    "blockName": null,
+    "blocks": [
+      {
+        "id": "6aafd048944c77efd0527c61",
+        "no": "01",
+        "name": "首页 Banner",
+        "note": "换图、设跳转、挂活动",
+        "w": "72%"
+      },
+      {
+        "id": "6aafd048944c77efd0527c62",
+        "no": "02",
+        "name": "商品橱窗",
+        "note": "价格、库存、排序",
+        "w": "86%"
+      },
+      {
+        "id": "6aafd048944c77efd0527c63",
+        "no": "03",
+        "name": "营销活动位",
+        "note": "拼团、秒杀、优惠券",
+        "w": "64%"
+      },
+      {
+        "id": "6aafd048944c77efd0527c64",
+        "no": "04",
+        "name": "会员与积分",
+        "note": "
+
+=== panel 的键名（判别键真值）===
+caps 数：写入 5 / 读回 5
+  caps[0].panel: array(len=1) keys=[id, badge, title, blockName, blocks, blockType] 写入侧 kind=blocks
+  caps[1].panel: array(len=1) keys=[id, badge, title, blockName, rows, blockType, chips] 写入侧 kind=chips
+  caps[2].panel: array(len=1) keys=[id, badge, title, blockName, kpis, blockType, bars, months] 写入侧 kind=bars
+  caps[3].panel: array(len=1) keys=[id, badge, title, blockName, blockType, steps] 写入侧 kind=journey
+  caps[4].panel: array(len=1) keys=[id, badge, title, core, blockName, pegs, blockType] 写入侧 kind=agent
+
+=== 深比结果：差异 7 条 ===
+  - caps[0].tagTone: 写入侧缺失
+  - caps[0].reverse: 写入侧缺失
+  - caps[1].tagTone: 写入侧缺失
+  - caps[2].tagTone: 写入侧缺失
+  - caps[2].reverse: 写入侧缺失
+  - caps[3].tagTone: 写入侧缺失
+  - caps[4].reverse: 写入侧缺失
+
+caps 顺序保持：yes
+RESULT=DIVERGENT
+
+清理探针记录：HTTP 200
+复核剩余 docs=0
+exit=0

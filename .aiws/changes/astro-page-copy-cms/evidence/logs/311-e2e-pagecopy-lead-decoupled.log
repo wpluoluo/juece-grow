@@ -1,0 +1,37 @@
+[e2e] 预热 http://127.0.0.1:4321/ -> 200 (1198ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/health -> 200 (32ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/articles?site=juece -> 200 (32ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/leads -> 405 (44ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/reminders/run -> 405 (48ms)
+[e2e] 预热 http://127.0.0.1:3000/api/leads -> 403 (75ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/pages?site=juece&page=pricing -> 200 (39ms)
+[e2e] 预热 http://127.0.0.1:4321/pricing -> 200 (46ms)
+[e2e] 已注入管理员凭据 CMS_ADMIN_USERNAME=e2e-admin（口令值不外泄）
+
+Running 22 tests using 1 worker
+
+  ok  1 [chromium] › tests\lead.spec.ts:4:1 › 健康端点返回统一成功信封 (36ms)
+  ok  2 [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 (7.0s)
+  ok  3 [chromium] › tests\lead.spec.ts:22:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true (2.5s)
+  ok  4 [chromium] › tests\lead.spec.ts:33:1 › API 直接提交线索，校验信封与业务 id (79ms)
+  ok  5 [chromium] › tests\lead.spec.ts:47:1 › 缺 phone/wechat 时返回校验错误信封 (19ms)
+  ok  6 [chromium] › tests\lead.spec.ts:57:1 › 仅填 wechat 也能提交成功 (60ms)
+  ok  7 [chromium] › tests\lead.spec.ts:71:1 › 非法 JSON 返回 INVALID_JSON 信封 (24ms)
+  ok  8 [chromium] › tests\lead.spec.ts:82:1 › 缺失 projectSlug 返回 MISSING_PROJECT (21ms)
+  ok  9 [chromium] › tests\lead.spec.ts:92:1 › 空白 projectSlug 返回 MISSING_PROJECT (32ms)
+  ok 10 [chromium] › tests\lead.spec.ts:104:1 › 不存在的 projectSlug 返回 PROJECT_NOT_FOUND (24ms)
+  ok 11 [chromium] › tests\lead.spec.ts:116:1 › 手机号格式非法时返回 VALIDATION (18ms)
+  ok 12 [chromium] › tests\lead.spec.ts:126:1 › 同一项目相同联系方式去重返回 duplicate:true (90ms)
+  ok 13 [chromium] › tests\page-copy.spec.ts:86:1 › juece 与 erp 的 pricing 各自独立（meta.description 与页头标题都不相等，无串台） (111ms)
+  ok 14 [chromium] › tests\page-copy.spec.ts:96:1 › /pricing 页头标题逐段等于端点 copy.hero.titleLines，强调行落在 <em> 内 (1.4s)
+  ok 15 [chromium] › tests\page-copy.spec.ts:125:3 › 缺 site → 400 INVALID_SITE（匿名请求，fail-closed 不回退主站） (28ms)
+  ok 16 [chromium] › tests\page-copy.spec.ts:125:3 › 未知 site → 400 INVALID_SITE（匿名请求，fail-closed 不回退主站） (19ms)
+  ok 17 [chromium] › tests\page-copy.spec.ts:125:3 › 缺 page → 400 INVALID_PAGE（匿名请求，fail-closed 不回退主站） (35ms)
+  ok 18 [chromium] › tests\page-copy.spec.ts:125:3 › 未知 page → 400 INVALID_PAGE（匿名请求，fail-closed 不回退主站） (21ms)
+  ok 19 [chromium] › tests\page-copy.spec.ts:131:1 › 原生 REST /api/page-pricing 匿名不可枚举（403） (21ms)
+  ok 20 [chromium] › tests\page-copy.spec.ts:148:3 › 草稿不可见 › yunque 的 pricing 置 draft → 端点 404 PAGE_COPY_NOT_FOUND；复原 published → 端点 200 (530ms)
+  ok 21 [chromium] › tests\page-copy.spec.ts:188:3 › 后台自助改稿 › juece 的 pricing hero.description 改成新串 → 端点与 /pricing 都是新串、旧串消失；finally 原样复原 (3.9s)
+  ok 22 [chromium] › tests\page-copy.spec.ts:315:3 › 首页 hero 与 CTA 增删换序 › juece 首页 hero 删一行+追加一行+倒序、cta 倒序+追加一行 → h1 逐行与 .cta-row 逐行都是后台数组序、删掉的行消失；finally 整份复原 (2.5s)
+
+  22 passed (22.3s)
+e2e_exit=0

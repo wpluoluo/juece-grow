@@ -1,0 +1,21 @@
+warning: in the working copy of '.aiws/issues/problem-issues.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/memory-bank/.index.yaml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/requirements/CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/requirements/requirements-issues.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/astro.config.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/components/sections/FeatureGrid.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/components/sections/PageHero.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/components/sections/PricingTable.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/lib/payload.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/articles/[slug].astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/features.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/pricing.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/solutions.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/site.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/cms/src/migrations/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/cms/src/payload-types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/e2e/setup/global-setup.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/03-data-model.md', LF will be replaced by CRLF the next time Git touches it
+ok: all gates passed (tier=strict)
+verify_bc_exit=0

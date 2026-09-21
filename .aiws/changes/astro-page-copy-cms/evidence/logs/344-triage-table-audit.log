@@ -1,0 +1,4 @@
+.aiws/changes/astro-page-copy-cms/review/spec-review.md: triage 表体=16 行 竖线数!=5=0 表内空行=0
+.aiws/changes/astro-page-copy-cms/review/quality-review.md: triage 表体=25 行 竖线数!=5=0 表内空行=0
+判定=OK：两份 triage 表体结构完好（4 列、无表内空行）
+audit_exit=0

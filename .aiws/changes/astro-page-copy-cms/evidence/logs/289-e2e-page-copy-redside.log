@@ -1,0 +1,51 @@
+[e2e] 预热 http://127.0.0.1:4321/ -> 200 (136ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/health -> 200 (12ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/articles?site=juece -> 200 (33ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/leads -> 405 (11ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/reminders/run -> 405 (9ms)
+[e2e] 预热 http://127.0.0.1:3000/api/leads -> 403 (28ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/pages?site=juece&page=pricing -> 200 (33ms)
+[e2e] 预热 http://127.0.0.1:4321/pricing -> 200 (44ms)
+[e2e] 已注入管理员凭据 CMS_ADMIN_USERNAME=e2e-admin（口令值不外泄）
+
+Running 1 test using 1 worker
+
+  x  1 [chromium] › tests\page-copy.spec.ts:316:3 › 首页 hero 与 CTA 增删换序 › juece 首页 hero 删一行+追加一行+倒序、cta 倒序+追加一行 → h1 逐行与 .cta-row 逐行都是后台数组序、删掉的行消失；finally 整份复原 (7.4s)
+
+
+  1) [chromium] › tests\page-copy.spec.ts:316:3 › 首页 hero 与 CTA 增删换序 › juece 首页 hero 删一行+追加一行+倒序、cta 倒序+追加一行 → h1 逐行与 .cta-row 逐行都是后台数组序、删掉的行消失；finally 整份复原 
+
+    Error: h1 第 0 个 span.line 不是后台 titleLines 的第 0 项
+
+    expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('h1.hero-title > span.line').first()
+    Expected: "E2E 增删换序 1789935219308"
+    Received: "接单有人管，AI 有人配"
+    Timeout:  5000ms
+
+    Call log:
+      - h1 第 0 个 span.line 不是后台 titleLines 的第 0 项 with timeout 5000ms
+      - waiting for locator('h1.hero-title > span.line').first()
+        14 × locator resolved to <span class="line">…</span>
+           - unexpected value "接单有人管，AI 有人配"
+
+
+      299 |     await expect(lineNodes, 'span.line 的行数与后台 titleLines 的行数不等').toHaveCount(lines.length)
+      300 |     for (const [i, line] of lines.entries()) {
+    > 301 |       await expect(lineNodes.nth(i), `h1 第 ${i} 个 span.line 不是后台 titleLines 的第 ${i} 项`).toHaveText(line.text)
+          |                                                                                         ^
+      302 |     }
+      303 |     const emphasized = lines.filter((line) => line.emphasis === true)
+      304 |     const emNodes = page.locator('h1.hero-title em')
+        at expectRenderedOrder (F:\juece-grow\apps\e2e\tests\page-copy.spec.ts:301:89)
+        at F:\juece-grow\apps\e2e\tests\page-copy.spec.ts:376:7
+
+    Error Context: test-results\page-copy-首页-hero-与-CTA-增删-72355-都是后台数组序、删掉的行消失；finally-整份复原-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\page-copy.spec.ts:316:3 › 首页 hero 与 CTA 增删换序 › juece 首页 hero 删一行+追加一行+倒序、cta 倒序+追加一行 → h1 逐行与 .cta-row 逐行都是后台数组序、删掉的行消失；finally 整份复原 
+undefined
+F:\juece-grow\apps\e2e:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: playwright test tests/page-copy.spec.ts -g 首页 hero 与 CTA 增删换序
+e2e_exit=1

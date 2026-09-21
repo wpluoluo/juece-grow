@@ -1,0 +1,37 @@
+### home slug=page-home dumpPaths=76 schemaPaths=91 leafFields=82 groups=15 arrays=9 scalarArrays(hasMany)=3 blocksFields=0 blockSlugs=0 genericDropped=13
+A\B（dump 有、schema 无，共 1 条）:
+  - hero.titleLines[].em
+B\A（schema 有、dump 无，已剔除通用字段，共 3 条）:
+  + hero.primary.href
+  + hero.titleLines[].emphasis
+  + products.spotlight.link.external
+
+### features slug=page-features dumpPaths=43 schemaPaths=55 leafFields=54 groups=5 arrays=8 scalarArrays(hasMany)=5 blocksFields=1 blockSlugs=5 genericDropped=12
+A\B（dump 有、schema 无，共 3 条）:
+  - caps[].panel.kind
+  - hero.titleA
+  - hero.titleEm
+B\A（schema 有、dump 无，已剔除通用字段，共 3 条）:
+  + caps[].panel.blockType
+  + hero.titleLines[].emphasis
+  + hero.titleLines[].text
+
+### solutions slug=page-solutions dumpPaths=20 schemaPaths=28 leafFields=24 groups=3 arrays=4 scalarArrays(hasMany)=2 blocksFields=0 blockSlugs=0 genericDropped=8
+A\B（dump 有、schema 无，共 2 条）:
+  - hero.titleA
+  - hero.titleEm
+B\A（schema 有、dump 无，已剔除通用字段，共 2 条）:
+  + hero.titleLines[].emphasis
+  + hero.titleLines[].text
+
+### pricing slug=page-pricing dumpPaths=22 schemaPaths=31 leafFields=27 groups=3 arrays=4 scalarArrays(hasMany)=1 blocksFields=0 blockSlugs=0 genericDropped=8
+A\B（dump 有、schema 无，共 2 条）:
+  - hero.titleA
+  - hero.titleEm
+B\A（schema 有、dump 无，已剔除通用字段，共 3 条）:
+  + hero.titleLines[].emphasis
+  + hero.titleLines[].text
+  + plans[].currency
+
+SUMMARY A\B total=8
+exit=0

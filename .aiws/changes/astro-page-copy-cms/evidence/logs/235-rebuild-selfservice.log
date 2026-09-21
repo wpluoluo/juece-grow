@@ -1,0 +1,19 @@
+[3.5] 已用 e2e-admin 登录 CMS（口令不外泄）
+[3.5] 记录 1：旧串 "这里是觉策智云的定价，按年付费，费用和权益都写明"… 长 57 字
+[3.5] 改稿后重建：build_exit=0 判定=OK
+[3.5] 新串命中=true 旧串残留=false
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: read ECONNRESET
+      at TCP.onStreamRead (node:internal/stream_base_commons:216:20) {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+
+Node.js v24.14.0
+rebuild_selfservice_exit=1

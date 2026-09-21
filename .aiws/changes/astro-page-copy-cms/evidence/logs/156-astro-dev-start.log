@@ -1,0 +1,287 @@
+
+> juece-grow@0.1.0 astro:dev F:\juece-grow
+> pnpm --filter astro dev
+
+
+> astro@0.1.0 dev F:\juece-grow\apps\astro
+> cross-env SITE_ID=juece astro dev
+
+[vite] connected.
+[2m22:03:59[22m [34m[types][39m Generated [2m2ms[22m
+[vite] connected.
+[2m22:03:59[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[42m[1m astro [22m[49m [32mv6.4.8[39m [2mready in[22m 6875 [2mms[22m
+[2m┃[22m Local    [36mhttp://localhost:4321/[39m
+[2m┃[22m Network  [2muse --host to expose[22m
+[2m22:03:59[22m [32mwatching for file changes...[39m
+[2m22:05:23[22m [34m[200][39m / [2m154ms[22m
+[2m22:07:27[22m [34m[200][39m /pricing [2m65ms[22m
+[2m22:11:38[22m [34m[200][39m / [2m89ms[22m
+[2m22:11:39[22m [34m[200][39m /pricing [2m30ms[22m
+[2m22:11:42[22m [34m[200][39m / [2m61ms[22m
+[2m22:11:56[22m [34m[200][39m / [2m108ms[22m
+[2m22:12:33[22m [34m[200][39m /pricing [2m42ms[22m
+[2m22:13:38[22m [34m[200][39m / [2m92ms[22m
+[2m22:13:38[22m [34m[200][39m /pricing [2m33ms[22m
+[2m22:13:39[22m [34m[200][39m / [2m76ms[22m
+[2m22:13:50[22m [34m[200][39m / [2m94ms[22m
+[2m22:16:42[22m [34m[200][39m / [2m182ms[22m
+[2m22:19:46[22m [34m[200][39m / [2m101ms[22m
+[2m22:19:47[22m [34m[200][39m /pricing [2m33ms[22m
+[2m22:19:50[22m [34m[200][39m / [2m75ms[22m
+[2m22:20:03[22m [34m[200][39m / [2m147ms[22m
+[2m22:20:38[22m [34m[200][39m /pricing [2m34ms[22m
+[2m22:28:40[22m [34m[watch][39m src/lib/payload.ts
+[2m22:28:55[22m [34m[watch][39m src/layouts/Layout.astro
+[2m22:30:59[22m [34m[watch][39m dist-erp/404.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/features/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/terms/index.html
+[2m22:30:59[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/404.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/features/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/terms/index.html
+[2m22:31:07[22m [34m[watch][39m dist-erp/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/404.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/features/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m22:31:13[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/404.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/features/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m22:31:17[22m [34m[watch][39m dist-yunque/index.html
+[2m22:36:00[22m [34m[200][39m / [2m151ms[22m
+[2m22:36:00[22m [34m[200][39m /pricing [2m47ms[22m
+[2m22:36:13[22m [34m[200][39m / [2m136ms[22m
+[2m22:36:14[22m [34m[200][39m /pricing [2m32ms[22m
+[2m22:36:17[22m [34m[200][39m / [2m68ms[22m
+[2m22:36:24[22m [34m[200][39m / [2m96ms[22m
+[2m22:36:30[22m [34m[200][39m /pricing [2m30ms[22m
+[2m01:29:26[22m [34m[200][39m / [2m431ms[22m
+[2m01:34:55[22m [34m[watch][39m dist-erp/404.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/features/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m01:34:55[22m [34m[watch][39m dist-erp/terms/index.html
+[2m01:34:59[22m [34m[watch][39m dist-erp/404.html
+[2m01:34:59[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m01:34:59[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m01:34:59[22m [34m[watch][39m dist-erp/features/index.html
+[2m01:35:00[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m01:35:00[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m01:35:00[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m01:35:00[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m01:35:00[22m [34m[watch][39m dist-erp/terms/index.html
+[2m01:35:00[22m [34m[watch][39m dist-erp/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/404.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/features/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m01:35:06[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/404.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/features/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m01:35:10[22m [34m[watch][39m dist-yunque/index.html
+[2m02:08:28[22m [34m[200][39m /pricing [2m128ms[22m
+[2m02:13:11[22m [34m[watch][39m src/lib/payload.ts
+[2m02:13:25[22m [34m[watch][39m src/lib/payload.ts
+[2m02:13:36[22m [34m[watch][39m src/lib/payload.ts
+[2m02:20:03[22m [34m[200][39m / [2m325ms[22m
+[2m02:20:45[22m [34m[200][39m /pricing [2m41ms[22m
+[2m02:20:47[22m [34m[200][39m /pricing [2m26ms[22m
+[2m02:20:54[22m [34m[200][39m /pricing [2m49ms[22m
+[2m02:27:47[22m [34m[200][39m / [2m111ms[22m
+[2m02:27:47[22m [34m[200][39m /pricing [2m34ms[22m
+[2m02:27:51[22m [34m[200][39m / [2m101ms[22m
+[2m02:27:57[22m [34m[200][39m / [2m75ms[22m
+[2m02:28:05[22m [34m[200][39m /pricing [2m37ms[22m
+[2m02:28:08[22m [34m[200][39m /pricing [2m35ms[22m
+[2m02:28:09[22m [34m[200][39m /pricing [2m28ms[22m
+[2m02:46:09[22m [34m[watch][39m dist-erp/404.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/features/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m02:46:09[22m [34m[watch][39m dist-erp/terms/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/404.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/features/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/terms/index.html
+[2m02:46:17[22m [34m[watch][39m dist-erp/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/404.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/features/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m02:46:31[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/404.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/features/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m02:46:34[22m [34m[watch][39m dist-yunque/index.html
+[2m03:13:19[22m [34m[200][39m / [2m144ms[22m
+[2m03:15:19[22m [34m[200][39m / [2m58ms[22m
+[2m03:54:54[22m [34m[200][39m / [2m1314ms[22m
+[2m03:56:10[22m [34m[200][39m / [2m74ms[22m
+[2m03:56:12[22m [34m[200][39m /pricing [2m23ms[22m
+[2m03:56:13[22m [34m[200][39m /pricing [2m61ms[22m
+[2m03:56:21[22m [34m[200][39m /pricing [2m36ms[22m
+[2m03:56:22[22m [34m[200][39m /pricing [2m25ms[22m
+[2m04:02:11[22m [34m[200][39m / [2m64ms[22m
+[2m04:05:20[22m [34m[200][39m / [2m94ms[22m
+[2m04:05:39[22m [34m[200][39m / [2m72ms[22m
+[2m04:11:56[22m [34m[200][39m / [2m100ms[22m
+[2m04:11:56[22m [34m[200][39m /pricing [2m32ms[22m
+[2m04:11:58[22m [34m[200][39m /pricing [2m39ms[22m
+[2m04:12:04[22m [34m[200][39m /pricing [2m26ms[22m
+[2m04:12:05[22m [34m[200][39m /pricing [2m36ms[22m
+[2m04:12:06[22m [34m[200][39m / [2m99ms[22m
+[2m04:12:10[22m [34m[200][39m / [2m71ms[22m
+[2m04:12:19[22m [34m[200][39m / [2m79ms[22m
+[2m04:12:19[22m [34m[200][39m /pricing [2m33ms[22m
+[2m04:12:21[22m [34m[200][39m /pricing [2m28ms[22m
+[2m04:12:23[22m [34m[200][39m /pricing [2m24ms[22m
+[2m04:12:25[22m [34m[200][39m /pricing [2m24ms[22m
+[2m04:12:25[22m [34m[200][39m / [2m48ms[22m
+[2m04:12:27[22m [34m[200][39m / [2m70ms[22m
+[2m04:13:37[22m [34m[200][39m / [2m117ms[22m
+[2m04:13:37[22m [34m[200][39m /pricing [2m34ms[22m
+[2m04:13:39[22m [34m[200][39m / [2m80ms[22m
+[2m04:13:45[22m [34m[200][39m / [2m64ms[22m
+[2m04:14:10[22m [34m[200][39m / [2m121ms[22m
+[2m04:14:10[22m [34m[200][39m /pricing [2m28ms[22m
+[2m04:14:11[22m [34m[200][39m /pricing [2m42ms[22m
+[2m04:14:14[22m [34m[200][39m /pricing [2m28ms[22m
+[2m04:14:16[22m [34m[200][39m /pricing [2m43ms[22m
+[2m04:14:17[22m [34m[200][39m / [2m70ms[22m
+[2m04:14:18[22m [34m[200][39m / [2m102ms[22m
+[2m04:15:19[22m [34m[200][39m / [2m73ms[22m
+[2m04:15:20[22m [34m[200][39m /pricing [2m21ms[22m
+[2m04:15:21[22m [34m[200][39m /pricing [2m54ms[22m
+[2m04:15:27[22m [34m[200][39m /pricing [2m28ms[22m
+[2m04:15:28[22m [34m[200][39m /pricing [2m25ms[22m
+[2m04:15:30[22m [34m[200][39m / [2m84ms[22m
+[2m04:15:32[22m [34m[200][39m / [2m145ms[22m
+[2m04:15:42[22m [34m[200][39m / [2m102ms[22m
+[2m04:15:42[22m [34m[200][39m /pricing [2m30ms[22m
+[2m04:15:44[22m [34m[200][39m /pricing [2m35ms[22m
+[2m04:15:47[22m [34m[200][39m /pricing [2m53ms[22m
+[2m04:15:48[22m [34m[200][39m /pricing [2m28ms[22m
+[2m04:15:49[22m [34m[200][39m / [2m76ms[22m
+[2m04:15:51[22m [34m[200][39m / [2m81ms[22m
+[2m04:59:22[22m [34m[200][39m / [2m1180ms[22m
+[2m04:59:23[22m [34m[200][39m /pricing [2m35ms[22m
+[2m04:59:24[22m [34m[200][39m / [2m73ms[22m
+[2m04:59:31[22m [34m[200][39m / [2m77ms[22m
+[2m04:59:34[22m [34m[200][39m /pricing [2m36ms[22m
+[2m04:59:37[22m [34m[200][39m /pricing [2m31ms[22m
+[2m04:59:39[22m [34m[200][39m /pricing [2m29ms[22m
+[2m04:59:41[22m [34m[200][39m / [2m65ms[22m
+[2m04:59:42[22m [34m[200][39m / [2m65ms[22m
+[2m06:15:02[22m [34m[200][39m / [2m179ms[22m
+[2m06:18:01[22m [34m[watch][39m dist-erp/404.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/features/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m06:18:01[22m [34m[watch][39m dist-erp/terms/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/404.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/features/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/pricing/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/privacy/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/sitemap/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/solutions/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/terms/index.html
+[2m06:18:04[22m [34m[watch][39m dist-erp/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/404.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/features/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m06:18:11[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/404.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/features/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/pricing/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/privacy/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/sitemap/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/solutions/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/terms/index.html
+[2m06:18:14[22m [34m[watch][39m dist-yunque/index.html
+[2m06:18:22[22m [34m[200][39m / [2m59ms[22m
+[2m06:18:22[22m [34m[200][39m /pricing [2m32ms[22m
+[2m06:18:24[22m [34m[200][39m / [2m80ms[22m
+[2m06:18:30[22m [34m[200][39m / [2m62ms[22m
+[2m06:18:36[22m [34m[200][39m /pricing [2m30ms[22m
+[2m06:18:39[22m [34m[200][39m /pricing [2m23ms[22m
+[2m06:18:41[22m [34m[200][39m /pricing [2m38ms[22m
+[2m06:18:42[22m [34m[200][39m / [2m70ms[22m
+[2m06:18:44[22m [34m[200][39m / [2m70ms[22m

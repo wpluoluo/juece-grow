@@ -1,0 +1,4 @@
+error: proposal.md Evidence_Path missing file: .aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md
+error: .aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md Evidence_Path missing file: .aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md
+error: .aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md out-of-scope files detected (update plan Scope or explain): .gitignore
+error: finish gate missing verify-before-complete evidence (run `aiws verify-bc` or write .aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md)

@@ -1,0 +1,4 @@
+更正：appender 第 232 行 / 台账第 349 行 各 1 处 台账行数=349 未变 键序不变=true 除 note 外字段不变=true 两边逐字一致=true 残留错误计数=0 sha256 appender cefe16c0bf21e002→a2e9c04074073c2c / 台账 bd41555489bb1e0b→a9b880a943c8be16
+fix_note_exit=0
+no-op：appender 与台账均已是更正后的文本
+fix_note_recheck_exit=0

@@ -1,0 +1,12 @@
+[restore] 现值前 24 字="3.5 重建自测 1789928555087 的" 长度=27
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/236-restore-pricing-hero.mjs:49
+  throw new Error(`id=${target.id} 的 hero 其他字段与 juece 快照不符 ⇒ 这条不是要复原的那一行，停手不写`)
+        ^
+
+Error: id=1 的 hero 其他字段与 juece 快照不符 ⇒ 这条不是要复原的那一行，停手不写
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/236-restore-pricing-hero.mjs:49:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.0
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+restore_exit=127

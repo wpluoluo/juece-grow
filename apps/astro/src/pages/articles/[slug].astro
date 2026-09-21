@@ -4,6 +4,7 @@ import sanitizeHtml from 'sanitize-html'
 
 import Layout from '../../layouts/Layout.astro'
 import { getArticles, getArticleBySlug, type Article } from '../../lib/payload'
+import { CMS_ORIGIN } from '../../lib/cmsOrigin'
 
 export async function getStaticPaths() {
   const articles = await getArticles()
@@ -56,7 +57,7 @@ const url = new URL(`/articles/${article.slug}/`, Astro.site || Astro.url).href
 
 const coverImage = article.coverImage && typeof article.coverImage === 'object' ? article.coverImage as { url: string; alt?: string } : undefined
 const coverImageUrl = coverImage
-  ? new URL(coverImage.url, import.meta.env.PUBLIC_CMS_ORIGIN).href
+  ? new URL(coverImage.url, CMS_ORIGIN).href
   : undefined
 
 const ogImageUrl = coverImageUrl || new URL('/og-cover.svg', Astro.site || Astro.url).href

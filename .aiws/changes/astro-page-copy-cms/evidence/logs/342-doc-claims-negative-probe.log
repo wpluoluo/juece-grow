@@ -1,0 +1,4 @@
+注入后：exit=1 A3 点名 tasks.md=true
+还原：sha256 改前=8c9ebaeb8ce91ae7 改后=8c9ebaeb8ce91ae7 逐字节相同=true
+还原后复跑：exit=0 [doc-claims] 判定=OK：工件口径与盘上实物一致
+probe_exit=0

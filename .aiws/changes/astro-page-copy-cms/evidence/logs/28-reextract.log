@@ -1,0 +1,18 @@
+extracted site=juece -> F:\juece-grow\.aiws\changes\astro-page-copy-cms\evidence\snapshot-pre-import
+  juece/home.txt lines=106 chars=2291
+  juece/features.txt lines=95 chars=1609
+  juece/solutions.txt lines=163 chars=2233
+  juece/pricing.txt lines=66 chars=1063
+site=juece exit=0
+extracted site=erp -> F:\juece-grow\.aiws\changes\astro-page-copy-cms\evidence\snapshot-pre-import
+  erp/home.txt lines=97 chars=1853
+  erp/features.txt lines=95 chars=1527
+  erp/solutions.txt lines=163 chars=2134
+  erp/pricing.txt lines=65 chars=1061
+site=erp exit=0
+extracted site=yunque -> F:\juece-grow\.aiws\changes\astro-page-copy-cms\evidence\snapshot-pre-import
+  yunque/home.txt lines=97 chars=1806
+  yunque/features.txt lines=95 chars=1540
+  yunque/solutions.txt lines=163 chars=2093
+  yunque/pricing.txt lines=64 chars=1065
+site=yunque exit=0

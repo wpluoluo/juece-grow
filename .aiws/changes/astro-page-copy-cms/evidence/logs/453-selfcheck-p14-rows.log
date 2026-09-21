@@ -1,0 +1,6 @@
+rows=57 dup_keys=0 工件缺失=0 note_无残留插值=true failure=4(422-doc-claims-stale-310.log 423-tasks-sync-p13.log 448-audit-logs-missing.log 451-audit-logs-missing-v2.log) 退出码与日志行不符=0
+selfcheck_exit=0
+check_appender_exit=0
+check_448_exit=0
+rows=57 dup_keys=0 工件缺失=0 note_无残留插值=true failure=4(422-doc-claims-stale-310.log 423-tasks-sync-p13.log 448-audit-logs-missing.log 451-audit-logs-missing-v2.log) 退出码与日志行不符=0
+selfcheck_exit=0

@@ -1,0 +1,5 @@
+✓ aiws validate: F:\juece-grow
+validate_exit=0
+warning: in the working copy of '.aiws/memory-bank/.index.yaml', LF will be replaced by CRLF the next time Git touches it
+ok: all gates passed (tier=strict)
+verify_bc_exit=0

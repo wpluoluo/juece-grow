@@ -1,0 +1,17 @@
+server_version = 16.15
+
+== payload_migrations 账本 ==
+  20260825_131753  batch=1
+  dev  batch=-1
+
+== 已存在的 page_* 表 ==
+(无)
+
+== 既有业务表（对照，只读）==
+共 21 张：articles, articles_tags, categories, forms, lead_activities, leads, media, memberships, payload_kv, payload_locked_documents, payload_locked_documents_rels, payload_migrations, payload_preferences, payload_preferences_rels, projects, reminder_notices, reminder_rules, reminder_rules_apply_statuses, sites, users, users_sessions
+
+== 四个页面集合将挂靠的 projects 现状 ==
+  id=4 slug=juece-erp name=觉策ERP
+  id=5 slug=yunque name=云雀Yunque
+  id=6 slug=juece-grow name=觉策增长
+exit=0

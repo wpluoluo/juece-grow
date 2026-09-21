@@ -1,0 +1,8 @@
+PROB-024 的第二半证明：选择器确实随产物发布，且现在能命中。
+源规则 features.astro:213 '.cap-tag.yb' 被 Astro 编译成（三站同一份 css 资产 features.DcrV5jsl.css）：
+apps/astro/dist-erp/_astro/features.DcrV5jsl.css:cap-tag[data-astro-cid-fsswmxcn].yb
+apps/astro/dist-yunque/_astro/features.DcrV5jsl.css:cap-tag[data-astro-cid-fsswmxcn].yb
+apps/astro/dist/_astro/features.DcrV5jsl.css:cap-tag[data-astro-cid-fsswmxcn].yb
+
+注意坑：编译后作用域属性插在两个类名之间（.cap-tag[cid].yb），按源码字面量 grep '.cap-tag.yb' 会误判成「样式没发布」——本轮差点据此报错误，改按编译形态匹配才对上。
+修前元素是 class="cap-tagyb"（单类名）⇒ 该选择器永不命中 ⇒ tone 配色是死样式；修后 class="cap-tag yb"（两个类）⇒ 命中。

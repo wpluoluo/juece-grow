@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
-    "build:juece": "cross-env SITE_ID=juece astro build --outDir dist && pagefind --site dist",
+    "dev": "cross-env SITE_ID=juece astro dev",
+    "build": "cross-env SITE_ID=juece astro build && pagefind --site dist",
     "build:erp": "cross-env SITE_ID=erp astro build --outDir dist-erp && pagefind --site dist-erp",
     "build:yunque": "cross-env SITE_ID=yunque astro build --outDir dist-yunque && pagefind --site dist-yunque",
-    "preview": "astro preview"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "preview": "cross-env SITE_ID=juece astro preview"
   },
   "dependencies": {
     "@payloadcms/richtext-lexical": "^3.88.0",

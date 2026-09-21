@@ -1,0 +1,12 @@
+--- before (ls -A，空目录不显示内容):
+analysis_ls_exit=0
+patches_ls_exit=0
+rmdir_exit=0
+--- after:
+design.md
+evidence
+metrics.json
+proposal.md
+review
+tasks.md
+ls_after_exit=0

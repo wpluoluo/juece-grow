@@ -1,0 +1,7 @@
+
+> cms@0.1.0 generate:types F:\juece-grow\apps\cms
+> payload generate:types
+
+[19:31:44] [32mINFO[39m: [36mCompiling TS types for Collections and Globals...[39m
+[19:31:45] [32mINFO[39m: [36mTypes written to F:\juece-grow\apps\cms\src\payload-types.ts[39m
+exit=0

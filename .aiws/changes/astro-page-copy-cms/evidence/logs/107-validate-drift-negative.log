@@ -1,0 +1,3 @@
+change gate failed.
+error: truth file changed since last sync: REQUIREMENTS.md (baseline_at=2026-09-20T12:06:47Z, baseline_sha=1b30538dd18f89d998eaf97c95da02f3a855e0e9d872a7c48f653bc73c7fc8b5, current_sha=b53cc9d7d6241890c933284918d6d0d49a0f729d552492ff9cbe62e6633d8f6e); run `aiws change sync astro-page-copy-cms` to acknowledge
+

@@ -1,0 +1,5 @@
+Tests: e2e 括注补第 7 组（B-1）
+Tests: 追加 coverage / agents9 / evidence-archive 三道
+Notes: 追加双审查轮记录（含 PROB-024/025 反向互引）
+rows=3 Tests_len=1381 Notes_len=2797 keys=22
+req_sync_exit=0

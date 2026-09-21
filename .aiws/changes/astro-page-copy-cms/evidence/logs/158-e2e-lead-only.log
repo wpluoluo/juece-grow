@@ -1,0 +1,96 @@
+[e2e] 预热 http://127.0.0.1:4321/ -> 200 (108ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/health -> 200 (21ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/articles?site=juece -> 200 (29ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/leads -> 405 (10ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/reminders/run -> 405 (10ms)
+[e2e] 预热 http://127.0.0.1:3000/api/leads -> 403 (22ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/pages?site=juece&page=pricing -> 200 (28ms)
+[e2e] 预热 http://127.0.0.1:4321/pricing -> 200 (41ms)
+[e2e] 已注入管理员凭据 CMS_ADMIN_USERNAME=e2e-admin（口令值不外泄）
+
+Running 12 tests using 1 worker
+
+  ok  1 [chromium] › tests\lead.spec.ts:4:1 › 健康端点返回统一成功信封 (39ms)
+  x   2 [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 (8.9s)
+  x   3 [chromium] › tests\lead.spec.ts:18:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true (30.1s)
+  ok  4 [chromium] › tests\lead.spec.ts:29:1 › API 直接提交线索，校验信封与业务 id (83ms)
+  ok  5 [chromium] › tests\lead.spec.ts:43:1 › 缺 phone/wechat 时返回校验错误信封 (21ms)
+  ok  6 [chromium] › tests\lead.spec.ts:53:1 › 仅填 wechat 也能提交成功 (44ms)
+  ok  7 [chromium] › tests\lead.spec.ts:67:1 › 非法 JSON 返回 INVALID_JSON 信封 (15ms)
+  ok  8 [chromium] › tests\lead.spec.ts:78:1 › 缺失 projectSlug 返回 MISSING_PROJECT (18ms)
+  ok  9 [chromium] › tests\lead.spec.ts:88:1 › 空白 projectSlug 返回 MISSING_PROJECT (34ms)
+  ok 10 [chromium] › tests\lead.spec.ts:100:1 › 不存在的 projectSlug 返回 PROJECT_NOT_FOUND (28ms)
+  ok 11 [chromium] › tests\lead.spec.ts:112:1 › 手机号格式非法时返回 VALIDATION (14ms)
+  ok 12 [chromium] › tests\lead.spec.ts:122:1 › 同一项目相同联系方式去重返回 duplicate:true (81ms)
+
+
+  1) [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 ─────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('#lead-form')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('#lead-form')
+        13 × locator resolved to <form novalidate="" id="lead-form" class="lead-form" data-project-slug="juece-grow">…</form>
+           - unexpected value "hidden"
+
+
+      13 |   await expect(page.getByRole('heading', { name: /接单有人管，AI 有人配/ })).toBeVisible()
+      14 |   await page.locator('[data-open-lead]').first().click()
+    > 15 |   await expect(page.locator('#lead-form')).toBeVisible()
+         |                                            ^
+      16 | })
+      17 |
+      18 | test('提交表单 → Lead 落库 → /api/v2 返回 success:true', async ({ page }) => {
+        at F:\juece-grow\apps\e2e\tests\lead.spec.ts:15:44
+
+    Error Context: test-results\lead-首页渲染-Payload-数据并展示线索表单-chromium\error-context.md
+
+  2) [chromium] › tests\lead.spec.ts:18:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true ───────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#lead-name')
+        - locator resolved to <input name="name" type="text" id="lead-name" autocomplete="name" placeholder="怎么称呼你"/>
+        - fill("烟测用户")
+      - attempting fill action
+        2 × waiting for element to be visible, enabled and editable
+          - element is not visible
+        - retrying fill action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and editable
+          - element is not visible
+        - retrying fill action
+          - waiting 100ms
+        52 × waiting for element to be visible, enabled and editable
+           - element is not visible
+         - retrying fill action
+           - waiting 500ms
+
+
+      20 |   await page.goto(`${WEB_ORIGIN}/`)
+      21 |   await page.locator('[data-open-lead]').first().click()
+    > 22 |   await page.locator('#lead-name').fill('烟测用户')
+         |                                    ^
+      23 |   await page.locator('#lead-phone').fill(phone)
+      24 |   await page.locator('#lead-form button').click()
+      25 |   const status = page.locator('#lead-status')
+        at F:\juece-grow\apps\e2e\tests\lead.spec.ts:22:36
+
+    Error Context: test-results\lead-提交表单-→-Lead-落库-→-api-v2-返回-success-true-chromium\error-context.md
+
+  2 failed
+    [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 ──────────────────────────────────
+    [chromium] › tests\lead.spec.ts:18:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true ────────────────
+  10 passed (44.0s)
+undefined
+F:\juece-grow\apps\e2e:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: playwright test tests/lead.spec.ts
+e2e_lead_only_exit=1

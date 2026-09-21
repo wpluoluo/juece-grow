@@ -1,0 +1,14 @@
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/460-tasks-sync-p14.mjs:89
+    throw new Error(`模式命中 ${hits ? hits.length : 0} 次（要求恰好 1 次）：${re.source.slice(0, 70)}`)
+          ^
+
+Error: 模式命中 0 次（要求恰好 1 次）：\*\*实测状态（P13 收口，P9 时为 190 行）\*\*：台账 \*\*349 行\*\*
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/460-tasks-sync-p14.mjs:89:11
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+check_fixed_exit=0
+no-op：8 处口径已全部同步（八段新文本逐字在行内、3.10 之外改动 0 行、幽灵引用 0），本次不写盘
+sync_recheck_exit=0

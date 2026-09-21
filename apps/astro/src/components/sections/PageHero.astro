@@ -3,13 +3,15 @@
  * 内页页头：kicker + 标题(slot) + 描述 + 可选统计条。
  * 由 features / solutions / pricing 等内页复用，样式内聚于此，避免各页双写。
  */
+import type { LabeledValue } from '../../types/shared'
+
 interface Props {
   /** 眉标文本（页面分区）。 */
   kicker: string
   /** 描述文案。 */
   description?: string
-  /** 统计条（value 为数字、label 为说明），缺省则不渲染。 */
-  stats?: { value: string; label: string }[]
+  /** 统计条（value 为数字、label 为说明），缺省则不渲染。与内页 hero.stats 共用同一类型真值。 */
+  stats?: LabeledValue[]
 }
 
 const { kicker, description, stats = [] } = Astro.props

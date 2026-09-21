@@ -1,0 +1,6 @@
+appended PROB-025; rows 24 -> 25
+rows_now=25 unique=25
+exit=0
+no-op: PROB-025 已存在，台账行数不变
+rows_now=25 unique=25
+exit2=0

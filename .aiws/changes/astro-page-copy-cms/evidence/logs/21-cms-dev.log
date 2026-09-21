@@ -1,0 +1,106 @@
+
+> juece-grow@0.1.0 cms:dev F:\juece-grow
+> pnpm --filter cms dev
+
+
+> cms@0.1.0 dev F:\juece-grow\apps\cms
+> cross-env NODE_OPTIONS=--no-deprecation next dev
+
+▲ Next.js 16.3.2 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.50.2:3000
+- Environments: .env
+✓ Ready in 8.7s
+✓ Running next.config.mjs took 226ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+- Experiments (use with caution):
+  ⨯ turbopackServerFastRefresh
+
+ GET /api/health 200 in 3.0s (proxy.ts: 94ms)
+ GET /api/health 200 in 3.0s (proxy.ts: 12ms)
+ GET /api/health 200 in 3.0s (proxy.ts: 5ms)
+ GET /api/health 200 in 3.0s (proxy.ts: 5ms)
+ GET /api/health 200 in 3.0s (proxy.ts: 5ms)
+[⣷] Pulling schema from database...
+ GET /api/health 200 in 868ms (next.js: 32ms, proxy.ts: 5ms, application-code: 831ms)
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[18:44:00] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+[18:44:00] [33mWARN[39m: [36mImage resizing is enabled for one or more collections, but sharp not installed. Please install 'sharp' and pass into the config.[39m
+ GET /api/health 404 in 37ms (next.js: 19ms, proxy.ts: 4ms, application-code: 13ms)
+ GET /api/health 404 in 32ms (next.js: 20ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/health 404 in 27ms (next.js: 17ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/health 404 in 34ms (next.js: 21ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/health 404 in 26ms (next.js: 16ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/health 404 in 25ms (next.js: 15ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/v2/content/articles?site=juece 200 in 496ms (next.js: 380ms, proxy.ts: 4ms, application-code: 112ms)
+ GET /api/v2/content/articles?site=juece 200 in 81ms (next.js: 7ms, proxy.ts: 5ms, application-code: 70ms)
+ GET /api/v2/content/articles?site=juece 200 in 78ms (next.js: 5ms, proxy.ts: 5ms, application-code: 68ms)
+ GET /api/v2/content/articles?site=juece&slug=wenzhang-dailai-duoshao-xiansuo-zhuang-rukou-ji-laiyuan 200 in 35ms (next.js: 4ms, proxy.ts: 4ms, application-code: 28ms)
+ GET /api/v2/content/articles?site=juece&slug=ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang 200 in 47ms (next.js: 7ms, proxy.ts: 5ms, application-code: 35ms)
+ GET /api/v2/content/articles?site=juece&slug=cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong 200 in 46ms (next.js: 7ms, proxy.ts: 5ms, application-code: 34ms)
+ GET /api/v2/content/articles?site=juece&slug=zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong 200 in 34ms (next.js: 4ms, proxy.ts: 4ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=juece&slug=baojia-dao-huikuan-yidan-yi-jilu 200 in 31ms (next.js: 3ms, proxy.ts: 3ms, application-code: 24ms)
+ GET /api/v2/content/articles?site=juece 200 in 34ms (next.js: 4ms, proxy.ts: 4ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=juece 200 in 42ms (next.js: 3ms, proxy.ts: 4ms, application-code: 35ms)
+ GET /api/v2/content/articles?site=juece 200 in 32ms (next.js: 4ms, proxy.ts: 5ms, application-code: 23ms)
+ GET /api/v2/content/articles?site=erp 200 in 65ms (next.js: 4ms, proxy.ts: 4ms, application-code: 57ms)
+ GET /api/v2/content/articles?site=erp&slug=zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong 200 in 36ms (next.js: 5ms, proxy.ts: 5ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=erp&slug=baojia-dao-huikuan-yidan-yi-jilu 200 in 31ms (next.js: 3ms, proxy.ts: 3ms, application-code: 25ms)
+ GET /api/v2/content/articles?site=erp 200 in 33ms (next.js: 4ms, proxy.ts: 3ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=erp 200 in 32ms (next.js: 3ms, proxy.ts: 4ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=erp 200 in 33ms (next.js: 4ms, proxy.ts: 3ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=yunque 200 in 46ms (next.js: 2ms, proxy.ts: 3ms, application-code: 41ms)
+ GET /api/v2/content/articles?site=yunque&slug=ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang 200 in 35ms (next.js: 3ms, proxy.ts: 3ms, application-code: 29ms)
+ GET /api/v2/content/articles?site=yunque&slug=cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong 200 in 28ms (next.js: 3ms, proxy.ts: 1.9ms, application-code: 23ms)
+ GET /api/v2/content/articles?site=yunque 200 in 32ms (next.js: 3ms, proxy.ts: 3ms, application-code: 25ms)
+ GET /api/v2/content/articles?site=yunque 200 in 45ms (next.js: 4ms, proxy.ts: 5ms, application-code: 36ms)
+ GET /api/v2/content/articles?site=yunque 200 in 33ms (next.js: 4ms, proxy.ts: 4ms, application-code: 25ms)
+ GET /api/v2/content/articles?site=juece 200 in 123ms (next.js: 21ms, proxy.ts: 4ms, application-code: 98ms)
+ GET /api/v2/content/articles?site=erp 200 in 35ms (next.js: 3ms, proxy.ts: 3ms, application-code: 30ms)
+ GET /api/v2/content/articles?site=yunque 200 in 37ms (next.js: 3ms, proxy.ts: 3ms, application-code: 31ms)
+ GET /api/v2/content/articles?site=erp 200 in 38ms (next.js: 4ms, proxy.ts: 4ms, application-code: 30ms)
+ GET /api/v2/content/articles?site=yunque 200 in 26ms (next.js: 3ms, proxy.ts: 3ms, application-code: 21ms)
+ GET /api/v2/content/articles?site=juece 200 in 761ms (next.js: 81ms, proxy.ts: 5ms, application-code: 675ms)
+ GET /api/v2/content/articles?site=juece&slug=wenzhang-dailai-duoshao-xiansuo-zhuang-rukou-ji-laiyuan 200 in 217ms (next.js: 23ms, proxy.ts: 4ms, application-code: 190ms)
+ GET /api/v2/content/articles?site=juece&slug=ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang 200 in 112ms (next.js: 25ms, proxy.ts: 5ms, application-code: 82ms)
+ GET /api/v2/content/articles?site=juece&slug=cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong 200 in 137ms (next.js: 17ms, proxy.ts: 4ms, application-code: 116ms)
+ GET /api/v2/content/articles?site=juece&slug=zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong 200 in 219ms (next.js: 19ms, proxy.ts: 4ms, application-code: 196ms)
+ GET /api/v2/content/articles?site=juece&slug=baojia-dao-huikuan-yidan-yi-jilu 200 in 250ms (next.js: 43ms, proxy.ts: 4ms, application-code: 203ms)
+ GET /api/v2/content/articles?site=juece 200 in 194ms (next.js: 44ms, proxy.ts: 4ms, application-code: 146ms)
+ GET /api/v2/content/articles?site=juece 200 in 127ms (next.js: 37ms, proxy.ts: 5ms, application-code: 84ms)
+ GET /api/v2/content/articles?site=juece 200 in 215ms (next.js: 79ms, proxy.ts: 4ms, application-code: 132ms)
+ GET /api/v2/content/articles?site=juece 200 in 1171ms (next.js: 963ms, proxy.ts: 3ms, application-code: 205ms)
+ GET /api/v2/content/articles?site=juece&slug=wenzhang-dailai-duoshao-xiansuo-zhuang-rukou-ji-laiyuan 200 in 48ms (next.js: 5ms, proxy.ts: 7ms, application-code: 36ms)
+ GET /api/v2/content/articles?site=juece&slug=ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang 200 in 33ms (next.js: 5ms, proxy.ts: 3ms, application-code: 25ms)
+ GET /api/v2/content/articles?site=juece&slug=cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong 200 in 37ms (next.js: 5ms, proxy.ts: 3ms, application-code: 29ms)
+ GET /api/v2/content/articles?site=juece&slug=zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong 200 in 29ms (next.js: 4ms, proxy.ts: 3ms, application-code: 23ms)
+ GET /api/v2/content/articles?site=juece&slug=baojia-dao-huikuan-yidan-yi-jilu 200 in 33ms (next.js: 3ms, proxy.ts: 3ms, application-code: 26ms)
+ GET /api/v2/content/articles?site=juece 200 in 38ms (next.js: 4ms, proxy.ts: 4ms, application-code: 30ms)
+ GET /api/v2/content/articles?site=juece 200 in 30ms (next.js: 3ms, proxy.ts: 3ms, application-code: 25ms)
+ GET /api/v2/content/articles?site=juece 200 in 30ms (next.js: 3ms, proxy.ts: 3ms, application-code: 24ms)
+ GET /api/v2/content/articles?site=juece 200 in 317ms (next.js: 177ms, proxy.ts: 4ms, application-code: 137ms)
+ GET /api/v2/content/articles?site=juece&slug=wenzhang-dailai-duoshao-xiansuo-zhuang-rukou-ji-laiyuan 200 in 31ms (next.js: 4ms, proxy.ts: 5ms, application-code: 22ms)
+ GET /api/v2/content/articles?site=juece&slug=ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang 200 in 28ms (next.js: 2ms, proxy.ts: 3ms, application-code: 22ms)
+ GET /api/v2/content/articles?site=juece&slug=cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong 200 in 26ms (next.js: 2ms, proxy.ts: 3ms, application-code: 21ms)
+ GET /api/v2/content/articles?site=juece&slug=zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong 200 in 29ms (next.js: 3ms, proxy.ts: 3ms, application-code: 23ms)
+ GET /api/v2/content/articles?site=juece&slug=baojia-dao-huikuan-yidan-yi-jilu 200 in 29ms (next.js: 3ms, proxy.ts: 3ms, application-code: 23ms)
+ GET /api/v2/content/articles?site=juece 200 in 35ms (next.js: 4ms, proxy.ts: 4ms, application-code: 27ms)
+ GET /api/v2/content/articles?site=juece 200 in 39ms (next.js: 3ms, proxy.ts: 4ms, application-code: 32ms)
+ GET /api/v2/content/articles?site=juece 200 in 41ms (next.js: 4ms, proxy.ts: 4ms, application-code: 33ms)
+ GET /api/health 404 in 946ms (next.js: 817ms, proxy.ts: 7ms, application-code: 123ms)
+ POST /api/users/login 200 in 210ms (next.js: 21ms, proxy.ts: 6ms, application-code: 184ms)
+ POST /api/page-features?depth=0 404 in 59ms (next.js: 5ms, proxy.ts: 40ms, application-code: 14ms)
+[?25h
+F:\juece-grow\apps\cms:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  cms@0.1.0 dev: `cross-env NODE_OPTIONS=--no-deprecation next dev`
+Exit status 4294967295
+ ELIFECYCLE  Command failed with exit code 4294967295.

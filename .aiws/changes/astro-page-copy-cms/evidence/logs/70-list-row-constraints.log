@@ -1,0 +1,19 @@
+=== PageHome.ts
+  titleLines: minRows: 1,   (行 52)
+  stats: minRows: 1,   (行 111)
+  nodes: maxRows: 3,   (行 136)
+  chips: minRows: 3,   (行 163)
+  chips: maxRows: 3,   (行 164)
+  minis: maxRows: 2,   (行 334)
+  rows: minRows: 1,   (行 399)
+=== PageFeatures.ts
+  titleLines: minRows: 1,   (行 224)
+  stats: minRows: 1,   (行 243)
+  panel: minRows: 1,   (行 305)
+  panel: maxRows: 1,   (行 306)
+=== PageSolutions.ts
+  titleLines: minRows: 1,   (行 52)
+  stats: minRows: 1,   (行 71)
+=== PagePricing.ts
+  titleLines: minRows: 1,   (行 67)
+exit=0

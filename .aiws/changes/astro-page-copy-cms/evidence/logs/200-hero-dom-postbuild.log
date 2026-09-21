@@ -1,0 +1,2 @@
+用法：node scripts/astro-copy-hero-dom.mjs <distDir> <site> <outFile>
+hero_dom_exit=1

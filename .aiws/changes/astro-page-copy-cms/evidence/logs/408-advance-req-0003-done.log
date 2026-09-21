@@ -1,0 +1,14 @@
+合同行：行数 前=3 后=3 改动行=1（预期 1） 其余两行逐字节不变=true 键顺序不变=true Impl_Status TODO→DONE Spec_Status=READY Updated_At=2026-09-20T22:55:01Z
+CHANGELOG：纯追加=true 表体行 前=12 后=13 竖线数!=7 的行=0 表内空行=-1 标记出现次数=0
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/408-advance-req-0003-done.mjs:87
+  if (!prefixOk || badPipes.length > 0 || innerBlank !== -1 || markerHits !== 1) throw new Error('CHANGELOG 写入后自检不通过')
+                                                                                       ^
+
+Error: CHANGELOG 写入后自检不通过
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/408-advance-req-0003-done.mjs:87:88
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+req0003_advance_exit=1

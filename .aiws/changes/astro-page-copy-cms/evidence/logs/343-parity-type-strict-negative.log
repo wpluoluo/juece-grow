@@ -1,0 +1,6 @@
+候选数值叶子 9 个：caps[1].panel.rows[0].w=84  caps[1].panel.rows[1].w=66  caps[1].panel.rows[2].w=52  caps[2].panel.bars[0]=34  caps[2].panel.bars[1]=48  caps[2].panel.bars[2]=42
+  caps[1].panel.rows[0].w: 注入为字符串 '84' → parity exit=1 同值异类型失败行=有 受影响 (site,page)=juece/features
+还原：sha256 改前=554b27e87f2ffa22 改后=554b27e87f2ffa22 逐字节相同=true
+判定=PASS：门禁确实因类型不同而红，且失败行两侧显示值都是 '84'（只有类型差）；同一对值：严格判据=false、被删的松散判据=true ⇒ 旧实现会放水成绿。
+还原后复跑：exit=0 12/12 (site,page) 逐字一致
+probe_exit=0

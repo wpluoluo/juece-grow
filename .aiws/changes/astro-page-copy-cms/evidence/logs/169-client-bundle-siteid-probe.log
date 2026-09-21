@@ -1,0 +1,5 @@
+dist: client_js=1 禁止串命中=0 CMS地址已内联=true 判定=OK
+dist-erp: client_js=1 禁止串命中=0 CMS地址已内联=true 判定=OK
+dist-yunque: client_js=1 禁止串命中=0 CMS地址已内联=true 判定=OK
+client_bundle_probe_exit=0
+node_exit=0

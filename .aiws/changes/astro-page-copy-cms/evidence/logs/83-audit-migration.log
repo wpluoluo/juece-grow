@@ -1,0 +1,32 @@
+== 新表（按前缀分组）==
+根表： page_home_hero_title_lines, page_home_hero_stats, page_home_hero_diagram_nodes, page_home_products_side, page_home_solutions_rows, page_home_cases_feature_metrics, page_home_cases_minis, page_home_resource_links, page_home_cta_rows, page_home_texts, page_features_hero_title_lines, page_features_hero_stats, page_features_blocks_blocks_blocks, page_features_blocks_chips_rows, page_features_blocks_bars_kpis, page_features_blocks_journey, page_features_blocks_agent_pegs, page_features_caps, page_features_base_items, page_features_texts, page_features_numbers, page_solutions_hero_title_lines, page_solutions_hero_stats, page_solutions_industries_scenarios, page_solutions_texts, page_pricing_hero_title_lines, page_pricing_plans, page_pricing_eco_links, page_pricing_faqs, page_pricing_texts
+表总数： 39
+
+== 枚举类型 ==
+数量： 0
+
+== 对既有表的 ADD COLUMN（应只落在 payload_locked_documents_rels）==
+  payload_locked_documents_rels + page_home_id
+  payload_locked_documents_rels + page_features_id
+  payload_locked_documents_rels + page_solutions_id
+  payload_locked_documents_rels + page_pricing_id
+
+== 外键指向的父表汇总 ==
+  REFERENCES page_features  ← 12 张表：page_features_hero_title_lines, page_features_hero_stats, page_features_blocks_blocks, page_features_blocks_chips, page_features_blocks_bars, page_features_blocks_journey, page_features_blocks_agent, page_features_caps, page_features_base_items, page_features_texts, page_features_numbers, payload_locked_documents_rels
+  REFERENCES page_features_blocks_agent  ← 1 张表：page_features_blocks_agent_pegs
+  REFERENCES page_features_blocks_bars  ← 1 张表：page_features_blocks_bars_kpis
+  REFERENCES page_features_blocks_blocks  ← 1 张表：page_features_blocks_blocks_blocks
+  REFERENCES page_features_blocks_chips  ← 1 张表：page_features_blocks_chips_rows
+  REFERENCES page_home  ← 11 张表：page_home_hero_title_lines, page_home_hero_stats, page_home_hero_diagram_nodes, page_home_products_side, page_home_solutions_rows, page_home_cases_feature_metrics, page_home_cases_minis, page_home_resource_links, page_home_cta_rows, page_home_texts, payload_locked_documents_rels
+  REFERENCES page_pricing  ← 6 张表：page_pricing_hero_title_lines, page_pricing_plans, page_pricing_eco_links, page_pricing_faqs, page_pricing_texts, payload_locked_documents_rels
+  REFERENCES page_solutions  ← 5 张表：page_solutions_hero_title_lines, page_solutions_hero_stats, page_solutions_industries, page_solutions_texts, payload_locked_documents_rels
+  REFERENCES page_solutions_industries  ← 1 张表：page_solutions_industries_scenarios
+  REFERENCES projects  ← 4 张表：page_home, page_features, page_solutions, page_pricing
+
+== 破坏性关键字扫描 ==
+命中： TYPE
+
+== 交叉校验 ==
+锁文档外键来源表数： 0
+down() 是否为镜像 DROP： yes
+exit=0

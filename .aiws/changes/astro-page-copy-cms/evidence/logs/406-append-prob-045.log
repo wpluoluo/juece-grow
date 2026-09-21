@@ -1,0 +1,4 @@
+appended=PROB-045 行数 前=44 后=45 键序全一致=true 既有字节未被改写=true PROB-029+ 行数=17 （DONE 7 / OPEN 10）
+prob045_exit=0
+no-op：PROB-045 已在台账，仍 45 行
+prob045_recheck_exit=0

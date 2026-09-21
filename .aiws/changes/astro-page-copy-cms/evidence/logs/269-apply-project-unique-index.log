@@ -1,0 +1,17 @@
+up DDL 提取成功：4 条，逐条形状断言通过（全部 CREATE UNIQUE INDEX on project_id）
+guard host=127.0.0.1 port=5434 db=juece_grow OK
+单事务 COMMIT 成功
+
+执行后 project_id 唯一索引 4 条（期望 4）
+  page_features -> project_1_idx :: CREATE UNIQUE INDEX project_1_idx ON public.page_features USING btree (project_id)
+  page_home -> project_idx :: CREATE UNIQUE INDEX project_idx ON public.page_home USING btree (project_id)
+  page_pricing -> project_3_idx :: CREATE UNIQUE INDEX project_3_idx ON public.page_pricing USING btree (project_id)
+  page_solutions -> project_2_idx :: CREATE UNIQUE INDEX project_2_idx ON public.page_solutions USING btree (project_id)
+  page_home: OK(1)
+  page_features: OK(1)
+  page_solutions: OK(1)
+  page_pricing: OK(1)
+
+行数未变：page_home=3 page_features=3 page_solutions=3 page_pricing=3（期望各 3）
+账本未写入新行：20260825_131753(batch=1), dev(batch=-1)
+apply_exit=0

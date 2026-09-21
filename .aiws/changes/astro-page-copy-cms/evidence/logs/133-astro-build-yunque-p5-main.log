@@ -1,0 +1,68 @@
+
+> juece-grow@0.1.0 astro:build:yunque F:\juece-grow
+> pnpm --filter astro build:yunque
+
+
+> astro@0.1.0 build:yunque F:\juece-grow\apps\astro
+> cross-env SITE_ID=yunque astro build --outDir dist-yunque && pagefind --site dist-yunque
+
+[2m21:39:24[22m [34m[types][39m Generated [2m44ms[22m
+[2m21:39:24[22m [34m[build][39m output: [34m"static"[39m
+[2m21:39:24[22m [34m[build][39m mode: [34m"static"[39m
+[2m21:39:24[22m [34m[build][39m directory: [34mF:\juece-grow\apps\astro\dist-yunque\[39m
+[2m21:39:24[22m [34m[build][39m Collecting build info...
+[2m21:39:24[22m [34m[build][39m [32m✓ Completed in 71ms.[39m
+[2m21:39:24[22m [34m[build][39m Building static entrypoints...
+[2m21:39:26[22m [34m[vite][39m [32m✓ built in 2.25s[39m
+[2m21:39:26[22m [34m[vite][39m [32m✓ built in 53ms[39m
+[2m21:39:27[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m21:39:27[22m   [34m├─[39m [2m/404.html[22m [2m(+13ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html[22m [2m(+36ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html[22m [2m(+31ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/features/index.html[22m [2m(+64ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/feed.xml[22m [2m(+29ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/pricing/index.html[22m [2m(+26ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/privacy/index.html[22m [2m(+4ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/robots.txt[22m [2m(+2ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/sitemap/index.html[22m [2m(+5ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/sitemap.xml[22m [2m(+41ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/solutions/index.html[22m [2m(+31ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/terms/index.html[22m [2m(+5ms)[22m 
+[2m21:39:27[22m   [34m├─[39m [2m/index.html[22m [2m(+62ms)[22m 
+[2m21:39:27[22m [32m✓ Completed in 700ms.
+[39m
+[2m21:39:27[22m [34m[build][39m [32m✓ Completed in 3.12s.[39m
+[2m21:39:27[22m [34m[build][39m 10 page(s) built in [1m3.20s[22m
+[2m21:39:27[22m [34m[build][39m [1mComplete![22m
+
+Running Pagefind v1.5.2 (Extended)
+Running from: "F:\\juece-grow\\apps\\astro"
+Source:       "dist-yunque"
+Output:       "dist-yunque\\pagefind"
+
+[Walking source directory]
+Found 10 files matching **/*.{html}
+
+[Parsing files]
+Found a data-pagefind-body element on the site.
+↳ Ignoring pages without this tag.
+
+[Reading languages]
+Discovered 1 language: zh-cn
+
+[Building search indexes]
+Total: 
+  Indexed 1 language
+  Indexed 10 pages
+  Indexed 906 words
+  Indexed 0 filters
+  Indexed 0 sorts
+Note: Pagefind doesn't support stemming for the language zh-cn. 
+Search will still work, but will not match across root words.
+Note: Pagefind doesn't support stemming for the language zh-cn. 
+Search will still work, but will not match across root words.
+
+Finished in 0.211 seconds
+build_yunque_exit=0

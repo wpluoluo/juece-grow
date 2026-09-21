@@ -1,0 +1,8 @@
+merge 2.2: 行 32+33 → 单行 len=1144
+repair 2.14: connectFailure() 已补回
+lines=93
+L32 head=- [x] 2.2 类型单一真值：新建 `apps/astro/src/types/pages/{home,features,solutions,pricing}.ts`（`wc -l` 实测 home 79 / features 38 /
+L32 tail= 行，复跑 `no-op` ⇒ 幂等）。零漂移证据：`pnpm astro:build` `exit=0`（`50`），juece 四页可见文本 sha 与切换前基线 **4/4 IDENTICAL、mismatches=0**（`68`）
+2.14 所在行号=44
+2.2 所在行号=32
+fix_exit=0

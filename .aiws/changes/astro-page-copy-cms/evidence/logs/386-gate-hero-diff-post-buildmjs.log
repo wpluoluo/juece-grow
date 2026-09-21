@@ -1,0 +1,5 @@
+[dist-fresh] juece   apps/astro/dist        dist最大mtime=2026-09-20T22:22:59.520Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] erp     apps/astro/dist-erp    dist最大mtime=2026-09-20T22:18:05.353Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] yunque  apps/astro/dist-yunque dist最大mtime=2026-09-20T22:18:15.363Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[hero-diff] 12/12 三站四页 hero <h1> 内部 DOM 与切换前基线逐字节一致（基线 12 条，本轮产物 → .aiws\tmp\astro-page-copy-cms\hero-dom-post.json）
+hero_diff_exit=0

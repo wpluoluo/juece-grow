@@ -1,0 +1,143 @@
+{
+  "generatedFor": "astro-page-copy-cms",
+  "purpose": "pre-import snapshot: rollback source + verbatim parity baseline",
+  "dumpCommand": "node .aiws/tmp/astro-page-copy-cms/dump-content-sources.mjs",
+  "sites": [
+    "juece",
+    "erp",
+    "yunque"
+  ],
+  "pages": [
+    "home",
+    "features",
+    "solutions",
+    "pricing"
+  ],
+  "totals": {
+    "files": 12,
+    "leafStrings": 1374,
+    "totalChars": 13922
+  },
+  "entries": [
+    {
+      "file": "home.juece.json",
+      "page": "home",
+      "site": "juece",
+      "sourceFile": "apps/astro/src/content/home.ts",
+      "sourceSha256": "f78281a8a867c2ee833fbec241792301ef1d382d4d3f1f672510c12e5746e51a",
+      "dumpSha256": "0aa6874925694ef72111cc44e4713cec5a8dcab7ad4d6df7bb7526b5b8f3dd37",
+      "leafStrings": 132,
+      "totalChars": 1682
+    },
+    {
+      "file": "home.erp.json",
+      "page": "home",
+      "site": "erp",
+      "sourceFile": "apps/astro/src/content/home.ts",
+      "sourceSha256": "f78281a8a867c2ee833fbec241792301ef1d382d4d3f1f672510c12e5746e51a",
+      "dumpSha256": "2d2437dd9197567b86a825e48801320328df0de328043934f7992a6db811744e",
+      "leafStrings": 133,
+      "totalChars": 1415
+    },
+    {
+      "file": "home.yunque.json",
+      "page": "home",
+      "site": "yunque",
+      "sourceFile": "apps/astro/src/content/home.ts",
+      "sourceSha256": "f78281a8a867c2ee833fbec241792301ef1d382d4d3f1f672510c12e5746e51a",
+      "dumpSha256": "fbf31aba523195ba2e3d057708e858692fdbdba882ea980e6599db927b963d84",
+      "leafStrings": 133,
+      "totalChars": 1387
+    },
+    {
+      "file": "features.juece.json",
+      "page": "features",
+      "site": "juece",
+      "sourceFile": "apps/astro/src/content/features.ts",
+      "sourceSha256": "1bd9ef451971c93591f5f944b89c31bdda029c192f89ba0dd7148b0d28247d81",
+      "dumpSha256": "554b27e87f2ffa22cdadf946f5fe324ce4dd7894bea0b1022aaff760a0db2d46",
+      "leafStrings": 140,
+      "totalChars": 1204
+    },
+    {
+      "file": "features.erp.json",
+      "page": "features",
+      "site": "erp",
+      "sourceFile": "apps/astro/src/content/features.ts",
+      "sourceSha256": "1bd9ef451971c93591f5f944b89c31bdda029c192f89ba0dd7148b0d28247d81",
+      "dumpSha256": "74f8df6ce4a6636e72c57ed6a54ae31b8ca363206b482121d0b7e16bb0858370",
+      "leafStrings": 139,
+      "totalChars": 1098
+    },
+    {
+      "file": "features.yunque.json",
+      "page": "features",
+      "site": "yunque",
+      "sourceFile": "apps/astro/src/content/features.ts",
+      "sourceSha256": "1bd9ef451971c93591f5f944b89c31bdda029c192f89ba0dd7148b0d28247d81",
+      "dumpSha256": "c977d0fe08938dfb5d06cd165f3ec3bc584c8821da1454daec9ebfaa17ff150b",
+      "leafStrings": 139,
+      "totalChars": 1102
+    },
+    {
+      "file": "solutions.juece.json",
+      "page": "solutions",
+      "site": "juece",
+      "sourceFile": "apps/astro/src/content/solutions.ts",
+      "sourceSha256": "5f1d0ae1b1bcf65e757e018f9073243f53765ddcd780c8d67563c12cded23969",
+      "dumpSha256": "1f419e7d5ef9fc90c60b25278ef239c9c3328899e9302562c9973704f2bfc08c",
+      "leafStrings": 136,
+      "totalChars": 1462
+    },
+    {
+      "file": "solutions.erp.json",
+      "page": "solutions",
+      "site": "erp",
+      "sourceFile": "apps/astro/src/content/solutions.ts",
+      "sourceSha256": "5f1d0ae1b1bcf65e757e018f9073243f53765ddcd780c8d67563c12cded23969",
+      "dumpSha256": "4a7f6d123713777df71ad42ec28b58a43398713a2f036f6358c9bd9bfd65bfc0",
+      "leafStrings": 136,
+      "totalChars": 1340
+    },
+    {
+      "file": "solutions.yunque.json",
+      "page": "solutions",
+      "site": "yunque",
+      "sourceFile": "apps/astro/src/content/solutions.ts",
+      "sourceSha256": "5f1d0ae1b1bcf65e757e018f9073243f53765ddcd780c8d67563c12cded23969",
+      "dumpSha256": "7ebaead8c1a995e88a6e207c524462542e1eb86c76c29179381b49c863c257d7",
+      "leafStrings": 136,
+      "totalChars": 1305
+    },
+    {
+      "file": "pricing.juece.json",
+      "page": "pricing",
+      "site": "juece",
+      "sourceFile": "apps/astro/src/content/pricing.ts",
+      "sourceSha256": "1c1c77fdd4eb3b778b0c14330ea3609bf07263f0386dc726568c02e7512498d0",
+      "dumpSha256": "dc29de2639fb7919fde55183b3bf8f97e65a2763d0c0af24d107974c42beea40",
+      "leafStrings": 53,
+      "totalChars": 651
+    },
+    {
+      "file": "pricing.erp.json",
+      "page": "pricing",
+      "site": "erp",
+      "sourceFile": "apps/astro/src/content/pricing.ts",
+      "sourceSha256": "1c1c77fdd4eb3b778b0c14330ea3609bf07263f0386dc726568c02e7512498d0",
+      "dumpSha256": "5ee156ee0d2510533ef41e04ddda65238065b53ef43f2770bd5cf1152540d4e2",
+      "leafStrings": 49,
+      "totalChars": 647
+    },
+    {
+      "file": "pricing.yunque.json",
+      "page": "pricing",
+      "site": "yunque",
+      "sourceFile": "apps/astro/src/content/pricing.ts",
+      "sourceSha256": "1c1c77fdd4eb3b778b0c14330ea3609bf07263f0386dc726568c02e7512498d0",
+      "dumpSha256": "263aca6b337dab6d47b7782f9ad575905249934935fbeab4f66281d381ee3acb",
+      "leafStrings": 48,
+      "totalChars": 629
+    }
+  ]
+}

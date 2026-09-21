@@ -1,0 +1,31 @@
+projects.docs count = 1 id = 6
+page-home.docs count = 1
+doc.id = 1 doc.status = published
+hero keys = [
+  'kicker',
+  'titleLines',
+  'desc',
+  'primary',
+  'secondary',
+  'stats',
+  'diagram'
+]
+hero.titleLines = [{"id":"6ab03a441d4ad6d1b41dae6c","text":"开店有人帮，","emphasis":false},{"id":"6ab03a441d4ad6d1b41dae6d","text":"接单有人管，AI 有人配","emphasis":true}]
+hero.stats has id = [
+  [ 'id', 'strong', 'span' ],
+  [ 'id', 'strong', 'span' ],
+  [ 'id', 'strong', 'span' ]
+]
+hero.diagram.nodes = [["id","no","name","sub","tone"],["id","no","name","sub","tone"],["id","no","name","sub","tone"]]
+cta keys = [ 'kicker', 'heading', 'desc', 'rows' ]
+cta.rows = [{"id":"6ab03a441d4ad6d1b41dae80","icon":"saas","head":"我是实体商家","desc":"把店开进顾客手机里，顾客下单、付款、复购，账目天天看得见。","act":"免费试用觉策智云","action":"lead","href":null,"external":null},{"id":"6ab03a441d4ad6d1b41dae81","icon":"erp","head":"我是广告公司","desc":"报价、生产、回款进系统，每一环都能交代。","act":"预约 ERP 演示","action":"href","href":"//erp.juece.cloud/","external":true},{"id":"6ab03a441d4ad6d1b41dae82","icon":"yunque","head":"我是技术团队","desc":"工作台、记忆、权限配齐，智能体就能正式用。","act":"了解云雀平台","action":"href","href":"//yunque.juece.cloud/","external":true}]
+top-level doc keys = [
+  'id',        'project',
+  'status',    'meta',
+  'hero',      'products',
+  'solutions', 'cases',
+  'resource',  'cta',
+  'blog',      'updatedAt',
+  'createdAt'
+]
+exit=0

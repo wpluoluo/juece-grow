@@ -1,0 +1,10 @@
+[evidence-archive] 台账行数=4 无 artifact 行=0 不同 artifact=4 归档目录=.aiws/changes/astro-page-copy-cms/evidence/logs
+  台账行 sha256 与原件一致=1 原件已清理（仅断言归档件存在）=1 问题=2
+[evidence-archive] 归档不完整 ⇒ 台账证据不可跨 clone 复核
+  ✗ 缺归档件 .aiws/changes/astro-page-copy-cms/evidence/logs/b-missing-mirror.log（台账第 2 行 → .aiws/tmp/astro-page-copy-cms/b-missing-mirror.log）
+  ✗ sha256 不一致 c-sha.log
+    归档=bdb46778a0bf61c951106a264b78e3f927ee1ed87ed0c21d5866340beed194f1
+    原件=d8eedc1f3bc5c46b1febea1e06c67eed27b87481f60606530a5f20015fb71419（台账第 3 行 → .aiws/tmp/astro-page-copy-cms/c-sha.log）
+gate_exit=1
+断言：exit=1(true) 问题=2(true) 点名缺镜像(true) 点名 sha 不等(true) 原件清理计 1(true) ⇒ 负向探针=PASS
+negative_probe_exit=0

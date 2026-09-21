@@ -1,0 +1,10 @@
+[3.5] 已用 e2e-admin 登录 CMS（口令不外泄）
+[3.5] 记录 1：旧串长度 57 字
+[3.5] 改稿后重建：build_exit=0 判定=OK
+[3.5] 新串命中=true 旧串残留=false
+[3.5] 复原 PATCH 第 1 次连接失败（ECONNRESET）⇒ 重试
+[3.5] 复原后重建：build_exit=0 判定=OK
+[3.5] 复原产物旧串命中=true 测试串残留=false
+[3.5] 端点已复原=true（构建期取数目标 http://127.0.0.1:3000，仅本地容器库对应的开发实例）
+RESULT 3.5-rebuild=OK
+rebuild_selfservice_exit=0

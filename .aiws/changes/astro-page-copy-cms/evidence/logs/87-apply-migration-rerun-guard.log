@@ -1,0 +1,11 @@
+up DDL 提取成功：187 条语句 / 32542 字符
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/86-apply-migration.mjs:47
+  throw new Error(`已存在 ${pre.length} 张 page_* 表，拒绝重复执行：${pre.map((r) => r.table_name).join(', ')}`)
+        ^
+
+Error: 已存在 39 张 page_* 表，拒绝重复执行：page_features, page_features_base_items, page_features_blocks_agent, page_features_blocks_agent_pegs, page_features_blocks_bars, page_features_blocks_bars_kpis, page_features_blocks_blocks, page_features_blocks_blocks_blocks, page_features_blocks_chips, page_features_blocks_chips_rows, page_features_blocks_journey, page_features_caps, page_features_hero_stats, page_features_hero_title_lines, page_features_numbers, page_features_texts, page_home, page_home_cases_feature_metrics, page_home_cases_minis, page_home_cta_rows, page_home_hero_diagram_nodes, page_home_hero_stats, page_home_hero_title_lines, page_home_products_side, page_home_resource_links, page_home_solutions_rows, page_home_texts, page_pricing, page_pricing_eco_links, page_pricing_faqs, page_pricing_hero_title_lines, page_pricing_plans, page_pricing_texts, page_solutions, page_solutions_hero_stats, page_solutions_hero_title_lines, page_solutions_industries, page_solutions_industries_scenarios, page_solutions_texts
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/86-apply-migration.mjs:47:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.0
+exit=1

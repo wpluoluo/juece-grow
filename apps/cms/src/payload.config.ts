@@ -32,6 +32,10 @@ import { LeadActivities } from './collections/LeadActivities'
 import { Memberships } from './collections/Memberships'
 import { ReminderRules } from './collections/ReminderRules'
 import { ReminderNotices } from './collections/ReminderNotices'
+import { PageHome } from './collections/pages/PageHome'
+import { PageFeatures } from './collections/pages/PageFeatures'
+import { PageSolutions } from './collections/pages/PageSolutions'
+import { PagePricing } from './collections/pages/PagePricing'
 import { startReminderCron } from './lib/reminderCron'
 
 const filename = fileURLToPath(import.meta.url)
@@ -148,6 +152,34 @@ export default buildConfig({
       ...Articles,
       admin: {
         ...Articles.admin,
+        group: { zh: '内容与站点', en: 'Content & Sites' },
+      },
+    },
+    {
+      ...PageHome,
+      admin: {
+        ...PageHome.admin,
+        group: { zh: '内容与站点', en: 'Content & Sites' },
+      },
+    },
+    {
+      ...PageFeatures,
+      admin: {
+        ...PageFeatures.admin,
+        group: { zh: '内容与站点', en: 'Content & Sites' },
+      },
+    },
+    {
+      ...PageSolutions,
+      admin: {
+        ...PageSolutions.admin,
+        group: { zh: '内容与站点', en: 'Content & Sites' },
+      },
+    },
+    {
+      ...PagePricing,
+      admin: {
+        ...PagePricing.admin,
         group: { zh: '内容与站点', en: 'Content & Sites' },
       },
     },

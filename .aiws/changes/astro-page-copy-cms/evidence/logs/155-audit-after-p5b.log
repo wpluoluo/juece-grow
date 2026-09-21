@@ -1,0 +1,10 @@
+append-verification-p2p3.mjs：declared=15 missing=0
+append-verification-p3c.mjs：declared=5 missing=0
+append-verification-p3d.mjs：declared=5 missing=0
+append-verification-p4.mjs：declared=20 missing=0
+append-verification-p4b.mjs：declared=8 missing=0
+append-verification-p4c.mjs：declared=6 missing=0
+append-verification-p5.mjs：declared=21 missing=0
+append-verification-p5b.mjs：declared=9 missing=0
+AUDIT ledger_rows=99 missing_total=0
+audit_exit=0

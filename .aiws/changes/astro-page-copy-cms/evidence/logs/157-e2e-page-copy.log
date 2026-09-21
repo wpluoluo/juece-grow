@@ -1,0 +1,158 @@
+
+> e2e@0.1.0 test F:\juece-grow\apps\e2e
+> playwright test "--" "tests/page-copy.spec.ts"
+
+[e2e] 预热 http://127.0.0.1:4321/ -> 200 (106ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/health -> 200 (11ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/articles?site=juece -> 200 (29ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/leads -> 405 (396ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/reminders/run -> 405 (262ms)
+[e2e] 预热 http://127.0.0.1:3000/api/leads -> 403 (58ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/pages?site=juece&page=pricing -> 200 (25ms)
+[e2e] 预热 http://127.0.0.1:4321/pricing -> 200 (39ms)
+[e2e] 已注入管理员凭据 CMS_ADMIN_USERNAME=e2e-admin（口令值不外泄）
+
+Running 69 tests using 1 worker
+
+  ok  1 [chromium] › tests\lead.spec.ts:4:1 › 健康端点返回统一成功信封 (48ms)
+  x   2 [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 (12.8s)
+  x   3 [chromium] › tests\lead.spec.ts:18:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true (30.1s)
+  ok  4 [chromium] › tests\lead.spec.ts:29:1 › API 直接提交线索，校验信封与业务 id (308ms)
+  ok  5 [chromium] › tests\lead.spec.ts:43:1 › 缺 phone/wechat 时返回校验错误信封 (36ms)
+  ok  6 [chromium] › tests\lead.spec.ts:53:1 › 仅填 wechat 也能提交成功 (94ms)
+  ok  7 [chromium] › tests\lead.spec.ts:67:1 › 非法 JSON 返回 INVALID_JSON 信封 (42ms)
+  ok  8 [chromium] › tests\lead.spec.ts:78:1 › 缺失 projectSlug 返回 MISSING_PROJECT (35ms)
+  ok  9 [chromium] › tests\lead.spec.ts:88:1 › 空白 projectSlug 返回 MISSING_PROJECT (87ms)
+  ok 10 [chromium] › tests\lead.spec.ts:100:1 › 不存在的 projectSlug 返回 PROJECT_NOT_FOUND (42ms)
+  ok 11 [chromium] › tests\lead.spec.ts:112:1 › 手机号格式非法时返回 VALIDATION (48ms)
+  ok 12 [chromium] › tests\lead.spec.ts:122:1 › 同一项目相同联系方式去重返回 duplicate:true (178ms)
+  ok 13 [chromium] › tests\leads-assign.spec.ts:112:3 › 线索分配 POST /api/leads/assign › 正向：分配给同项目成员 → owner 落库并写 assigned 动态 (214ms)
+  ok 14 [chromium] › tests\leads-assign.spec.ts:145:3 › 线索分配 POST /api/leads/assign › 负向：未登录 401 UNAUTHORIZED (23ms)
+  ok 15 [chromium] › tests\leads-assign.spec.ts:153:3 › 线索分配 POST /api/leads/assign › 负向：请求体非 JSON → 400 INVALID_JSON (29ms)
+  ok 16 [chromium] › tests\leads-assign.spec.ts:157:3 › 线索分配 POST /api/leads/assign › 负向：leadId 缺失或非法 → 400 MISSING_LEAD (74ms)
+  ok 17 [chromium] › tests\leads-assign.spec.ts:167:3 › 线索分配 POST /api/leads/assign › 负向：assigneeId 缺失或非法 → 400 INVALID_ASSIGNEE (84ms)
+  ok 18 [chromium] › tests\leads-assign.spec.ts:173:3 › 线索分配 POST /api/leads/assign › 负向：被分配人不是该项目成员 → 400 ASSIGNEE_NOT_IN_PROJECT (66ms)
+  ok 19 [chromium] › tests\leads-assign.spec.ts:183:3 › 线索分配 POST /api/leads/assign › 负向：发起人对该项目无写权限 → 403 FORBIDDEN (81ms)
+  ok 20 [chromium] › tests\leads-assign.spec.ts:192:3 › 线索分配 POST /api/leads/assign › 负向：leadId 指向不存在的记录 → 404 LEAD_NOT_FOUND (84ms)
+  ok 21 [chromium] › tests\leads-assign.spec.ts:202:3 › 线索分配 POST /api/leads/assign › 负向：assigneeId 指向不存在的记录 → 404 ASSIGNEE_NOT_FOUND (60ms)
+  ok 22 [chromium] › tests\leads-assign.spec.ts:211:3 › 线索分配 POST /api/leads/assign › 审计：端点分配写出的动态带发起人 actor（本用例自己调用端点，不依赖前面用例的副作用） (236ms)
+  ok 23 [chromium] › tests\leads-assign.spec.ts:233:3 › 线索分配 POST /api/leads/assign › 审计：成员被移除时清主动态也带发起人（级联写不透传 req 即丢审计） (319ms)
+  ok 24 [chromium] › tests\page-copy.spec.ts:88:3 › 公开端点分站读取 › juece 与 erp 的 pricing 各自独立（meta.description 与页头标题都不相等，无串台） (82ms)
+  ok 25 [chromium] › tests\page-copy.spec.ts:100:3 › 公开站 /pricing 读 CMS 文案 › 页头标题逐段等于端点 copy.hero.titleLines，强调行落在 <em> 内 (3.3s)
+  ok 26 [chromium] › tests\page-copy.spec.ts:129:3 › 缺 site → 400 INVALID_SITE（匿名请求，fail-closed 不回退主站） (29ms)
+  ok 27 [chromium] › tests\page-copy.spec.ts:129:3 › 未知 site → 400 INVALID_SITE（匿名请求，fail-closed 不回退主站） (21ms)
+  ok 28 [chromium] › tests\page-copy.spec.ts:129:3 › 缺 page → 400 INVALID_PAGE（匿名请求，fail-closed 不回退主站） (52ms)
+  ok 29 [chromium] › tests\page-copy.spec.ts:129:3 › 未知 page → 400 INVALID_PAGE（匿名请求，fail-closed 不回退主站） (13ms)
+  ok 30 [chromium] › tests\page-copy.spec.ts:134:1 › 原生 REST /api/page-pricing 匿名不可枚举（403） (27ms)
+  ok 31 [chromium] › tests\page-copy.spec.ts:152:3 › 草稿不可见 › yunque 的 pricing 置 draft → 端点 404 PAGE_COPY_NOT_FOUND；复原 published → 端点 200 (482ms)
+  ok 32 [chromium] › tests\reminders.spec.ts:122:3 › 提醒扫描 POST /api/v2/reminders/run › 命中落账：due 与 sla 各建一条 open 通知 + reminder 动态 (233ms)
+  ok 33 [chromium] › tests\reminders.spec.ts:162:3 › 提醒扫描 POST /api/v2/reminders/run › 判重：紧接着第二次扫描 created 为 0，通知与动态不翻倍 (94ms)
+  ok 34 [chromium] › tests\reminders.spec.ts:179:3 › 提醒扫描 POST /api/v2/reminders/run › 扫描对线索只读：状态与时间字段与扫描前逐项一致 (49ms)
+  ok 35 [chromium] › tests\reminders.spec.ts:196:3 › 提醒扫描 POST /api/v2/reminders/run › 未登录不能手动触发扫描（403 FORBIDDEN 统一信封） (17ms)
+  ok 36 [chromium] › tests\security.spec.ts:54:3 › C1 跨端文章隔离 › 主站 juece 返回全部已发布文章，且响应为统一成功信封 (46ms)
+  ok 37 [chromium] › tests\security.spec.ts:62:3 › C1 跨端文章隔离 › 分站 erp 仅返回项目 juece-erp 的文章（越界被隔离） (42ms)
+  ok 38 [chromium] › tests\security.spec.ts:71:3 › C1 跨端文章隔离 › 分站 yunque 仅返回项目 yunque 的文章（越界被隔离） (29ms)
+  ok 39 [chromium] › tests\security.spec.ts:80:3 › C1 跨端文章隔离 › 分站文章必为主站文章的子集（禁止跨端越权抽取） (83ms)
+  ok 40 [chromium] › tests\security.spec.ts:94:3 › C1 跨端文章隔离 › 未知站点返回 400 + INVALID_SITE（fail-closed） (21ms)
+  ok 41 [chromium] › tests\security.spec.ts:102:3 › C1 跨端文章隔离 › 分站项目不存在时仍返回空集而非全量（fail-closed，禁止兜底放行） (33ms)
+  ok 42 [chromium] › tests\security.spec.ts:127:5 › C2/C3/C4 原生 REST 匿名访问收敛 › 未登录访问 /api/articles 返回 403（草稿不可枚举） (14ms)
+  ok 43 [chromium] › tests\security.spec.ts:127:5 › C2/C3/C4 原生 REST 匿名访问收敛 › 未登录访问 /api/articles/1 返回 403（详情按 id 亦不可读（不泄露资源存在性）） (16ms)
+  ok 44 [chromium] › tests\security.spec.ts:127:5 › C2/C3/C4 原生 REST 匿名访问收敛 › 未登录访问 /api/projects 返回 403（联系人不外泄） (16ms)
+  ok 45 [chromium] › tests\security.spec.ts:127:5 › C2/C3/C4 原生 REST 匿名访问收敛 › 未登录访问 /api/sites 返回 403（站点结构不可枚举） (13ms)
+  ok 46 [chromium] › tests\security.spec.ts:127:5 › C2/C3/C4 原生 REST 匿名访问收敛 › 未登录访问 /api/forms 返回 403（表单字段定义不可枚举） (15ms)
+  ok 47 [chromium] › tests\security.spec.ts:127:5 › C2/C3/C4 原生 REST 匿名访问收敛 › 未登录访问 /api/categories 返回 403（分类维度不可枚举） (16ms)
+  ok 48 [chromium] › tests\security.spec.ts:138:3 › C3 公开响应脱敏投影 › 文章对象只出现在白名单字段集合内 (51ms)
+  ok 49 [chromium] › tests\security.spec.ts:148:3 › C3 公开响应脱敏投影 › 内联关联对象只暴露最小字段，不泄露联系人等内部字段 (50ms)
+  ok 50 [chromium] › tests\security.spec.ts:169:3 › C3 公开响应脱敏投影 › 单篇详情（带 slug）返回体内含 body，但仍只在白名单内 (92ms)
+  ok 51 [chromium] › tests\security.spec.ts:192:3 › C5 CORS 白名单 › 白名单 Origin 请求内容端点回 Allow-Origin=自身 (36ms)
+  ok 52 [chromium] › tests\security.spec.ts:198:3 › C5 CORS 白名单 › 非白名单 Origin 不回 Allow-Origin（跨端投毒被拒，C5） (31ms)
+  ok 53 [chromium] › tests\security.spec.ts:203:3 › C5 CORS 白名单 › 无 Origin 请求不回 Allow-Origin（服务端/非浏览器调用） (39ms)
+  ok 54 [chromium] › tests\security.spec.ts:208:3 › C5 CORS 白名单 › 白名单 Origin 的 OPTIONS 预检返回 204 + 方法头 (21ms)
+  ok 55 [chromium] › tests\security.spec.ts:215:3 › C5 CORS 白名单 › 白名单 Origin 的 POST 仍回 Allow-Origin（公开表单链路不受 CORS 收敛误伤，数据无关） (19ms)
+  ok 56 [chromium] › tests\security.spec.ts:233:3 › 公开 v2 统一信封 › 所有已知站点内容端点均返回 success:true 信封 (117ms)
+  ok 57 [chromium] › tests\security.spec.ts:256:3 › C6 后台鉴权边界（跨项目隔离） › 受限成员不能跨项目管理成员 / 写线索 / 搬家 / 越权分配（fail-closed） (1.3s)
+  ok 58 [chromium] › tests\security.spec.ts:354:3 › C7 Chatwoot webhook 鉴权 › 未携带签名头 → 401 + UNAUTHORIZED（fail-closed） (239ms)
+  ok 59 [chromium] › tests\security.spec.ts:365:3 › C7 Chatwoot webhook 鉴权 › 携带错误签名 → 401（误凭据被拒） (12ms)
+  -  60 [chromium] › tests\security.spec.ts:379:3 › C7 Chatwoot webhook 鉴权 › 过期时间戳（超出波动窗口）→ 401（重放防护）
+  -  61 [chromium] › tests\security.spec.ts:395:3 › C7 Chatwoot webhook 鉴权 › 正确签名放行进入业务层（以缺 projectId 返回 400 INVALID_PROJECT 断言鉴权已通过）
+  ok 62 [chromium] › tests\sites-clone.spec.ts:97:3 › 站点复制 POST /api/sites/clone › 正向：克隆体字段可查、状态与模板位被重置，源站不受影响 (170ms)
+  ok 63 [chromium] › tests\sites-clone.spec.ts:131:3 › 站点复制 POST /api/sites/clone › 未显式命名时副本名为「<源站名> 副本」，且两个副本互不干扰 (185ms)
+  ok 64 [chromium] › tests\sites-clone.spec.ts:149:3 › 站点复制 POST /api/sites/clone › 跨项目：显式 projectId 时克隆落目标项目，源站仍在原项目 (138ms)
+  ok 65 [chromium] › tests\sites-clone.spec.ts:173:3 › 站点复制 POST /api/sites/clone › 负向：未登录 401 UNAUTHORIZED (17ms)
+  ok 66 [chromium] › tests\sites-clone.spec.ts:181:3 › 站点复制 POST /api/sites/clone › 负向：缺或非法 sourceId → 400 MISSING_SOURCE (99ms)
+  ok 67 [chromium] › tests\sites-clone.spec.ts:187:3 › 站点复制 POST /api/sites/clone › 负向：sourceId 指向不存在的站点 → 404 SOURCE_NOT_FOUND (67ms)
+  ok 68 [chromium] › tests\sites-clone.spec.ts:200:3 › 站点复制 POST /api/sites/clone › 负向：projectId 非法 → 400 INVALID_PROJECT (21ms)
+  ok 69 [chromium] › tests\sites-clone.spec.ts:208:3 › 站点复制 POST /api/sites/clone › 负向：仅查看权限的项目成员不能复制站点 → 403 FORBIDDEN (46ms)
+
+
+  1) [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 ─────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('#lead-form')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('#lead-form')
+        13 × locator resolved to <form novalidate="" id="lead-form" class="lead-form" data-project-slug="juece-grow">…</form>
+           - unexpected value "hidden"
+
+
+      13 |   await expect(page.getByRole('heading', { name: /接单有人管，AI 有人配/ })).toBeVisible()
+      14 |   await page.locator('[data-open-lead]').first().click()
+    > 15 |   await expect(page.locator('#lead-form')).toBeVisible()
+         |                                            ^
+      16 | })
+      17 |
+      18 | test('提交表单 → Lead 落库 → /api/v2 返回 success:true', async ({ page }) => {
+        at F:\juece-grow\apps\e2e\tests\lead.spec.ts:15:44
+
+    Error Context: test-results\lead-首页渲染-Payload-数据并展示线索表单-chromium\error-context.md
+
+  2) [chromium] › tests\lead.spec.ts:18:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true ───────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#lead-name')
+        - locator resolved to <input name="name" type="text" id="lead-name" autocomplete="name" placeholder="怎么称呼你"/>
+        - fill("烟测用户")
+      - attempting fill action
+        2 × waiting for element to be visible, enabled and editable
+          - element is not visible
+        - retrying fill action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and editable
+          - element is not visible
+        - retrying fill action
+          - waiting 100ms
+        56 × waiting for element to be visible, enabled and editable
+           - element is not visible
+         - retrying fill action
+           - waiting 500ms
+
+
+      20 |   await page.goto(`${WEB_ORIGIN}/`)
+      21 |   await page.locator('[data-open-lead]').first().click()
+    > 22 |   await page.locator('#lead-name').fill('烟测用户')
+         |                                    ^
+      23 |   await page.locator('#lead-phone').fill(phone)
+      24 |   await page.locator('#lead-form button').click()
+      25 |   const status = page.locator('#lead-status')
+        at F:\juece-grow\apps\e2e\tests\lead.spec.ts:22:36
+
+    Error Context: test-results\lead-提交表单-→-Lead-落库-→-api-v2-返回-success-true-chromium\error-context.md
+
+  2 failed
+    [chromium] › tests\lead.spec.ts:11:1 › 首页渲染 Payload 数据并展示线索表单 ──────────────────────────────────
+    [chromium] › tests\lead.spec.ts:18:1 › 提交表单 → Lead 落库 → /api/v2 返回 success:true ────────────────
+  2 skipped
+  65 passed (1.1m)
+F:\juece-grow\apps\e2e:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  e2e@0.1.0 test: `playwright test "--" "tests/page-copy.spec.ts"`
+Exit status 1
+e2e_exit=1

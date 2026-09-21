@@ -1,0 +1,16 @@
+[e2e] 预热 http://127.0.0.1:4321/ -> 200 (396ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/health -> 200 (45ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/articles?site=juece -> 200 (46ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/leads -> 405 (276ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/reminders/run -> 405 (282ms)
+[e2e] 预热 http://127.0.0.1:3000/api/leads -> 403 (40866ms)
+[e2e] 预热 http://127.0.0.1:3000/api/v2/content/pages?site=juece&page=pricing -> 200 (89ms)
+[e2e] 预热 http://127.0.0.1:4321/pricing -> 200 (58ms)
+[e2e] 已注入管理员凭据 CMS_ADMIN_USERNAME=e2e-admin（口令值不外泄）
+
+Running 1 test using 1 worker
+
+  ok 1 [chromium] › tests\page-copy.spec.ts:185:3 › 后台自助改稿 › juece 的 pricing hero.description 改成新串 → 端点与 /pricing 都是新串、旧串消失；finally 原样复原 (9.3s)
+
+  1 passed (53.9s)
+selfserve_e2e_exit=0

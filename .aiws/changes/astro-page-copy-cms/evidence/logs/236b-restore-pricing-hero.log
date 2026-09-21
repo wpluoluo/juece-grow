@@ -1,0 +1,3 @@
+[restore] 定位到 id=1，现值前 24 字="3.5 重建自测 1789928555087 的" 长度=27
+[restore] RESULT=OK id=1 的 hero.description 已回到快照值（长度 57），公开端点同步读到
+restore_exit=0

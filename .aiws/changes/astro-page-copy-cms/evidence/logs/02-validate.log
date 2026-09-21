@@ -1,0 +1,7 @@
+change gate failed.
+error: truth file changed since creation: REQUIREMENTS.md (baseline_at=2026-09-20T09:57:36Z, baseline_sha=5d3db0a604dba09ffa3df71a84982391b73a65e0eb5d681e7e8c03cb7d7c9c46, current_sha=78709ae74a88f02d9593988acb1b8ed8ed8846b5c38faf9053ffd3ae5607f153); run `aiws change sync astro-page-copy-cms` to acknowledge
+error: Contract_Row must include Problem_ID binding for proposal Problem_ID: PROB-023
+error: Problem_ID mismatch between proposal.md and .aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md: proposal=PROB-023, plan=PROB-023�������µǼǣ�����ҳ/404/����Դ/���� JSON-LD Ʒ��Ӳ���룬�þ�Ϊ**���� change**���� Non-goals��
+error: .aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md Plan section is too long (24 steps > 8); keep to small verifiable steps
+
+validate_exit=2

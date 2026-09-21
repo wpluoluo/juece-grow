@@ -1,0 +1,21 @@
+### home slug=page-home dumpPaths=76 schemaPaths=89 leafFields=80 groups=15 arrays=9 scalarArrays(hasMany)=3 blocksFields=0 blockSlugs=0 genericDropped=11
+A\B（dump 有、schema 无，共 0 条）:
+B\A（schema 有、dump 无，已剔除通用字段，共 2 条）:
+  + hero.primary.href
+  + products.spotlight.link.external
+
+### features slug=page-features dumpPaths=43 schemaPaths=53 leafFields=52 groups=5 arrays=8 scalarArrays(hasMany)=5 blocksFields=1 blockSlugs=5 genericDropped=10
+A\B（dump 有、schema 无，共 0 条）:
+B\A（schema 有、dump 无，已剔除通用字段，共 0 条）:
+
+### solutions slug=page-solutions dumpPaths=20 schemaPaths=26 leafFields=22 groups=3 arrays=4 scalarArrays(hasMany)=2 blocksFields=0 blockSlugs=0 genericDropped=6
+A\B（dump 有、schema 无，共 0 条）:
+B\A（schema 有、dump 无，已剔除通用字段，共 0 条）:
+
+### pricing slug=page-pricing dumpPaths=22 schemaPaths=29 leafFields=25 groups=3 arrays=4 scalarArrays(hasMany)=1 blocksFields=0 blockSlugs=0 genericDropped=6
+A\B（dump 有、schema 无，共 0 条）:
+B\A（schema 有、dump 无，已剔除通用字段，共 1 条）:
+  + plans[].currency
+
+SUMMARY A\B total=0
+coverage=0

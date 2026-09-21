@@ -1,0 +1,5 @@
+dist: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+dist-erp: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+dist-yunque: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+判定=OK：三站客户端 bundle 均不含服务端站点解析，CMS 地址已内联
+client_bundle_gate_exit=0

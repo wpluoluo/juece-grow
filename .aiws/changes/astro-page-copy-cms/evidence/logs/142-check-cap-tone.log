@@ -1,0 +1,5 @@
+juece   cap-tag yb=1 cap-tag=4 缺陷串 cap-tagyb=0 编译后选择器命中=features.DcrV5jsl.css
+erp     cap-tag yb=1 cap-tag=4 缺陷串 cap-tagyb=0 编译后选择器命中=features.DcrV5jsl.css
+yunque  cap-tag yb=1 cap-tag=4 缺陷串 cap-tagyb=0 编译后选择器命中=features.DcrV5jsl.css
+[cap-tone] 三站全部通过：类名拼接正确且作用域选择器随产物发布
+cap_tone_exit=0

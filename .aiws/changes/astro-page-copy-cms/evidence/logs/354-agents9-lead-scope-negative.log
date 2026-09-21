@@ -1,0 +1,5 @@
+注入生产名样本后：exit=1 §7 点名该文件=true
+删除后复跑：exit=0
+  OK   §7 线索主数据未被本 change 触碰 :: 生产代码 0 个；只改过测试断言：apps/e2e/tests/lead.spec.ts
+判定=PASS：§7 仍咬得住生产侧改动，且对测试文件如实披露而非静默放行
+probe_exit=0

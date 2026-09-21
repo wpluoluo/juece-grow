@@ -1,0 +1,39 @@
+check_exit=0
+镜像窗口 466–471：tmp 侧=6 归档侧=6 新复制=6 已存在且等值=0 空洞编号=[]
+mirror4_exit=0
+镜像窗口 466–471：tmp 侧=6 归档侧=6 新复制=0 已存在且等值=6 空洞编号=[]
+mirror4_recheck_exit=0
+cp: cannot stat '.aiws/tmp/astro-page-copy-cms/472-mirror-tail-4.log': No such file or directory
+cp_self_exit=1
+sha256sum: .aiws/tmp/astro-page-copy-cms/472-mirror-tail-4.log: No such file or directory
+sha256sum: .aiws/changes/astro-page-copy-cms/evidence/logs/472-mirror-tail-4.log: No such file or directory
+编号日志总数=453 台账有行=396 归档有字节=451
+声明式排除=35 其中已入账（应 0，排除表过期信号）=0
+归档缺字节（提交即永久丢，门禁项）=2
+  465-audit-glob-fixed.log
+  473-mirror4-noop-and-final-audit.log
+有字节但台账无行（下一轮补登的尾日志）=22
+  447b-noop-and-final-copy.log
+  453-selfcheck-p14-rows.log
+  454-append-verification-p14.log
+  455-p14-idempotent-recheck.log
+  456-audit-after-p14.log
+  457-recount-after-p14.log
+  458-archive-after-p14.log
+  459-doc-claims-stale-before-p14sync.log
+  460-tasks-sync-p14.log
+  461-tasks-sync-p14-idempotent.log
+  462-doc-claims-after-p14sync.log
+  463-mirror-tail-3.log
+  463b-noop-and-copy.log
+  464-audit-logs-missing-v3.log
+  465-audit-glob-fixed.log
+  466-doc-claims-after-p14doc.log
+  467-change-sync-p14doc.log
+  468-validate-stamp-p14doc.log
+  469-change-validate-strict-p14doc.log
+  470-change-validate-evidence-scope-p14doc.log
+  471-verify-bc-p14doc.log
+  473-mirror4-noop-and-final-audit.log
+判定=NEEDS-BACKFILL 问题类合计=2
+audit_final_exit=1

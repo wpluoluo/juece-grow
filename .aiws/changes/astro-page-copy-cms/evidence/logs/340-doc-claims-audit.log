@@ -1,0 +1,7 @@
+  page_copy_gates 列出=8
+  tasks.md:32 len=1144
+[doc-claims] 废弃串=11 表体行=12 工件点名的门禁=11（存在 10） PROB-029+ 16 行（DONE 7 / OPEN 9） 问题=2
+  B ✗ 工件点名但不存在：scripts/astro-copy-projection.mjs
+  B ✗ AI_WORKSPACE.md 的 astro_build_cmd 未写明 CMS 前置（W-6）
+[doc-claims] 判定=FAIL：工件与实物漂移
+audit_exit=1

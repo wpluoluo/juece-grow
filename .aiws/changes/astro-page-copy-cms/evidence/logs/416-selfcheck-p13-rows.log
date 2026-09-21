@@ -1,0 +1,17 @@
+<anonymous_script>:178
+})
+^
+
+SyntaxError: Unexpected token '}'
+    at new Function (<anonymous>)
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/416-selfcheck-p13-rows.mjs:9:14
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+selfcheck_p13_exit=1
+rows=28 dup_keys=0 工件缺失=0 note_无残留插值=true failure=6(394-audit-after-p12.log 395-recount-after-p12.log 397-p12-rows-selfcontained-fix.log 397-p12-rows-selfcontained-fix.log 400-doc-claims-after-p12.log 408-advance-req-0003-done.log)
+selfcheck_p13_exit=0
+rows=30 dup_keys=0 工件缺失=0 note_无残留插值=true failure=7(394-audit-after-p12.log 395-recount-after-p12.log 397-p12-rows-selfcontained-fix.log 397-p12-rows-selfcontained-fix.log 400-doc-claims-after-p12.log 408-advance-req-0003-done.log 416-selfcheck-p13-rows.log)
+selfcheck_p13_exit=0

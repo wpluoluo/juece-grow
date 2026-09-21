@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro'
 import PageHero from '../components/sections/PageHero.astro'
 import PricingTable from '../components/sections/PricingTable.astro'
-import { pricing } from '../content/pricing'
+import { getPageCopy } from '../lib/payload'
+import type { PricingContent } from '../types/pages/pricing'
 
-const c = pricing
+const c = await getPageCopy<PricingContent>('pricing')
 ---
 
 <Layout
@@ -15,7 +16,7 @@ const c = pricing
     kicker={c.hero.kicker}
     description={c.hero.description}
   >
-    {c.hero.titleA}<br /><em>{c.hero.titleEm}</em>
+    {c.hero.titleLines.map((line, i) => <>{i > 0 && <br />}{line.emphasis ? <em>{line.text}</em> : <>{line.text}</>}</>)}
   </PageHero>
 
   <!-- ═══ 02 · 方案堆叠带 ═══ -->

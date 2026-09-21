@@ -16,6 +16,8 @@ dist-*/
 .next/
 .astro/
 *.log
+# 例外：change 证据台账（verification.jsonl）逐条引用的判定日志必须入库，否则换 clone 后指针全断链
+!/.aiws/changes/**/evidence/logs/*.log
 .DS_Store
 
 # database backups (dated SQL dumps)

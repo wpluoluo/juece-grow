@@ -10,7 +10,11 @@ test('健康端点返回统一成功信封', async ({ request }) => {
 
 test('首页渲染 Payload 数据并展示线索表单', async ({ page }) => {
   await page.goto(`${WEB_ORIGIN}/`)
-  await expect(page.getByRole('heading', { name: /接单有人管，AI 有人配/ })).toBeVisible()
+  // 本用例的主体是留资表单，不是文案：h1 的文字自 REQ-0003 起归 CMS、运营可随时改稿，
+  // 所以只锚「渲染器确实从 CMS 读到了非空 hero」这条结构判据，不锚具体话术。
+  const heroTitle = page.locator('h1.hero-title')
+  await expect(heroTitle).toBeVisible()
+  await expect(heroTitle.locator('span.line')).not.toHaveCount(0)
   await page.locator('[data-open-lead]').first().click()
   await expect(page.locator('#lead-form')).toBeVisible()
 })

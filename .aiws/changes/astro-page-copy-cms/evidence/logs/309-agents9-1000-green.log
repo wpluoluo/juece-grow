@@ -1,0 +1,49 @@
+warning: in the working copy of '.aiws/issues/problem-issues.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/memory-bank/.index.yaml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/requirements/CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/requirements/requirements-issues.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/astro.config.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/components/sections/FeatureGrid.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/components/sections/PageHero.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/components/sections/PricingTable.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/lib/payload.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/articles/[slug].astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/features.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/pricing.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/pages/solutions.astro', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/astro/src/site.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/cms/src/migrations/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/cms/src/payload-types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'apps/e2e/setup/global-setup.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/03-data-model.md', LF will be replaced by CRLF the next time Git touches it
+  跳过（生成物） apps/cms/src/migrations/20260920_121115_page_copy_collections.json = 8038 行 —— migrate:create 产物（与 .ts 同一份 SQL 的 JSON 形态）
+  跳过（生成物） apps/cms/src/migrations/20260920_121115_page_copy_collections.ts = 689 行 —— migrate:create 产物（SQL 由适配器生成）
+  跳过（生成物） apps/cms/src/migrations/20260920_195201_page_copy_project_unique_index.json = 8098 行 —— migrate:create 产物（与 .ts 同一份 SQL 的 JSON 形态）
+  跳过（生成物） apps/cms/src/migrations/20260920_195201_page_copy_project_unique_index.ts = 18 行 —— migrate:create 产物（SQL 由适配器生成）
+  跳过（生成物） apps/cms/src/migrations/index.ts = 28 行 —— migrate:create 登记产物
+  跳过（生成物） apps/cms/src/payload-types.ts = 2022 行 —— generate:types 产物
+  OK   §4 自研文件 ≤1000 行 :: 最大 apps/astro/src/pages/features.astro=595
+  OK   payload-types.ts 确为生成物 :: 文件头含生成器标记，不计入自研限额
+  迁移批次 20260830_122948：.ts 466 行 / .json 3669 行
+  迁移批次 20260919_093340_drop_lead_activity：.ts 25 行 / .json 3564 行
+  迁移批次 20260920_121115_page_copy_collections：.ts 689 行 / .json 8038 行
+  迁移批次 20260920_195201_page_copy_project_unique_index：.ts 18 行 / .json 8098 行
+  OK   4 个迁移批次均为 migrate:create 生成物 :: 每批 .ts 含 MigrateUpArgs、配套 .json 含 dialect 与 prevId ⇒ 不占 §4 自研限额
+  OK   AGENTS §4 无站点兜底 :: apps/astro 内 `|| 'juece'` 命中 0
+  OK   apps/astro/src/site.ts 缺键即抛 :: 含显式空值分支 `trim() === ''`
+  OK   apps/astro/astro.config.mjs 缺键即抛 :: 含显式空值分支 `trim() === ''`
+  OK   旧文案数据源已删 :: apps/astro/src/content 不存在 ⇒ 无法回退到代码内旧文案
+  OK   无残留 import 旧 content/ :: 命中 0 个文件
+  OK   payload.ts 的 catch 只有两类：抛错 / 返回诊断字符串（无返回旧数据） :: catch=3 首句=[throw connectFailure(url, label, err) | return `上游响应体不是 JSON：${trimmed.slice(0, UPSTREAM_DETAIL_LIMIT)}` | throw connectFailure(url, label, err)]
+  OK   §5 Payload 字段 camelCase :: 四集合 + 共享文件共扫 `无 snake_case 命中`
+  OK   §5 Astro 侧无 snake_case 取值 :: 命中 0
+  OK   §6 端点复用统一信封 :: import { err, ok } from '.../lib/envelope'
+  OK   §6 端点未手写响应体 :: 全部出口走 ok()/err()
+  OK   §6 对外路径 /api/v2/* :: apps/cms/src/app/api/v2/content/pages/route.ts
+  OK   §9 SEO 三件套在 Layout 落地 :: title + meta description + link canonical
+  OK   四页 title/description 均取自 CMS copy.meta :: index/features/solutions/pricing 4/4
+  OK   §7 线索主数据未被本 change 触碰 :: diff/新增文件里 lead 相关 0 个
+  OK   §9 影响范围已说明 :: proposal 四个小节齐全
+自检 3.9：全部断言成立
+agents9_exit=0

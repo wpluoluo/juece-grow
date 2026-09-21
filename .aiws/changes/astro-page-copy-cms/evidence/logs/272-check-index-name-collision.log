@@ -1,0 +1,7 @@
+目标索引名 project_idx, project_1_idx, project_2_idx, project_3_idx 在 public 下已存在 0 条
+
+以 project 开头的索引名（对照，只读）：3 条
+  projects -> projects_created_at_idx
+  projects -> projects_slug_idx
+  projects -> projects_updated_at_idx
+collision_check_exit=0

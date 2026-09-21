@@ -73,6 +73,10 @@ export interface Config {
     categories: Category;
     media: Media;
     articles: Article;
+    'page-home': PageHome;
+    'page-features': PageFeature;
+    'page-solutions': PageSolution;
+    'page-pricing': PagePricing;
     forms: Form;
     users: User;
     memberships: Membership;
@@ -92,6 +96,10 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    'page-home': PageHomeSelect<false> | PageHomeSelect<true>;
+    'page-features': PageFeaturesSelect<false> | PageFeaturesSelect<true>;
+    'page-solutions': PageSolutionsSelect<false> | PageSolutionsSelect<true>;
+    'page-pricing': PagePricingSelect<false> | PagePricingSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     memberships: MembershipsSelect<false> | MembershipsSelect<true>;
@@ -479,6 +487,494 @@ export interface Article {
   createdAt: string;
 }
 /**
+ * Home page copy per project; rebuild the static site after editing.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-home".
+ */
+export interface PageHome {
+  id: number;
+  /**
+   * The project this page copy belongs to; one record per project per page collection.
+   */
+  project: number | Project;
+  /**
+   * Drafts stay in admin; the static build reads published only.
+   */
+  status: 'draft' | 'published';
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    kicker: string;
+    /**
+     * One entry per title line; reorder freely. Emphasis renders the line highlighted.
+     */
+    titleLines: {
+      text: string;
+      emphasis?: boolean | null;
+      id?: string | null;
+    }[];
+    desc: string;
+    primary: {
+      label: string;
+      action: 'lead' | 'href';
+      /**
+       * Used when action is a link: /path/ internal, //host/ external.
+       */
+      href?: string | null;
+    };
+    secondary: {
+      label: string;
+      href: string;
+    };
+    /**
+     * Hero bullet points, rendered in list order.
+     */
+    stats: {
+      strong: string;
+      span: string;
+      id?: string | null;
+    }[];
+    diagram: {
+      coreName: string;
+      coreSub: string;
+      /**
+       * Max 3: the renderer stacks y offsets (92 + i*112) inside a fixed viewBox; more overflow.
+       */
+      nodes: {
+        no: string;
+        name: string;
+        sub: string;
+        tone: 'saas' | 'erp' | 'yunque';
+        id?: string | null;
+      }[];
+      /**
+       * Exactly 3: the renderer maps items 1/2/3 to chip-a/b/c slots; extras are dropped, gaps left blank.
+       */
+      chips: string[];
+    };
+  };
+  products: {
+    kicker: string;
+    heading: string;
+    desc: string;
+    spotlight: {
+      tag: string;
+      icon: 'saas' | 'erp' | 'yunque';
+      name: string;
+      desc: string;
+      points: string[];
+      link: {
+        label: string;
+        href: string;
+        external?: boolean | null;
+      };
+    };
+    side: {
+      tag: string;
+      icon: 'saas' | 'erp' | 'yunque';
+      name: string;
+      desc: string;
+      link: {
+        label: string;
+        href: string;
+        external?: boolean | null;
+      };
+      id?: string | null;
+    }[];
+  };
+  solutions: {
+    kicker: string;
+    /**
+     * Newlines allowed: rendered as <br>; stored verbatim.
+     */
+    heading: string;
+    moreLabel: string;
+    moreHref: string;
+    rows: {
+      title: string;
+      audience: string;
+      desc: string;
+      points: string[];
+      id?: string | null;
+    }[];
+  };
+  cases: {
+    kicker: string;
+    /**
+     * Newlines allowed: rendered as <br>; stored verbatim.
+     */
+    heading: string;
+    feature: {
+      band: string;
+      title: string;
+      desc: string;
+      metrics: {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[];
+    };
+    /**
+     * Max 2: labels come from an A/B pair by index, so a third entry renders undefined.
+     */
+    minis: {
+      band: string;
+      /**
+       * Blank keeps the default styling (only some cards set a tone).
+       */
+      tone?: ('saas' | 'erp' | 'yunque') | null;
+      title: string;
+      desc: string;
+      tag: string;
+      id?: string | null;
+    }[];
+  };
+  resource: {
+    kicker: string;
+    heading: string;
+    desc: string;
+    links: {
+      title: string;
+      sub: string;
+      href: string;
+      external?: boolean | null;
+      id?: string | null;
+    }[];
+  };
+  cta: {
+    kicker: string;
+    heading: string;
+    desc: string;
+    /**
+     * Rendered in list order; reorder freely in admin.
+     */
+    rows: {
+      icon: 'saas' | 'erp' | 'yunque';
+      head: string;
+      desc: string;
+      act: string;
+      action: 'lead' | 'href';
+      href?: string | null;
+      external?: boolean | null;
+      id?: string | null;
+    }[];
+  };
+  blog: {
+    kicker: string;
+    heading: string;
+    desc: string;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Features page copy per project; rebuild the static site after editing.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-features".
+ */
+export interface PageFeature {
+  id: number;
+  /**
+   * The project this page copy belongs to; one record per project per page collection.
+   */
+  project: number | Project;
+  /**
+   * Drafts stay in admin; the static build reads published only.
+   */
+  status: 'draft' | 'published';
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    kicker: string;
+    /**
+     * One entry per title line; emphasis renders that line highlighted (the old two-field split lives here now).
+     */
+    titleLines: {
+      text: string;
+      emphasis?: boolean | null;
+      id?: string | null;
+    }[];
+    description: string;
+    stats: {
+      value: string;
+      label: string;
+      id?: string | null;
+    }[];
+  };
+  /**
+   * Entries and panel kinds differ per site; rows are reorderable.
+   */
+  caps: {
+    no: string;
+    tag: string;
+    /**
+     * Blank keeps the default tag style; yb is the warm-gold variant.
+     */
+    tagTone?: 'yb' | null;
+    title: string;
+    /**
+     * Swap the text and panel sides for visual rhythm.
+     */
+    reverse?: boolean | null;
+    aside: {
+      p: string;
+      points: string[];
+    };
+    /**
+     * Exactly one panel per capability (blockType carries the original kind discriminator).
+     */
+    panel: (
+      | {
+          badge: string;
+          title: string;
+          blocks: {
+            no: string;
+            name: string;
+            note: string;
+            /**
+             * A CSS width like 72%; a layout geometry value, not a quantity.
+             */
+            w: string;
+            id?: string | null;
+          }[];
+          id?: string | null;
+          blockName?: string | null;
+          blockType: 'blocks';
+        }
+      | {
+          badge: string;
+          title: string;
+          chips: string[];
+          rows: {
+            label: string;
+            /**
+             * Numeric bar width (treated as 0-100 by the renderer), unlike the percent text in blocks.
+             */
+            w: number;
+            val: string;
+            id?: string | null;
+          }[];
+          id?: string | null;
+          blockName?: string | null;
+          blockType: 'chips';
+        }
+      | {
+          badge: string;
+          title: string;
+          kpis: {
+            val: string;
+            label: string;
+            id?: string | null;
+          }[];
+          bars: number[];
+          months: string[];
+          id?: string | null;
+          blockName?: string | null;
+          blockType: 'bars';
+        }
+      | {
+          badge: string;
+          title: string;
+          steps: string[];
+          id?: string | null;
+          blockName?: string | null;
+          blockType: 'journey';
+        }
+      | {
+          badge: string;
+          title: string;
+          core: string;
+          pegs: {
+            /**
+             * Anchor slot: the renderer places p1-p4 at fixed coordinates.
+             */
+            pos: 'p1' | 'p2' | 'p3' | 'p4';
+            icon: 'task' | 'memory' | 'gov' | 'ext';
+            text: string;
+            id?: string | null;
+          }[];
+          id?: string | null;
+          blockName?: string | null;
+          blockType: 'agent';
+        }
+    )[];
+    id?: string | null;
+  }[];
+  base: {
+    kicker: string;
+    heading: string;
+    items: {
+      title: string;
+      desc: string;
+      id?: string | null;
+    }[];
+  };
+  cta: {
+    kicker: string;
+    heading: string;
+    desc: string;
+    btnText: string;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Solutions page copy per project (accordion by industry); rebuild the static site after editing.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-solutions".
+ */
+export interface PageSolution {
+  id: number;
+  /**
+   * The project this page copy belongs to; one record per project per page collection.
+   */
+  project: number | Project;
+  /**
+   * Drafts stay in admin; the static build reads published only.
+   */
+  status: 'draft' | 'published';
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    kicker: string;
+    /**
+     * One entry per title line; emphasis renders that line highlighted (the old two-field split lives here now).
+     */
+    titleLines: {
+      text: string;
+      emphasis?: boolean | null;
+      id?: string | null;
+    }[];
+    description: string;
+    stats: {
+      value: string;
+      label: string;
+      id?: string | null;
+    }[];
+  };
+  /**
+   * One entry per accordion industry; list order is the display order.
+   */
+  industries: {
+    label: string;
+    /**
+     * Product name shown beside the industry, e.g. Juece SaaS.
+     */
+    meta: string;
+    blurb: string;
+    tone: 'saas' | 'erp' | 'yunque';
+    painPoints: string[];
+    solutions: string[];
+    scenarios: {
+      title: string;
+      desc: string;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  cta: {
+    kicker: string;
+    heading: string;
+    desc: string;
+    btnText: string;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Pricing page copy per project (plans, cross-product links, FAQ); rebuild the static site after editing.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-pricing".
+ */
+export interface PagePricing {
+  id: number;
+  /**
+   * The project this page copy belongs to; one record per project per page collection.
+   */
+  project: number | Project;
+  /**
+   * Drafts stay in admin; the static build reads published only.
+   */
+  status: 'draft' | 'published';
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    kicker: string;
+    /**
+     * One entry per title line; emphasis renders that line highlighted (the old two-field split lives here now).
+     */
+    titleLines: {
+      text: string;
+      emphasis?: boolean | null;
+      id?: string | null;
+    }[];
+    description: string;
+  };
+  /**
+   * Three plans per site with independent billing models; rows are reorderable.
+   */
+  plans: {
+    name: string;
+    price: string;
+    /**
+     * Billing unit such as /year; blank for per-project or quote-based plans.
+     */
+    unit?: string | null;
+    /**
+     * Currency glyph; blank falls through to the renderer default of ¥. Leave blank for quotes.
+     */
+    currency?: string | null;
+    desc: string;
+    btnText: string;
+    /**
+     * Renders this card emphasized, with an optional badge.
+     */
+    highlight?: boolean | null;
+    /**
+     * Badge on the highlighted card, e.g. 重点推荐; blank uses the renderer default.
+     */
+    recTag?: string | null;
+    features: string[];
+    id?: string | null;
+  }[];
+  eco: {
+    kicker: string;
+    heading: string;
+    desc: string;
+    links: {
+      label: string;
+      href: string;
+      /**
+       * Outlined secondary button styling.
+       */
+      ghost?: boolean | null;
+      id?: string | null;
+    }[];
+  };
+  /**
+   * Rendered in list order; rows are reorderable.
+   */
+  faqs: {
+    q: string;
+    a: string;
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Define lead-capture form fields and submission target on public pages.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -663,6 +1159,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'page-home';
+        value: number | PageHome;
+      } | null)
+    | ({
+        relationTo: 'page-features';
+        value: number | PageFeature;
+      } | null)
+    | ({
+        relationTo: 'page-solutions';
+        value: number | PageSolution;
+      } | null)
+    | ({
+        relationTo: 'page-pricing';
+        value: number | PagePricing;
       } | null)
     | ({
         relationTo: 'forms';
@@ -875,6 +1387,480 @@ export interface ArticlesSelect<T extends boolean = true> {
   seoDescription?: T;
   status?: T;
   publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-home_select".
+ */
+export interface PageHomeSelect<T extends boolean = true> {
+  project?: T;
+  status?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  hero?:
+    | T
+    | {
+        kicker?: T;
+        titleLines?:
+          | T
+          | {
+              text?: T;
+              emphasis?: T;
+              id?: T;
+            };
+        desc?: T;
+        primary?:
+          | T
+          | {
+              label?: T;
+              action?: T;
+              href?: T;
+            };
+        secondary?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+            };
+        stats?:
+          | T
+          | {
+              strong?: T;
+              span?: T;
+              id?: T;
+            };
+        diagram?:
+          | T
+          | {
+              coreName?: T;
+              coreSub?: T;
+              nodes?:
+                | T
+                | {
+                    no?: T;
+                    name?: T;
+                    sub?: T;
+                    tone?: T;
+                    id?: T;
+                  };
+              chips?: T;
+            };
+      };
+  products?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+        spotlight?:
+          | T
+          | {
+              tag?: T;
+              icon?: T;
+              name?: T;
+              desc?: T;
+              points?: T;
+              link?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    external?: T;
+                  };
+            };
+        side?:
+          | T
+          | {
+              tag?: T;
+              icon?: T;
+              name?: T;
+              desc?: T;
+              link?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    external?: T;
+                  };
+              id?: T;
+            };
+      };
+  solutions?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        moreLabel?: T;
+        moreHref?: T;
+        rows?:
+          | T
+          | {
+              title?: T;
+              audience?: T;
+              desc?: T;
+              points?: T;
+              id?: T;
+            };
+      };
+  cases?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        feature?:
+          | T
+          | {
+              band?: T;
+              title?: T;
+              desc?: T;
+              metrics?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+            };
+        minis?:
+          | T
+          | {
+              band?: T;
+              tone?: T;
+              title?: T;
+              desc?: T;
+              tag?: T;
+              id?: T;
+            };
+      };
+  resource?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+        links?:
+          | T
+          | {
+              title?: T;
+              sub?: T;
+              href?: T;
+              external?: T;
+              id?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+        rows?:
+          | T
+          | {
+              icon?: T;
+              head?: T;
+              desc?: T;
+              act?: T;
+              action?: T;
+              href?: T;
+              external?: T;
+              id?: T;
+            };
+      };
+  blog?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-features_select".
+ */
+export interface PageFeaturesSelect<T extends boolean = true> {
+  project?: T;
+  status?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  hero?:
+    | T
+    | {
+        kicker?: T;
+        titleLines?:
+          | T
+          | {
+              text?: T;
+              emphasis?: T;
+              id?: T;
+            };
+        description?: T;
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
+  caps?:
+    | T
+    | {
+        no?: T;
+        tag?: T;
+        tagTone?: T;
+        title?: T;
+        reverse?: T;
+        aside?:
+          | T
+          | {
+              p?: T;
+              points?: T;
+            };
+        panel?:
+          | T
+          | {
+              blocks?:
+                | T
+                | {
+                    badge?: T;
+                    title?: T;
+                    blocks?:
+                      | T
+                      | {
+                          no?: T;
+                          name?: T;
+                          note?: T;
+                          w?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+              chips?:
+                | T
+                | {
+                    badge?: T;
+                    title?: T;
+                    chips?: T;
+                    rows?:
+                      | T
+                      | {
+                          label?: T;
+                          w?: T;
+                          val?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+              bars?:
+                | T
+                | {
+                    badge?: T;
+                    title?: T;
+                    kpis?:
+                      | T
+                      | {
+                          val?: T;
+                          label?: T;
+                          id?: T;
+                        };
+                    bars?: T;
+                    months?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              journey?:
+                | T
+                | {
+                    badge?: T;
+                    title?: T;
+                    steps?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              agent?:
+                | T
+                | {
+                    badge?: T;
+                    title?: T;
+                    core?: T;
+                    pegs?:
+                      | T
+                      | {
+                          pos?: T;
+                          icon?: T;
+                          text?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+        id?: T;
+      };
+  base?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              desc?: T;
+              id?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+        btnText?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-solutions_select".
+ */
+export interface PageSolutionsSelect<T extends boolean = true> {
+  project?: T;
+  status?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  hero?:
+    | T
+    | {
+        kicker?: T;
+        titleLines?:
+          | T
+          | {
+              text?: T;
+              emphasis?: T;
+              id?: T;
+            };
+        description?: T;
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
+  industries?:
+    | T
+    | {
+        label?: T;
+        meta?: T;
+        blurb?: T;
+        tone?: T;
+        painPoints?: T;
+        solutions?: T;
+        scenarios?:
+          | T
+          | {
+              title?: T;
+              desc?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+        btnText?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-pricing_select".
+ */
+export interface PagePricingSelect<T extends boolean = true> {
+  project?: T;
+  status?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  hero?:
+    | T
+    | {
+        kicker?: T;
+        titleLines?:
+          | T
+          | {
+              text?: T;
+              emphasis?: T;
+              id?: T;
+            };
+        description?: T;
+      };
+  plans?:
+    | T
+    | {
+        name?: T;
+        price?: T;
+        unit?: T;
+        currency?: T;
+        desc?: T;
+        btnText?: T;
+        highlight?: T;
+        recTag?: T;
+        features?: T;
+        id?: T;
+      };
+  eco?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        desc?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              ghost?: T;
+              id?: T;
+            };
+      };
+  faqs?:
+    | T
+    | {
+        q?: T;
+        a?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

@@ -1,0 +1,12 @@
+up DDL 提取成功：4 条，逐条形状断言通过（全部 CREATE UNIQUE INDEX on project_id）
+guard host=127.0.0.1 port=5434 db=juece_grow OK
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/269-apply-project-unique-index.mjs:62
+  throw new Error(
+        ^
+
+Error: 已存在 4 条 project_id 唯一索引，拒绝重复执行：page_features/project_1_idx, page_solutions/project_2_idx, page_pricing/project_3_idx, page_home/project_idx
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/269-apply-project-unique-index.mjs:62:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.0
+apply_rerun_exit=1

@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro'
 import PageHero from '../components/sections/PageHero.astro'
 import CTABand from '../components/sections/CTABand.astro'
-import { solutions } from '../content/solutions'
+import { getPageCopy } from '../lib/payload'
+import type { SolutionsContent } from '../types/pages/solutions'
 
-const c = solutions
+const c = await getPageCopy<SolutionsContent>('solutions')
 ---
 
 <Layout
@@ -17,7 +18,7 @@ const c = solutions
     description={c.hero.description}
     stats={c.hero.stats}
   >
-    {c.hero.titleA}<br />{c.hero.titleEm && <em>{c.hero.titleEm}</em>}
+    {c.hero.titleLines.map((line, i) => <>{i > 0 && <br />}{line.emphasis ? <em>{line.text}</em> : <>{line.text}</>}</>)}
   </PageHero>
 
   <!-- ═══ 02 · 行业索引（手风琴） ═══ -->

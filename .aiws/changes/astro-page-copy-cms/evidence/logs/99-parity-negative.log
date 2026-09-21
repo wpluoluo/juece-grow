@@ -1,0 +1,17 @@
+### juece/home 叶子字符串=132 差异=0
+### erp/home 叶子字符串=133 差异=0
+### yunque/home 叶子字符串=133 差异=0
+### juece/features 叶子字符串=140 差异=0
+### erp/features 叶子字符串=139 差异=0
+### yunque/features 叶子字符串=139 差异=0
+### juece/solutions 叶子字符串=136 差异=0
+### erp/solutions 叶子字符串=136 差异=0
+### yunque/solutions 叶子字符串=136 差异=0
+### juece/pricing 叶子字符串=53 差异=0
+### erp/pricing 叶子字符串=49 差异=0
+### yunque/pricing 叶子字符串=48 差异=1
+合计比对 12 个 (site,page)，端点侧叶子字符串 1374
+
+=== parity 差异 1 条 ===
+  - yunque/pricing: meta.description: 值不等 云雀按团队协作规模定价。先按最占人的活试起来，用得顺了再扩。方案可咨询。 vs 云雀按团队协作规模定价。先按最占人的活试起来，用得顺了再扩。方案可咨询。（parity 探针改动，须被检出）
+parity 门禁未过：1 条差异（期望 12/12 逐字一致）

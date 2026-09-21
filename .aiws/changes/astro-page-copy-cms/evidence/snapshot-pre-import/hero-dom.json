@@ -1,0 +1,14 @@
+{
+  "juece/home": "<span class=\"line\">开店有人帮，</span><span class=\"line\"><em>接单有人管，AI 有人配</em></span>",
+  "juece/features": "每项能力，<br><em>都对应一个落地结果</em>",
+  "juece/solutions": "不同行业，<br><em>落地结果各不相同</em>",
+  "juece/pricing": "价格摆出来，<br><em>选哪档你说了算</em>",
+  "erp/home": "<span class=\"line\">广告生意，</span><span class=\"line\"><em>从报价到回款，一单不漏</em></span>",
+  "erp/features": "按广告制作的环节，<br><em>一个模块对一个痛点</em>",
+  "erp/solutions": "工艺不同，<br><em>流程对齐的方式不同</em>",
+  "erp/pricing": "按项目授权，<br><em>费用按场景核</em>",
+  "yunque/home": "<span class=\"line\">智能体能用了，</span><span class=\"line\"><em>不在演示里，在工作里</em></span>",
+  "yunque/features": "每项能力，<br><em>都在把智能体变好用</em>",
+  "yunque/solutions": "这些活，<br><em>先交给智能体试试</em>",
+  "yunque/pricing": "按团队规模，<br><em>用得起也看得清</em>"
+}

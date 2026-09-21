@@ -1,0 +1,110 @@
+{
+  "generatedFor": "astro-page-copy-cms",
+  "purpose": "pre-import rendered visible-text baseline",
+  "distDirs": {
+    "juece": "apps/astro/dist",
+    "erp": "apps/astro/dist-erp",
+    "yunque": "apps/astro/dist-yunque"
+  },
+  "files": {
+    "juece/home": {
+      "file": "juece/home.txt",
+      "site": "juece",
+      "page": "home",
+      "sha256": "550b4a9b3c7b2bb8d98183b12aba0dc36ca96957f808ddd800e677f183bb51da",
+      "lines": 106,
+      "chars": 2291
+    },
+    "juece/features": {
+      "file": "juece/features.txt",
+      "site": "juece",
+      "page": "features",
+      "sha256": "4e7ab6148b14880361a2c47a8d0f9a9cec1b8f49865d3e6f0a54c6cc860c274a",
+      "lines": 95,
+      "chars": 1609
+    },
+    "juece/solutions": {
+      "file": "juece/solutions.txt",
+      "site": "juece",
+      "page": "solutions",
+      "sha256": "55822ee7f5ea098cb6c49d70d1c1ba9e3e839e2281b10458efa3c86b88e1a4be",
+      "lines": 163,
+      "chars": 2233
+    },
+    "juece/pricing": {
+      "file": "juece/pricing.txt",
+      "site": "juece",
+      "page": "pricing",
+      "sha256": "5b9d885ef67fbda1cf7188139fcb0dbf6d5963971179b32b2c2904655d4d2d67",
+      "lines": 66,
+      "chars": 1063
+    },
+    "erp/home": {
+      "file": "erp/home.txt",
+      "site": "erp",
+      "page": "home",
+      "sha256": "473869abd889bc7a3e7e0112ea08fa85402956b16c035bdf55cc7ee5271dacf5",
+      "lines": 97,
+      "chars": 1853
+    },
+    "erp/features": {
+      "file": "erp/features.txt",
+      "site": "erp",
+      "page": "features",
+      "sha256": "284510e4b5b2332185b0065842698915a06fe6125c32900b0906540d0e99e0f8",
+      "lines": 95,
+      "chars": 1527
+    },
+    "erp/solutions": {
+      "file": "erp/solutions.txt",
+      "site": "erp",
+      "page": "solutions",
+      "sha256": "3e58c484109c1abd2d81c4015eb77b6d5320aac2c6580027af08621ea1af4fc0",
+      "lines": 163,
+      "chars": 2134
+    },
+    "erp/pricing": {
+      "file": "erp/pricing.txt",
+      "site": "erp",
+      "page": "pricing",
+      "sha256": "1205299786df9e570e1893c1b36de10110b1f27c65f0518330e5c20da14aaf1c",
+      "lines": 65,
+      "chars": 1061
+    },
+    "yunque/home": {
+      "file": "yunque/home.txt",
+      "site": "yunque",
+      "page": "home",
+      "sha256": "4113776e47e747f82e9b6aab8eea34e67d952ee06c68100b3ea4de1c0eaf428b",
+      "lines": 97,
+      "chars": 1806
+    },
+    "yunque/features": {
+      "file": "yunque/features.txt",
+      "site": "yunque",
+      "page": "features",
+      "sha256": "376aebb28678eb6ee416944daefbcfd15544112bd3942ce622a7205e993a7d27",
+      "lines": 95,
+      "chars": 1540
+    },
+    "yunque/solutions": {
+      "file": "yunque/solutions.txt",
+      "site": "yunque",
+      "page": "solutions",
+      "sha256": "2a27e39106d74bbe874c70800b0ffad0f727b3523115b798652735e9fb713196",
+      "lines": 163,
+      "chars": 2093
+    },
+    "yunque/pricing": {
+      "file": "yunque/pricing.txt",
+      "site": "yunque",
+      "page": "pricing",
+      "sha256": "b0e078bf9c0e77f18a75e84d4746a78abafb431c523ab540ca94c93064a0c382",
+      "lines": 64,
+      "chars": 1065
+    }
+  },
+  "gitRev": "7279d55e91cb7994f604e4d3cec16f1af5ef9c66",
+  "extractCommand": "node scripts/astro-copy-render-text.mjs <distDir> <site> <outDir>",
+  "extractorSha256": "fd46e2483b0cf69cf31812c89419947b6ceeca535fd23407964d28fb8108279d"
+}

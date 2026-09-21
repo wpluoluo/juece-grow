@@ -1,0 +1,10 @@
+[03:55:33] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+[03:55:33] [33mWARN[39m: [36mImage resizing is enabled for one or more collections, but sharp not installed. Please install 'sharp' and pass into the config.[39m
+Error running script: F:\juece-grow\apps\cms\scripts\import-astro-copy.ts
+Error: page-home 里 project=6（site=juece）已有一条文案记录。本脚本是一次性导入；要覆盖后台手工改动请显式设置 IMPORT_ASTRO_COPY_ALLOW_OVERWRITE=1；只改单条文案请走后台。
+    at <anonymous> (F:\juece-grow\apps\cms\scripts\import-astro-copy.ts:81:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+undefined
+F:\juece-grow\apps\cms:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: payload run scripts/import-astro-copy.ts
+import_no_perm_exit=1

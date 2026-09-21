@@ -1,0 +1,6 @@
+[cms-unreachable] dead_origin=http://127.0.0.1:59999 可连接=false build_exit=1 ECONNREFUSED+端口命中=true 可读错误命中=false dist_html=0
+  FAIL 构建输出未出现「不回退」⇒ 错误不可读：没说明硬失败口径（PROB-028）
+判定=FAIL
+(node:7604) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+neg_gate_exit=1

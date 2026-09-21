@@ -47,6 +47,10 @@ const WARM_TARGETS = [
   // Payload 集合 CRUD 与自定义端点（/api/leads/assign、/api/sites/clone）共用
   // src/app/(payload)/api/[...slug]/route.ts 这一个捕获路由；未登录 GET 返回 403，不读不写。
   `${CMS_ORIGIN}/api/leads`,
+  // tests/page-copy.spec.ts 的读路径两端：页面文案公开端点（Next 路由，只读不写）
+  // 与 astro dev 的 /pricing 页（构建期打端点取文案）。
+  `${CMS_ORIGIN}/api/v2/content/pages?site=juece&page=pricing`,
+  `${WEB_ORIGIN}/pricing`,
 ]
 
 export default async function globalSetup(): Promise<void> {

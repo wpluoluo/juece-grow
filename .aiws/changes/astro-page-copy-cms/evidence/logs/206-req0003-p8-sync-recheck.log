@@ -1,0 +1,12 @@
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/append-req0003-p8-sync.mjs:47
+  throw new Error('Tests 字段不是 P6 那一版（缺 hero-dom 那段），拒绝盲改——先人工核对当前合同行')
+        ^
+
+Error: Tests 字段不是 P6 那一版（缺 hero-dom 那段），拒绝盲改——先人工核对当前合同行
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/append-req0003-p8-sync.mjs:47:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+req_p8_recheck_exit=1

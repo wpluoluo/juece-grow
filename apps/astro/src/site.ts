@@ -5,7 +5,8 @@
  * 子域分站（独立构建）：
  * - 每个站点一套独立 `astro build`，构建期由 `SITE_ID`（juece / erp / yunque）
  *   选择对应站点配置；域名由 `astro.config.mjs` 按同一 SITE_ID 决定。
- * - 默认不传 SITE_ID 时按 juece（主站）构建。
+ * - SITE_ID 缺失或空白直接抛错，不默认按主站构建（禁兜底）：显式赋值由
+ *   `apps/astro/package.json` 的 dev / build 脚本（cross-env SITE_ID=...）负责。
  * - 未知 SITE_ID 直接抛错，不静默回退（禁兜底）。
  */
 
@@ -165,7 +166,17 @@ const SITES: Record<SiteId, Site> = {
   yunque: yunqueSite,
 }
 
-const currentSiteId = (import.meta.env.SITE_ID as SiteId | undefined) || 'juece'
+const rawSiteId: unknown = import.meta.env.SITE_ID
+if (typeof rawSiteId !== 'string' || rawSiteId.trim() === '') {
+  throw new Error(
+    '缺少 SITE_ID：三站共用这份配置，不给默认站点，缺标识即构建失败（禁兜底）。' +
+      '请通过 apps/astro/package.json 的脚本入口运行（它们用 cross-env SITE_ID=<juece|erp|yunque> 显式赋值）：' +
+      'pnpm astro:dev / astro:build / astro:build:erp / astro:build:yunque；' +
+      '直接调用 astro 时写作 cross-env SITE_ID=juece astro build。',
+  )
+}
+
+const currentSiteId = rawSiteId.trim() as SiteId
 
 if (!(currentSiteId in SITES)) {
   throw new Error(

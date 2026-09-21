@@ -1,0 +1,13 @@
+<anonymous_script>:8
+    note: `${NOEXIT} 输出 \`appended=14 declared=14 total=285 mirrored=14 sha256=1f0c1df90d34e086\` ⇒ 台账 271→285 行，345–358 号日志逐条镜像进 evidence/logs/`,
+             ^
+
+ReferenceError: NOEXIT is not defined
+    at eval (eval at <anonymous> (file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs:23:19), <anonymous>:8:14)
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/221-uncovered-rows.mjs:23:61
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+recount_exit=1

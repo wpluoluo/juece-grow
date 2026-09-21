@@ -1,0 +1,48 @@
+
+> cms@0.1.0 build F:\juece-grow\apps\cms
+> cross-env NODE_OPTIONS=--no-deprecation NEXT_DISABLE_TURBOPACK=1 next build --webpack
+
+▲ Next.js 16.3.2 (webpack)
+- Environments: .env
+✓ Running next.config.mjs took 50ms
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 26.1s
+  Running TypeScript ...
+  Finished TypeScript in 3.7s ...
+  Collecting page data using 14 workers ...
+  Generating static pages using 14 workers (0/11) ...
+  Generating static pages using 14 workers (2/11) 
+  Generating static pages using 14 workers (5/11) 
+  Generating static pages using 14 workers (8/11) 
+✓ Generating static pages using 14 workers (11/11) in 3.8s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin/[[...segments]]
+├ ƒ /api/[...slug]
+├ ƒ /api/v2/content/articles
+├ ƒ /api/v2/content/pages
+├ ƒ /api/v2/health
+├ ƒ /api/v2/leads
+├ ƒ /api/v2/reminders/run
+├ ƒ /api/v2/stats/leads
+├ ƒ /api/v2/webhooks/chatwoot
+└ ○ /intake
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+cms_build_exit=0

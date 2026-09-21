@@ -1,0 +1,8 @@
+[dist-fresh] juece   apps/astro/dist        dist最大mtime=2026-09-20T18:27:03.630Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] erp     apps/astro/dist-erp    dist最大mtime=2026-09-20T18:46:18.164Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] yunque  apps/astro/dist-yunque dist最大mtime=2026-09-20T18:46:35.264Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+juece apps/astro/dist: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+erp apps/astro/dist-erp: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+yunque apps/astro/dist-yunque: client_js=1 禁止串命中=0 CMS地址已内联=true Layout脚本chunk=有 判定=OK
+判定=OK：三站客户端 bundle 均不含服务端站点解析，CMS 地址已内联
+client_bundle_exit=0

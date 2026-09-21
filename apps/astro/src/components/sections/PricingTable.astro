@@ -1,18 +1,8 @@
 ---
-interface Plan {
-  name: string
-  price: string
-  unit?: string
-  currency?: string
-  desc: string
-  btnText: string
-  highlight: boolean
-  recTag?: string
-  features: string[]
-}
+import type { PricingPlan } from '../../types/pages/pricing'
 
 interface Props {
-  plans: Plan[]
+  plans: PricingPlan[]
 }
 
 const { plans } = Astro.props

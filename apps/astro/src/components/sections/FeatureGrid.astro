@@ -1,13 +1,10 @@
 ---
-interface FeatureItem {
-  title: string
-  desc?: string
-}
+import type { FeaturesContent } from '../../types/pages/features'
 
 interface Props {
   kicker?: string
   heading?: string
-  items: FeatureItem[]
+  items: FeaturesContent['base']['items']
 }
 
 const { kicker, heading, items } = Astro.props

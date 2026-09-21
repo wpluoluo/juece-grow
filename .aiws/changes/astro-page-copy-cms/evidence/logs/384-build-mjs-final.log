@@ -1,0 +1,123 @@
+
+> juece-grow@0.1.0 cms:build F:\juece-grow
+> pnpm --filter cms build
+
+
+> cms@0.1.0 build F:\juece-grow\apps\cms
+> cross-env NODE_OPTIONS=--no-deprecation NEXT_DISABLE_TURBOPACK=1 next build --webpack
+
+▲ Next.js 16.3.2 (webpack)
+- Environments: .env
+✓ Running next.config.mjs took 42ms
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 8.4s
+  Running TypeScript ...
+  Finished TypeScript in 1429ms ...
+  Collecting page data using 14 workers ...
+  Generating static pages using 14 workers (0/11) ...
+  Generating static pages using 14 workers (2/11) 
+  Generating static pages using 14 workers (5/11) 
+  Generating static pages using 14 workers (8/11) 
+✓ Generating static pages using 14 workers (11/11) in 2.4s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin/[[...segments]]
+├ ƒ /api/[...slug]
+├ ƒ /api/v2/content/articles
+├ ƒ /api/v2/content/pages
+├ ƒ /api/v2/health
+├ ƒ /api/v2/leads
+├ ƒ /api/v2/reminders/run
+├ ƒ /api/v2/stats/leads
+├ ƒ /api/v2/webhooks/chatwoot
+└ ○ /intake
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> juece-grow@0.1.0 astro:build F:\juece-grow
+> pnpm --filter astro build
+
+
+> astro@0.1.0 build F:\juece-grow\apps\astro
+> cross-env SITE_ID=juece astro build && pagefind --site dist
+
+[2m06:22:55[22m [34m[types][39m Generated [2m52ms[22m
+[2m06:22:55[22m [34m[build][39m output: [34m"static"[39m
+[2m06:22:55[22m [34m[build][39m mode: [34m"static"[39m
+[2m06:22:55[22m [34m[build][39m directory: [34mF:\juece-grow\apps\astro\dist\[39m
+[2m06:22:55[22m [34m[build][39m Collecting build info...
+[2m06:22:55[22m [34m[build][39m [32m✓ Completed in 92ms.[39m
+[2m06:22:55[22m [34m[build][39m Building static entrypoints...
+[2m06:22:58[22m [34m[vite][39m [32m✓ built in 2.75s[39m
+[2m06:22:58[22m [34m[vite][39m [32m✓ built in 60ms[39m
+[2m06:22:58[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m06:22:58[22m   [34m├─[39m [2m/404.html[22m [2m(+15ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/articles/wenzhang-dailai-duoshao-xiansuo-zhuang-rukou-ji-laiyuan/index.html[22m [2m(+35ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/articles/ai-zai-gongsi-yongbuqilai-xian-zha-zhe-sanyang/index.html[22m [2m(+29ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/articles/cong-geren-yanshi-dao-tuandui-shiyong-bu-sanyang-jiu-tong/index.html[22m [2m(+28ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/articles/zichan-he-waixie-ge-yiban-jindu-he-chengben-dou-jin-xitong/index.html[22m [2m(+32ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/articles/baojia-dao-huikuan-yidan-yi-jilu/index.html[22m [2m(+29ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/features/index.html[22m [2m(+63ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/feed.xml[22m [2m(+27ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/pricing/index.html[22m [2m(+30ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/privacy/index.html[22m [2m(+5ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/robots.txt[22m [2m(+3ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/sitemap/index.html[22m [2m(+4ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/sitemap.xml[22m [2m(+28ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/solutions/index.html[22m [2m(+31ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/terms/index.html[22m [2m(+4ms)[22m 
+[2m06:22:58[22m   [34m├─[39m [2m/index.html[22m [2m(+65ms)[22m 
+[2m06:22:59[22m [32m✓ Completed in 907ms.
+[39m
+[2m06:22:59[22m [34m[build][39m [32m✓ Completed in 3.86s.[39m
+[2m06:22:59[22m [34m[build][39m 13 page(s) built in [1m3.98s[22m
+[2m06:22:59[22m [34m[build][39m [1mComplete![22m
+
+Running Pagefind v1.5.2 (Extended)
+Running from: "F:\\juece-grow\\apps\\astro"
+Source:       "dist"
+Output:       "dist\\pagefind"
+
+[Walking source directory]
+Found 13 files matching **/*.{html}
+
+[Parsing files]
+Found a data-pagefind-body element on the site.
+↳ Ignoring pages without this tag.
+
+[Reading languages]
+Discovered 1 language: zh-cn
+
+[Building search indexes]
+Total: 
+  Indexed 1 language
+  Indexed 13 pages
+  Indexed 1246 words
+  Indexed 0 filters
+  Indexed 0 sorts
+Note: Pagefind doesn't support stemming for the language zh-cn. 
+Search will still work, but will not match across root words.
+Note: Pagefind doesn't support stemming for the language zh-cn. 
+Search will still work, but will not match across root words.
+
+Finished in 0.290 seconds
+[build] 构建全部通过。
+build_mjs_exit=0

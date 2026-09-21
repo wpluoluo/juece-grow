@@ -1,0 +1,60 @@
+153	153-append-verification-p5b.log	p5b_exit=0	appended=9 total=99 sha256=57ba81edb66968dc
+154	154-p5b-idempotent-recheck.log	p5b_recheck_exit=0	no-op：9 条已全部在册，台账仍 99 行
+155	155-audit-after-p5b.log	audit_exit=0	AUDIT ledger_rows=99 missing_total=0
+171	171-e2e-pagecopy-tsc.log	tsc_exit=2	helpers/cmsRest.ts(43,20): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+172	172-e2e-pagecopy-tsc.log	tsc_exit=2	    Entry point of type library 'node' specified in compilerOptions
+181	181-append-verification-p6.log	appended_exit=0	appended=19 total=118 sha256=51cc82b07ebe38d8
+182	182-p6-idempotent-recheck.log	recheck_exit=0	no-op：19 条已全部在册，台账仍 118 行
+183	183-audit-after-p6.log	audit_exit=0	AUDIT ledger_rows=118 missing_total=0
+184	184-append-verification-p6-red-green.log	appended_exit=0	appended=1 total=119 sha256=387f7895ec15fe54
+185	185-p6-idempotent-recheck-2.log	recheck_exit=0	no-op：20 条已全部在册，台账仍 119 行
+186	186-audit-after-p6-red-green.log	audit_exit=0	AUDIT ledger_rows=119 missing_total=0
+189	189-append-verification-p6-final.log	appended_exit=0	appended=2 total=121 sha256=3d7269b113634d8f
+190	190-audit-final-p7.log	audit_exit=0	AUDIT ledger_rows=121 missing_total=0
+260	260-append-verification-p9b.log	append_p9b_exit=0	appended=6 total=190 sha256=e009841953a1a934
+261	261-p9b-idempotent-recheck.log	append_p9b_recheck_exit=0	no-op：6 条已全部在册，台账仍 190 行
+262	262-audit-after-p9b.log	audit_exit=0	AUDIT ledger_rows=190 missing_total=0
+263	263-recount-after-p9b.log	recount_exit=0	  - .aiws/tmp/astro-page-copy-cms/32-verify-integrity.log | node -e "重算 render/_index.json 每条 sha256 + 抽取器自身 sha256 + 行数"  # 见 snapshot-pr
+264	264-p9b-recheck-after-note-edit.log	recheck_exit=0	no-op：6 条已全部在册，台账仍 190 行
+265	265-audit-after-note-edit.log	audit_exit=0	AUDIT ledger_rows=190 missing_total=0
+266	266-validate-after-ledger.log	validate_exit=0	✓ aiws validate: F:\juece-grow
+267	267-change-validate-strict-after-ledger.log	strict_exit=0	ok: change validated (astro-page-copy-cms)
+417	417-append-verification-p13.log	append_p13_exit=0	appended=31 declared=31 total=349 mirrored=31 sha256=bd41555489bb1e0b
+418	418-p13-idempotent-recheck.log	p13_idempotent_exit=0	no-op：31 条已全部在册，台账仍 349 行
+419	419-audit-after-p13.log	audit_exit=0	AUDIT ledger_rows=349 missing_total=0
+420	420-recount-after-p13.log	recount_exit=0	  - .aiws/tmp/astro-page-copy-cms/32-verify-integrity.log | node -e "重算 render/_index.json 每条 sha256 + 抽取器自身 sha256 + 行数"  # 见 snapshot-pr
+421	421-archive-after-p13.log	archive_exit=0	[evidence-archive] 台账全部 artifact 均已归档且逐字节可核对（原件缺失、仅核归档件存在的行数 0 已如实计数）
+422	422-doc-claims-stale-310.log	docclaims_exit=1	[doc-claims] 判定=FAIL：工件与实物漂移
+423	423-tasks-sync-p13.log	sync_exit=1 sync_exit=0 sync_recheck_exit=0	no-op：9 处口径已全部同步（旧片段命中 0、新片段齐全），本次不写盘
+424	424-doc-claims-after-sync.log	docclaims_exit=0	[doc-claims] 判定=OK：工件口径与盘上实物一致
+425	!!同名多份或缺失	
+426	426-fix-p13-note-count.log	fix_note_exit=0 fix_note_recheck_exit=0	no-op：appender 与台账均已是更正后的文本
+427	427-audit-after-note-fix.log	audit_exit=0	AUDIT ledger_rows=349 missing_total=0
+428	428-recount-after-note-fix.log	recount_exit=0	  - .aiws/tmp/astro-page-copy-cms/32-verify-integrity.log | node -e "重算 render/_index.json 每条 sha256 + 抽取器自身 sha256 + 行数"  # 见 snapshot-pr
+429	429-archive-after-note-fix.log	archive_exit=0	[evidence-archive] 台账全部 artifact 均已归档且逐字节可核对（原件缺失、仅核归档件存在的行数 0 已如实计数）
+430	430-doc-claims-after-note-fix.log	docclaims_exit=0	[doc-claims] 判定=OK：工件口径与盘上实物一致
+431	431-change-sync-terminal.log	sync_exit=0	No changes detected vs baseline.
+432	432-validate-stamp-terminal.log	validate_stamp_exit=0	stamp: .aiws\tmp\aiws-validate\20260920-231741944Z.json
+433	433-change-validate-strict-terminal.log	strict_exit=0	ok: change validated (astro-page-copy-cms)
+434	434-change-validate-evidence-scope-terminal.log	evidence_scope_exit=0	ok: change validated (astro-page-copy-cms)
+435	435-verify-bc-terminal.log	verify_bc_exit=0	ok: all gates passed (tier=strict)
+436	436-mirror-tail-logs.log	mirror_exit=0	镜像窗口 417–435：tmp 侧=18 归档侧=18 新复制=18 已存在且等值=0 空洞编号=[425]（425 这一号在跑之前改名成 426，日志里从来没有 425） 逐文件 sha 与原件一致=true 归档侧缺口=0 最新 mtime=2026-09-20T23:17:51.364Z
+437	437-audit-final.log	audit_exit=0	AUDIT ledger_rows=349 missing_total=0
+438	438-recount-final.log	recount_exit=0	  - .aiws/tmp/astro-page-copy-cms/32-verify-integrity.log | node -e "重算 render/_index.json 每条 sha256 + 抽取器自身 sha256 + 行数"  # 见 snapshot-pr
+439	439-doc-claims-final.log	docclaims_exit=0	[doc-claims] 判定=OK：工件口径与盘上实物一致
+440	440-archive-final.log	archive_exit=0	[evidence-archive] 台账全部 artifact 均已归档且逐字节可核对（原件缺失、仅核归档件存在的行数 0 已如实计数）
+441	441-change-sync-final.log	sync_exit=0	No changes detected vs baseline.
+442	442-validate-stamp-final.log	validate_stamp_exit=0	stamp: .aiws\tmp\aiws-validate\20260920-232054784Z.json
+443	443-change-validate-strict-final.log	strict_exit=0	ok: change validated (astro-page-copy-cms)
+444	444-change-validate-evidence-scope-final.log	evidence_scope_exit=0	ok: change validated (astro-page-copy-cms)
+445	445-verify-bc-final.log	verify_bc_exit=0	ok: all gates passed (tier=strict)
+446	446-doc-claims-final2.log	docclaims_exit=0	[doc-claims] 判定=OK：工件口径与盘上实物一致
+447	447-mirror-tail-2.log	mirror2_exit=0	镜像窗口 437–446：tmp 侧=10 归档侧=10 新复制=6 已存在且等值=4 空洞编号=[] 归档侧缺口=0
+448	448-audit-logs-missing.log	audit_missing_exit=1	判定=NEEDS-BACKFILL 问题类合计=55 台账行数=349
+449	449-mirror-all.log	mirror_all_exit=0	镜像窗口 <449：tmp 侧=426 归档侧=426 复制前缺=55 新复制=55 已存在且等值=371 逐文件 sha 与原件一致=true 复制后缺口=0 本支自身日志（449-）不入窗口=1
+	!!归档缺字节 449-mirror-all.log
+450	450-list-ledger-commands.log	listcmds_exit=0	   node .aiws/tmp/astro-page-copy-cms/114-audit-ledger-coverage.mjs  # P5 入账后
+	!!归档缺字节 450-list-ledger-commands.log
+451	451-audit-logs-missing-v2.log	audit_v2_exit=1	判定=NEEDS-BACKFILL 问题类合计=3
+	!!归档缺字节 451-audit-logs-missing-v2.log
+collect_exit=0

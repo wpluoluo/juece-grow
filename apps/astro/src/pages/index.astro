@@ -1,12 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import { getArticles } from '../lib/payload'
+import { getArticles, getPageCopy } from '../lib/payload'
+import { CMS_ORIGIN } from '../lib/cmsOrigin'
 import { siteId, type SiteId } from '../site'
-import { home, type IconKey } from '../content/home'
+import type { HomeContent } from '../types/pages/home'
+import type { IconKey } from '../types/icons'
 import '../styles/home.css'
 
 const articles = await getArticles()
-const c = home
+const c = await getPageCopy<HomeContent>('home')
 
 /** 图标集：按 IconKey 返回对应 SVG 内部路径。 */
 const iconPaths: Record<IconKey, string> = {
@@ -79,7 +81,7 @@ function formatDate(value?: string): string {
         <span class="kicker" data-reveal>{c.hero.kicker}</span>
         <h1 class="hero-title" data-reveal>
           {c.hero.titleLines.map((line) => (
-            line.em
+            line.emphasis
               ? <span class="line"><em>{line.text}</em></span>
               : <span class="line">{line.text}</span>
           ))}
@@ -355,7 +357,7 @@ function formatDate(value?: string): string {
           <ul class="blog-grid">
             {articles.map((a, i) => {
               const coverImg = a.coverImage && typeof a.coverImage === 'object' ? a.coverImage as { url: string; alt?: string } : undefined
-              const coverUrl = coverImg ? new URL(coverImg.url, import.meta.env.PUBLIC_CMS_ORIGIN).href : undefined
+              const coverUrl = coverImg ? new URL(coverImg.url, CMS_ORIGIN).href : undefined
               return (
               <li data-reveal>
                 <a class="blog-card" href={`/articles/${a.slug}/`}>

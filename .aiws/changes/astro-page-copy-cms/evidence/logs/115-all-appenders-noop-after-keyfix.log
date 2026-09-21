@@ -1,0 +1,15 @@
+--- append-verification-p2p3.mjs
+no-op：15 条已全部在册，台账仍 63 行
+p2p3_exit=0
+--- append-verification-p3c.mjs
+no-op：5 条已全部在册，台账仍 63 行
+p3c_exit=0
+--- append-verification-p3d.mjs
+no-op：5 条已全部在册，台账仍 63 行
+p3d_exit=0
+--- append-verification-p4.mjs
+no-op：20 条已全部在册，台账仍 63 行
+p4_exit=0
+--- append-verification-p4b.mjs
+no-op：8 条已全部在册，台账仍 63 行
+p4b_exit=0

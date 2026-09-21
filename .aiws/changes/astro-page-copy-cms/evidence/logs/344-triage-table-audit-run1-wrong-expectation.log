@@ -1,0 +1,55 @@
+.aiws/changes/astro-page-copy-cms/review/spec-review.md: triage 表体=16 行 竖线数!=4=16 表内空行=0
+  ✗ 第 163 行 pipes=5 head=| # | 发现（审查者提出 → 主 session 核实） | 处置 | 证据 |
+  ✗ 第 165 行 pipes=5 head=| B-1 | 验收 2「首页 hero/CTA 可增删排序」无常驻机器对面：唯一常驻 DOM 
+  ✗ 第 166 行 pipes=5 head=| H-1 | 台账 190 行的 `artifact` 100% 指向 gitignored 
+  ✗ 第 167 行 pipes=5 head=| H-2 | 验收 1（一比一覆盖）与验收 6（SEO 三件套）的唯一机器对面是 tmp 里的
+  ✗ 第 168 行 pipes=5 head=| H-3 | 同一份 §4 的 1000 行硬限额在自检脚本里实现成 1500，`design
+  ✗ 第 169 行 pipes=5 head=| H-4 | `proposal.md:31` 与 plan:13 的 `Evidence_P
+  ✗ 第 170 行 pipes=5 head=| W-1 | 规划工件路径漂移：`proposal.md:53` 与 plan:74 仍引用不
+  ✗ 第 171 行 pipes=5 head=| W-2 | 数字口径同句混用：`proposal.md:40` 一句里同时出现 1933 与
+  ✗ 第 172 行 pipes=5 head=| W-3 | `tasks.md` 的行数断言普遍按 `split('\\n')` 计数、与 
+  ✗ 第 173 行 pipes=5 head=| W-4 | `tasks.md:32`（2.2）的四页类型行数顺序错位（记成 39/79/3
+  ✗ 第 174 行 pipes=5 head=| W-5 | 同一份 `tasks.md` 内 `payload.ts` 行数两个值（2.14
+  ✗ 第 175 行 pipes=5 head=| W-6 | `AI_WORKSPACE.md` 是测试入口真值且被 `proposal.md
+  ✗ 第 176 行 pipes=5 head=| W-7 | 归因不对称：PROB-024/025/026/027/028 都写了 `Req_
+  ✗ 第 177 行 pipes=5 head=| W-8 | `CHANGELOG.md` 表体走形：第 15 行空行把表切成两段、19–23
+  ✗ 第 178 行 pipes=5 head=| W-9 | 台账审计方向不含「tasks 引用 ⊆ 台账」，且规划轮日志 `01`–`10`
+  ✗ 第 179 行 pipes=5 head=| 交付轮必做 | `tasks/tasks.jsonl` 26 条全 `pending`，与 
+.aiws/changes/astro-page-copy-cms/review/quality-review.md: triage 表体=25 行 竖线数!=4=25 表内空行=0
+  ✗ 第 198 行 pipes=5 head=| # | 发现（审查者提出 → 主 session 核实） | 处置 | 证据 |
+  ✗ 第 200 行 pipes=5 head=| HIGH-1 | 唯一性只有 `pageCopyShared.ts` 的 find-then
+  ✗ 第 201 行 pipes=5 head=| HIGH-2 | 导入脚本对已发布记录无条件 `payload.update` 整份覆盖，头
+  ✗ 第 202 行 pipes=5 head=| HIGH-3 | 三只 dist 消费门禁只做 `existsSync(dist)`，比较逻
+  ✗ 第 203 行 pipes=5 head=| W-1 | parity 为 `numeric` 列回成字符串预留「类型松散」容忍；审查者的
+  ✗ 第 204 行 pipes=5 head=| W-2 | 站点/页面清单在 5 处硬编码，未引用 `pageCopyContract` 的
+  ✗ 第 205 行 pipes=7 head=| W-3 | `payload.ts:114-119` 三条失败分支在 `ok()/err()
+  ✗ 第 206 行 pipes=5 head=| W-4 | `PANEL_KINDS` 三重声明（投影、`PageFeatures` 五个 
+  ✗ 第 207 行 pipes=5 head=| W-5 | `SITE_PROJECT_SLUG` 在 CMS 合同表与 Astro `pa
+  ✗ 第 208 行 pipes=5 head=| W-6 | `client-bundle.mjs:45-48` 的「CMS 地址已内联」谓词
+  ✗ 第 209 行 pipes=5 head=| W-7 | e2e 第 2 组期望值直接从被测端点读出再断言自身一致（自指）；缓解因素已自陈
+  ✗ 第 210 行 pipes=5 head=| W-8 | `lead.spec.ts:13` 硬编码了现已住在 CMS 里的 hero 话
+  ✗ 第 211 行 pipes=5 head=| W-9 | `pageCopyProjection.ts` 163 行纯函数零单元测试，`h
+  ✗ 第 212 行 pipes=5 head=| W-10 | e2e 的 origin 写死在 `origins.ts:7-8`，门禁读 `
+  ✗ 第 213 行 pipes=5 head=| W-11 | `render-text.mjs:57` 提取前删 `<head>` ⇒ SE
+  ✗ 第 214 行 pipes=5 head=| W-12 | `PageFeatures.ts:3` 引入未使用的 `ICON_OPTION
+  ✗ 第 215 行 pipes=5 head=| I-1 | 投影头注释声称「覆盖度脚本用 `fromRecord`」，实际无跨文件消费者 ⇒
+  ✗ 第 216 行 pipes=5 head=| I-2 | 钩子抛中文单语 `new Error`，而同文件字段 label 全 `{zh,
+  ✗ 第 217 行 pipes=5 head=| I-3 | `diagram.nodes`（`maxRows:3` 无 `minRows`）
+  ✗ 第 218 行 pipes=5 head=| I-4 | 迁移里 FK 建成 `ON DELETE set null` 而列是 `proj
+  ✗ 第 219 行 pipes=5 head=| I-5 | 导入脚本硬编码「期望 12 / 期望 3」并在不符时抛 ⇒ 集合数一变即需改脚本
+  ✗ 第 220 行 pipes=5 head=| I-6 | `cmsOrigin.ts` 的中文报错文案（含 URL）会被打进浏览器包，正是
+  ✗ 第 221 行 pipes=5 head=| I-7 | `render-diff.mjs:68-69` 对产物文件用无 `try/cat
+  ✗ 第 222 行 pipes=5 head=| I-8 | `cms-unreachable.mjs:19-20` 自陈「本门禁会清空 `a
+  ✗ 第 223 行 pipes=5 head=| I-9 | `client-bundle.mjs:16` 的用法注释要求 `cd apps/
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/344-triage-table-audit.mjs:52
+if (bad > 0) throw new Error(`triage 表格未修齐：${bad} 处`)
+                   ^
+
+Error: triage 表格未修齐：41 处
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/344-triage-table-audit.mjs:52:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+audit_exit=1

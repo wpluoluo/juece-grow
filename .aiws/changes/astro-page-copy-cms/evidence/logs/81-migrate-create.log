@@ -1,0 +1,12 @@
+
+> cms@0.1.0 payload F:\juece-grow\apps\cms
+> payload "migrate:create" "page_copy_collections"
+
+[20:11:14] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+[20:11:14] [33mWARN[39m: [36mImage resizing is enabled for one or more collections, but sharp not installed. Please install 'sharp' and pass into the config.[39m
+[20:11:15] [32mINFO[39m: [36mStarting migration: generating UP statements...[39m
+[20:11:15] [32mINFO[39m: [36mMigration UP complete. Generating DOWN statements...[39m
+[20:11:15] [32mINFO[39m: [36mMigration DOWN statements generation complete.[39m
+[20:11:15] [32mINFO[39m: [36mMigration created at F:\juece-grow\apps\cms\src\migrations/20260920_121115_page_copy_collections.ts[39m
+[20:11:15] [32mINFO[39m: [36mDone.[39m
+exit=0

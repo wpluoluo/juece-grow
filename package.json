@@ -11,6 +11,7 @@
     "astro:build": "pnpm --filter astro build",
     "astro:build:erp": "pnpm --filter astro build:erp",
     "astro:build:yunque": "pnpm --filter astro build:yunque",
+    "astro:typecheck": "pnpm --filter astro typecheck",
     "e2e:test": "pnpm --filter e2e test",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down"

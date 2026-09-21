@@ -1,0 +1,9 @@
+[dist-fresh] juece   apps/astro/dist        dist最大mtime=2026-09-20T18:27:03.630Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] erp     apps/astro/dist-erp    dist最大mtime=2026-09-20T18:46:18.164Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[dist-fresh] yunque  apps/astro/dist-yunque dist最大mtime=2026-09-20T18:46:35.264Z src最大mtime=2026-09-20T18:13:36.765Z 判定=新鲜
+[cap-tone] juece   cap-tag yb=1 cap-tag=4 缺陷串 cap-tagyb=0 编译后选择器命中=features.DcrV5jsl.css
+[cap-tone] erp     cap-tag yb=1 cap-tag=4 缺陷串 cap-tagyb=0 编译后选择器命中=features.DcrV5jsl.css
+[cap-tone] yunque  cap-tag yb=1 cap-tag=4 缺陷串 cap-tagyb=0 编译后选择器命中=features.DcrV5jsl.css
+[render-diff] 基线 12 份齐全；比对产物 → .aiws\tmp\astro-page-copy-cms\render-post；差异 0 条
+[render-diff] 12/12 三站四页可见文本逐字一致 + 三站 cap-tag 配色类断言成立（差异清单为空）
+render-diff=0

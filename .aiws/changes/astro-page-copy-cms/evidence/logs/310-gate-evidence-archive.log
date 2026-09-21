@@ -1,0 +1,4 @@
+[evidence-archive] 台账行数=190 无 artifact 行=0 不同 artifact=190 归档目录=.aiws/changes/astro-page-copy-cms/evidence/logs
+  台账行 sha256 与原件一致=190 原件已清理（仅断言归档件存在）=0 问题=0
+[evidence-archive] 台账全部 artifact 均已归档且逐字节可核对（原件缺失、仅核归档件存在的行数 0 已如实计数）
+evidence-archive=0

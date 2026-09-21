@@ -1,0 +1,64 @@
+编号日志总数=429 台账有行=341 归档有字节=426
+声明式排除=33 其中已入账（应 0，排除表过期信号）=0
+归档缺字节（提交即永久丢，门禁项）=3
+  449-mirror-all.log
+  450-list-ledger-commands.log
+  451-audit-logs-missing-v2.log
+有字节但台账无行（下一轮补登的尾日志）=55
+  153-append-verification-p5b.log
+  154-p5b-idempotent-recheck.log
+  155-audit-after-p5b.log
+  171-e2e-pagecopy-tsc.log
+  172-e2e-pagecopy-tsc.log
+  181-append-verification-p6.log
+  182-p6-idempotent-recheck.log
+  183-audit-after-p6.log
+  184-append-verification-p6-red-green.log
+  185-p6-idempotent-recheck-2.log
+  186-audit-after-p6-red-green.log
+  189-append-verification-p6-final.log
+  190-audit-final-p7.log
+  260-append-verification-p9b.log
+  261-p9b-idempotent-recheck.log
+  262-audit-after-p9b.log
+  263-recount-after-p9b.log
+  264-p9b-recheck-after-note-edit.log
+  265-audit-after-note-edit.log
+  266-validate-after-ledger.log
+  267-change-validate-strict-after-ledger.log
+  417-append-verification-p13.log
+  418-p13-idempotent-recheck.log
+  419-audit-after-p13.log
+  420-recount-after-p13.log
+  421-archive-after-p13.log
+  422-doc-claims-stale-310.log
+  423-tasks-sync-p13.log
+  424-doc-claims-after-sync.log
+  426-fix-p13-note-count.log
+  427-audit-after-note-fix.log
+  428-recount-after-note-fix.log
+  429-archive-after-note-fix.log
+  430-doc-claims-after-note-fix.log
+  431-change-sync-terminal.log
+  432-validate-stamp-terminal.log
+  433-change-validate-strict-terminal.log
+  434-change-validate-evidence-scope-terminal.log
+  435-verify-bc-terminal.log
+  436-mirror-tail-logs.log
+  437-audit-final.log
+  438-recount-final.log
+  439-doc-claims-final.log
+  440-archive-final.log
+  441-change-sync-final.log
+  442-validate-stamp-final.log
+  443-change-validate-strict-final.log
+  444-change-validate-evidence-scope-final.log
+  445-verify-bc-final.log
+  446-doc-claims-final2.log
+  447-mirror-tail-2.log
+  448-audit-logs-missing.log
+  449-mirror-all.log
+  450-list-ledger-commands.log
+  451-audit-logs-missing-v2.log
+判定=NEEDS-BACKFILL 问题类合计=3
+audit_v2_exit=1

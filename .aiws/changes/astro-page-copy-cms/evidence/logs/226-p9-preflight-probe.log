@@ -1,0 +1,5 @@
+deadport_exit=7
+cms_health_http=200
+cms_health_exit=0
+astro_dev_http=200
+astro_dev_exit=0

@@ -1,0 +1,20 @@
+✓ aiws change evidence: astro-page-copy-cms
+dir: .aiws\changes\astro-page-copy-cms
+Plan_File: .aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md
+created:
+- .aiws/changes/astro-page-copy-cms/evidence/change-status-20260920-224221Z.json
+- .aiws/changes/astro-page-copy-cms/evidence/change-validate-strict-20260920-224221Z.json
+- .aiws/changes/astro-page-copy-cms/evidence/aiws-validate-stamp-20260920-224221Z.json
+- .aiws/changes/astro-page-copy-cms/evidence/change-sync-stamp-20260920-224221Z.json
+- .aiws/changes/astro-page-copy-cms/review/quality-review.md
+- .aiws/changes/astro-page-copy-cms/review/spec-review.md
+- .aiws/changes/astro-page-copy-cms/evidence/collaboration-summary-20260920-224221Z.json
+- .aiws/changes/astro-page-copy-cms/evidence/delivery-summary-20260920-224221Z.md
+updated:
+- .aiws\changes\astro-page-copy-cms\proposal.md (Evidence_Path)
+- .aiws/plan/2026-09-20_10-04-01-astro-page-copy-cms.md (Evidence_Path)
+
+next:
+- 执行前质量门（优先）：`aiws change validate astro-page-copy-cms --strict`（AI 工具中等价于 `aiws plan-verify`）
+- verify evidence gate: `aiws change validate astro-page-copy-cms --strict --check-evidence`
+change_evidence_exit=0

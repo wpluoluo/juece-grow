@@ -1,0 +1,12 @@
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/fix-tasks-shell-damage-p11.mjs:25
+if (i === -1) throw new Error('未找到被截断的 2.2 行（行尾不是 split 的半截字符串）')
+                    ^
+
+Error: 未找到被截断的 2.2 行（行尾不是 split 的半截字符串）
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/fix-tasks-shell-damage-p11.mjs:25:21
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+rerun_exit=1
