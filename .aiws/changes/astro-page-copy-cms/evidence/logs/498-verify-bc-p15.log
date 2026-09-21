@@ -1,0 +1,8 @@
+warning: in the working copy of '.aiws/memory-bank/.index.yaml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/changes/astro-page-copy-cms/.ws-change.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/changes/astro-page-copy-cms/metrics.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/changes/astro-page-copy-cms/tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.aiws/changes/astro-page-copy-cms/evidence/verify-before-complete.md', LF will be replaced by CRLF the next time Git touches it
+ok: all gates passed (tier=strict)
+verify_bc_exit=0

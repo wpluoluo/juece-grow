@@ -601,7 +601,83 @@
         "warnings": 0,
         "exit_code": 0
       }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-21T00:17:23Z",
+      "payload": {
+        "synced_at": "2026-09-21T00:17:23Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-21T00:06:19Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-21T00:17:26Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-21T00:17:28Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "truth_sync",
+      "timestamp": "2026-09-21T00:20:10Z",
+      "payload": {
+        "synced_at": "2026-09-21T00:20:10Z",
+        "baseline_from": "last sync",
+        "baseline_at": "2026-09-21T00:17:23Z",
+        "changed_files": []
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-21T00:20:12Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": false,
+        "check_scope": false,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
+    },
+    {
+      "type": "validate",
+      "timestamp": "2026-09-21T00:20:14Z",
+      "payload": {
+        "ok": true,
+        "strict": true,
+        "allow_truth_drift": false,
+        "check_evidence": true,
+        "check_scope": true,
+        "errors": 0,
+        "warnings": 0,
+        "exit_code": 0
+      }
     }
   ],
-  "updated_at": "2026-09-21T00:06:24Z"
+  "updated_at": "2026-09-21T00:20:14Z"
 }
