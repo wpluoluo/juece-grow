@@ -135,3 +135,33 @@ memories:
     summary: >-
       Chatwoot 访客端显示「当前已离线」为后台客服在线状态问题，非代码缺陷。浮窗能显示该提示语即证明 SDK 与后端连通正常。根因=收件箱无在线客服账号或 inbox availability 为 offline。处置：登录
       chat.juece.cloud 保持客服在线+inbox 切 online；离线留言仍经 webhook message_created 写回自有线索池不丢失。代码...
+  decision://astro-page-copy-cms/plan:
+    title: astro-page-copy-cms 规划定案：方案 B + 唯一读接缝 + 位置耦合锁长度
+    domain: decision
+    path: decision/astro-page-copy-cms/plan.md
+    created: '2026-09-20T10:30:02.956Z'
+    updated: '2026-09-20T10:30:02.958Z'
+    tags:
+      - astro
+      - payload
+      - cms
+      - plan
+      - req-0003
+    summary: >-
+      Astro 页面文案入 CMS（REQ-0003 / change astro-page-copy-cms）规划定案，owner 2026-09-20 裁决方案 B 打底：每页一个结构化 Payload 集合（page-home
+      / page-features / page-solutions / page-pricing），字段与 apps/astro/src/content/{home,...
+  decision://astro-page-copy-cms/delivery:
+    title: astro-page-copy-cms 交付定案：单一读路径 + 迁移需显式应用 + 台账与日志归档口径
+    domain: decision
+    path: decision/astro-page-copy-cms/delivery.md
+    created: '2026-09-21T00:14:44.642Z'
+    updated: '2026-09-21T00:18:05.706Z'
+    tags:
+      - astro
+      - payload
+      - cms
+      - delivery
+      - req-0003
+    summary: >-
+      Astro 页面文案入 CMS 交付轮定案（change astro-page-copy-cms，2026-09-21 本地提交 0872bd0，未推送、未 finish）。实现即规划方案 B：四个 Payload 集合
+      page-home / page-features / page-solutions / page-pricing 字段一比一对齐原 TS 类型，旧 content 四文件...
