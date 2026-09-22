@@ -791,7 +791,17 @@
         "warnings": 0,
         "exit_code": 0
       }
+    },
+    {
+      "type": "finish_local",
+      "timestamp": "2026-09-22T03:12:09Z",
+      "payload": {
+        "into": "main",
+        "from": "change/astro-page-copy-cms",
+        "push": true,
+        "gateTier": "strict"
+      }
     }
   ],
-  "updated_at": "2026-09-22T03:00:42Z"
+  "updated_at": "2026-09-22T03:12:09Z"
 }
