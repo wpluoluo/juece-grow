@@ -155,7 +155,7 @@ memories:
     domain: decision
     path: decision/astro-page-copy-cms/delivery.md
     created: '2026-09-21T00:14:44.642Z'
-    updated: '2026-09-22T02:33:43.070Z'
+    updated: '2026-09-22T03:27:25.065Z'
     tags:
       - astro
       - payload
@@ -163,5 +163,5 @@ memories:
       - delivery
       - req-0003
     summary: >-
-      Astro 页面文案入 CMS 交付轮定案（change astro-page-copy-cms，2026-09-21 本地三个提交：0872bd0 代码与证据、1c530a4 文档、3242886 memory-bank
-      单独一次，未推送、未 finish）。实现即规划方案 B：四个 Payload 集合 page-home / page-features / page-solutions...
+      Astro 页面文案入 CMS 交付轮定案（change astro-page-copy-cms，已于 2026-09-22 归档关闭：main 上依次为 0872bd0 代码与证据、1c530a4 文档、3242886 与
+      f1ed394 两次 memory-bank、752d626 P15 台账与收口链、e7446f2 finish bookkeeping、c41fe86 归档搬运；gi...
