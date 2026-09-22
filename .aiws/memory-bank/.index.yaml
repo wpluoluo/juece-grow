@@ -151,11 +151,11 @@ memories:
       Astro 页面文案入 CMS（REQ-0003 / change astro-page-copy-cms）规划定案，owner 2026-09-20 裁决方案 B 打底：每页一个结构化 Payload 集合（page-home
       / page-features / page-solutions / page-pricing），字段与 apps/astro/src/content/{home,...
   decision://astro-page-copy-cms/delivery:
-    title: astro-page-copy-cms 交付定案：单一读路径 + 迁移需显式应用 + 台账与日志归档口径
+    title: astro-page-copy-cms 交付定案：方案 B 四集合、构建期硬失败、台账与归档三审计器分工
     domain: decision
     path: decision/astro-page-copy-cms/delivery.md
     created: '2026-09-21T00:14:44.642Z'
-    updated: '2026-09-21T00:18:05.706Z'
+    updated: '2026-09-22T02:33:43.070Z'
     tags:
       - astro
       - payload
@@ -163,5 +163,5 @@ memories:
       - delivery
       - req-0003
     summary: >-
-      Astro 页面文案入 CMS 交付轮定案（change astro-page-copy-cms，2026-09-21 本地提交 0872bd0，未推送、未 finish）。实现即规划方案 B：四个 Payload 集合
-      page-home / page-features / page-solutions / page-pricing 字段一比一对齐原 TS 类型，旧 content 四文件...
+      Astro 页面文案入 CMS 交付轮定案（change astro-page-copy-cms，2026-09-21 本地三个提交：0872bd0 代码与证据、1c530a4 文档、3242886 memory-bank
+      单独一次，未推送、未 finish）。实现即规划方案 B：四个 Payload 集合 page-home / page-features / page-solutions...
