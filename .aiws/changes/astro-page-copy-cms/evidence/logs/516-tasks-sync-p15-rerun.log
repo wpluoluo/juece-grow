@@ -1,0 +1,12 @@
+file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/514-tasks-sync-p15.mjs:130
+  if (residue.length) throw new Error(`旧口径残留：${residue.join(' / ')}`)
+                            ^
+
+Error: 旧口径残留：21 只 appender
+    at file:///F:/juece-grow/.aiws/tmp/astro-page-copy-cms/514-tasks-sync-p15.mjs:130:29
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.0
+sync_exit=1

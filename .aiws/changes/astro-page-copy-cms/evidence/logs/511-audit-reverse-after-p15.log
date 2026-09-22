@@ -1,0 +1,12 @@
+ledger=460 covered=450 uncovered=10
+  - .aiws/tmp/astro-page-copy-cms/20-dump-content.log | node .aiws/tmp/astro-page-copy-cms/dump-content-sources.mjs
+  - .aiws/tmp/astro-page-copy-cms/22-dump-rerun.log | node .aiws/tmp/astro-page-copy-cms/dump-content-sources.mjs  # 复跑比 sha
+  - .aiws/tmp/astro-page-copy-cms/23-articles-probe.json | curl http://127.0.0.1:3000/api/v2/content/articles?site=juece|erp|yunque
+  - .aiws/tmp/astro-page-copy-cms/24-build-juece.log | pnpm astro:build
+  - .aiws/tmp/astro-page-copy-cms/25-build-erp.log | pnpm astro:build:erp
+  - .aiws/tmp/astro-page-copy-cms/26-build-yunque.log | pnpm astro:build:yunque
+  - .aiws/tmp/astro-page-copy-cms/27-extract.log | node scripts/astro-copy-render-text.mjs apps/astro/dist{,-erp,-yunque} <site> 
+  - .aiws/tmp/astro-page-copy-cms/28-reextract.log | node scripts/astro-copy-render-text.mjs apps/astro/dist-<写错的目录名> <site> <…>/sn
+  - .aiws/tmp/astro-page-copy-cms/30-reextract-correct-outdir.log | node scripts/astro-copy-render-text.mjs … ×3  # 抽取器去掉两处不可达兜底后重放
+  - .aiws/tmp/astro-page-copy-cms/32-verify-integrity.log | node -e "重算 render/_index.json 每条 sha256 + 抽取器自身 sha256 + 行数"  # 见 snapshot-pr
+reverse_exit=0

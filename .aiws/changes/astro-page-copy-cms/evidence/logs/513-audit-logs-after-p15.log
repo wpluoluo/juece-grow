@@ -1,0 +1,20 @@
+编号日志总数=493 台账有行=450 归档有字节=486
+声明式排除=36 其中已入账（应 0，排除表过期信号）=0
+归档缺字节（提交即永久丢，门禁项）=7
+  507-selfcheck-p15-rows.log
+  508-append-p15.log
+  509-recheck-p15-idempotent.log
+  510-audit-forward-after-p15.log
+  511-audit-reverse-after-p15.log
+  512-archive-check-after-p15.log
+  513-audit-logs-after-p15.log
+有字节但台账无行（下一轮补登的尾日志）=7
+  507-selfcheck-p15-rows.log
+  508-append-p15.log
+  509-recheck-p15-idempotent.log
+  510-audit-forward-after-p15.log
+  511-audit-reverse-after-p15.log
+  512-archive-check-after-p15.log
+  513-audit-logs-after-p15.log
+判定=NEEDS-BACKFILL 问题类合计=7
+audit448_exit=1
